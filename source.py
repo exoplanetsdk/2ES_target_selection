@@ -1,6 +1,12 @@
 import math
 from typing import Dict, List
 
+import requests
+import pandas as pd
+from tkinter import filedialog, Tk
+import json
+
+
 # TODO urgent: HD 5 gibt nen Fehler weil G2/3V nicht verstanden wird!
 # TODO: Add t_obs "min", "sec", "hour" switch!
 # TODO: simbad query: changing SpRes leads to new simbad call!
@@ -308,7 +314,165 @@ def analyse_simbad_query(url_rows: List[Dict], classification_rows: List[Dict], 
     elif magnitude == "jmag":
         Plotly.d3.csv("dataJmag.csv", lambda all_rows: rv_precision(all_rows, variables, write_to_html))
 
-def query_simbad(url: str, write_to_html: bool):
+
+def query_simbad(url, write_to_html):
     base_url = 'https://simbad.u-strasbg.fr/simbad/sim-script?script='
     output = 'output%20console=off%20script=off%20error=off%0D'
-    format = 'format%20object%20%22%25IDLIST(1),%2527COO(A%
+    format = 'format%20object%20%22%25IDLIST(1),%2527COO(A%20D),%25SP,%25FLUXLIST(V%3BF),%25FLUXLIST(J%3BF)%22'
+    header = 'echodata%20Name,Coo,SpT,Vmag,Jmag'
+    full_url = f"{base_url}{output}%0A{format}%0A{header}%0A{url}"
+    
+    print("Simbad Query:", full_url)
+    
+    response = requests.get(full_url)
+    if response.status_code != 200:
+        print("Error fetching data from Simbad")
+        return
+    
+    data = response.text
+    rows = data.split("\n")
+    if not rows or "error" in rows[0]:
+        print("Given object(s) not found by Simbad!")
+        return
+    
+    simbad_data = pd.read_csv(pd.compat.StringIO(data))
+    classi_data = pd.read_csv("classification.csv")
+    analyse_simbad_query(simbad_data, classi_data, write_to_html)
+
+def file_upload():
+    Tk().withdraw()
+    file_path = filedialog.askopenfilename()
+    if not file_path:
+        return
+    
+    with open(file_path, 'r') as file:
+        lines = file.readlines()
+    
+    write_to_html = len(lines) < 2
+    query_str = "%0A".join(line.strip() for line in lines)
+    query_simbad(query_str, write_to_html)
+
+def key_down(event):
+    if event.key == 'Enter':
+        event.preventDefault()
+        if event.target.id in ["snrVmag", "snrJmag", "MiDia", "vmag", "jmag", "tObs"]:
+            update_slave(True)
+        
+        query_button.style.backgroundColor = '#666'
+        setTimeout(lambda: query_button.style.backgroundColor = "", 100)
+        input_function()
+
+def simbad_field_input():
+    co_query = document.getElementById("co_query")
+    id_query = document.getElementById("id_query")
+    query = ""
+    if id_query.checked:
+        query += 'query%20id%20'
+    elif co_query.checked:
+        query += 'query%20coo%20'
+    else:
+        document.getElementById("simbad_err").innerHTML = "Neither 'identifier' nor 'coordinates' selected! Select one and repeat the query!"
+        return
+    
+    document.getElementById("simbad_err").innerHTML = ""
+    simbad = document.getElementById("simbadField").value
+    query += simbad
+    query_simbad(query, True)
+
+def which_mag_band():
+    selection = document.getElementById("Magnitude")
+    v_select = document.getElementById("vmag")
+    j_select = document.getElementById("jmag")
+    snr_v_select = document.getElementById("inputTableSnrVmag")
+    snr_j_select = document.getElementById("inputTableSnrJmag")
+
+    update_slave(True)
+
+    if selection[0].selected:
+        v_select.style.display = ""
+        snr_v_select.style.display = ""
+        j_select.style.display = "none"
+        snr_j_select.style.display = "none"
+        magnitude = "vmag"
+        if xvals:
+            mag_nan = "vmag"
+            input_function()
+    elif selection[1].selected:
+        v_select.style.display = "none"
+        snr_v_select.style.display = "none"
+        j_select.style.display = ""
+        snr_j_select.style.display = ""
+        magnitude = "jmag"
+        if xvals:
+            mag_nan = "jmag"
+            input_function()
+
+def which_radio():
+    file_input = document.getElementById("fileInput")
+    manually = document.getElementById("setManually")
+    id_query = document.getElementById("id_query")
+    co_query = document.getElementById("co_query")
+
+    document.getElementById("temp").readOnly = not manually.checked
+    document.getElementById("vmag").readOnly = not manually.checked
+    document.getElementById("jmag").readOnly = not manually.checked
+    document.getElementById("simbadField").readOnly = not (id_query.checked or co_query.checked)
+    simbad_field.placeholder = "Simbad coords" if co_query.checked else "Simbad resolver"
+
+    if file_input.checked:
+        input_selection = "fileInput"
+    elif id_query.checked or co_query.checked:
+        input_selection = "idcoQuery"
+    elif manually.checked:
+        input_selection = "manual"
+
+def input_function():
+    update_slave(True)
+
+    document.getElementById("simbad_err").innerHTML = ""
+    if not input_selection:
+        document.getElementById("simbad_err").innerHTML = "No type of query selected! Select one from above and repeat the query!"
+    elif input_selection == "idcoQuery":
+        simbad_field_input()
+    elif input_selection == "fileInput":
+        file_upload()
+        coloring(outputfile)
+    elif input_selection == "manual":
+        variables = get_manual_values()
+        if magnitude == "jmag":
+            data = pd.read_csv("dataJmag.csv")
+            rv_precision(data, variables, True)
+        else:
+            data = pd.read_csv("dataVmag.csv")
+            rv_precision(data, variables, True)
+
+def toggle_master(elem):
+    x = document.querySelector('.master > input')
+    if x:
+        x.parentElement.classList.remove('master')
+    (elem or event.target).parentElement.classList.add('master')
+
+# Event listeners
+document.getElementById("Magnitude").addEventListener("change", which_mag_band)
+document.getElementById("fileInput").addEventListener("change", which_radio)
+document.getElementById("id_query").addEventListener("change", which_radio)
+document.getElementById("co_query").addEventListener("change", which_radio)
+document.getElementById("setManually").addEventListener("change", which_radio)
+
+document.getElementById("temp").addEventListener("keydown", key_down)
+document.getElementById("vmag").addEventListener("keydown", key_down)
+document.getElementById("jmag").addEventListener("keydown", key_down)
+document.getElementById("MiDia").addEventListener("keydown", key_down)
+document.getElementById("SpRes").addEventListener("keydown", key_down)
+document.getElementById("snrVmag").addEventListener("keydown", key_down)
+document.getElementById("snrJmag").addEventListener("keydown", key_down)
+document.getElementById("tObs").addEventListener("keydown", key_down)
+document.getElementById("Lam_min").addEventListener("keydown", key_down)
+document.getElementById("Lam_max").addEventListener("keydown", key_down)
+
+document.getElementById("queryButton").addEventListener("click", input_function)
+document.getElementById("simbadField").addEventListener("keydown", key_down)
+
+which_radio()
+input_function()
+
