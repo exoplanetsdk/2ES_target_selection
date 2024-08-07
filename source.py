@@ -6,6 +6,109 @@ import pandas as pd
 from tkinter import filedialog, Tk
 import json
 
+# -----------------------------
+# from helpers.js
+# -----------------------------
+
+import numpy as np
+
+def nanmin(x):
+    return np.nanmin(x)
+
+def argnanmin(x):
+    return np.nanargmin(x)
+
+def simplify_spt(spt):
+    int_spt = spt.replace("dM", "M")[:2]
+    for letter in ["IV", "V", "III", "II", "I"]:
+        if letter in spt:
+            return int_spt + letter
+    return int_spt + "V"
+
+def find_temperature(temp_array, temperature):
+    diff_old = temp_array[0] - temperature
+    for i in range(1, len(temp_array)):
+        diff = temp_array[i] - temperature
+        if diff_old < 0 and diff < 0:
+            diff_old = diff
+        elif diff_old < 0 and diff > 0:
+            return [temp_array[i-1], temp_array[i]]
+    raise ValueError(f"ERROR in finding temperature interval! Given Temperature: {temperature}")
+
+def lin_interpol(temp, temp_int, values_min, values_max):
+    return [values_min[i] + (temp - temp_int[0]) * (values_max[i] - values_min[i]) / (temp_int[1] - temp_int[0]) for i in range(len(values_min))]
+
+def check_input(dict_values, temperatures, given_temp):
+    if given_temp < min(temperatures) or given_temp > max(temperatures):
+        return [-1] * len(temperatures)
+    
+    if given_temp in temperatures:
+        return dict_values[given_temp]
+    
+    temp_interval = find_temperature(temperatures, given_temp)
+    values = lin_interpol(given_temp, temp_interval, dict_values[temp_interval[0]], dict_values[temp_interval[1]])
+    
+    if all(np.isnan(values)):
+        if magnitude == "jmag":
+            magnitude = "vmag"
+            document.getElementById("jmag").style.display = "none"
+            mag_nan = "vmag"
+            input_function()
+        elif magnitude == "vmag":
+            magnitude = "jmag"
+            document.getElementById("vmag").style.display = "none"
+            mag_nan = "jmag"
+            input_function()
+    
+    return values
+
+def update_table(values, custom_rv_precision):
+    table = document.getElementById("table")
+    
+    rv_window = optional
+    if np.isnan(rv_window[0]):
+        rv_window[0] = min(Wavelengths["Lambda"])
+    if np.isnan(rv_window[1]):
+        rv_window[1] = max(Wavelengths["Lambda"])
+    
+    for j in range(table.rows.length - 1, 0, -1):
+        table.deleteRow(1)
+    
+    for j in range(len(Wavelengths["Lambda"])):
+        row = table.insertRow(table.rows.length)
+        row.insertCell(0).innerHTML = round(Wavelengths["Lambda"][j] - Wavelengths["Lambda_err"][j], 2)
+        row.insertCell(1).innerHTML = round(Wavelengths["Lambda"][j] + Wavelengths["Lambda_err"][j], 2)
+        row.insertCell(2).innerHTML = round(values["RVPrecision"][0][j], 2)
+    
+    if not np.isnan(rv_window[0]) and not np.isnan(rv_window[1]):
+        row = table.insertRow(table.rows.length)
+        row.style['background-color'] = custom_range_color
+        row.insertCell(0).innerHTML = round(rv_window[0], 2)
+        row.insertCell(1).innerHTML = round(rv_window[1], 2)
+        row.insertCell(2).innerHTML = round(custom_rv_precision, 2)
+    
+    index_of_min_value = argnanmin(values["RVPrecision"][0])
+    if index_of_min_value + 1:
+        table.rows[index_of_min_value + 1].style.background = coloring_color
+    
+    table.style.visibility = "visible"
+
+def download(filename, text):
+    element = document.getElementById("outputfile")
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text))
+    # element.setAttribute('download', filename)
+    # element.style.display = 'none'
+    # document.body.appendChild(element)
+    # element.click()
+    # document.body.removeChild(element)
+
+# Note: The commented-out function queryTObs is not converted as it is marked as TODO and not fully implemented.
+
+
+
+# -----------------------------
+# from functions.js
+# -----------------------------
 
 # TODO urgent: HD 5 gibt nen Fehler weil G2/3V nicht verstanden wird!
 # TODO: Add t_obs "min", "sec", "hour" switch!
