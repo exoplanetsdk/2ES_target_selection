@@ -112,19 +112,22 @@ function queryVariable(variable, writeToHtml) {
 
 function PrepareDownload(values, fileEnding="") {
    const delim = ",";
-   var output = "Id,Coordinates,Spectral Type,Temperature,";//RVPrec at Lam_min, Lam_max ";
+   var output = "Id,Coordinates,Spectral Type,Temperature,Vmag,Jmag,";
    // add to header the wavelengths provided
    var i=0
    for (; i<Wavelengths["Lambda"].length; i++) {
       output += "RV_Prec("+Wavelengths["Lambda"][i]+" +- "+Wavelengths["Lambda_err"][i]+")";
       output += delim;
    }
-   // add full wavelength range
-   output += "RV_Prec("+Wavelengths["Lambda"][0]+" - "+Wavelengths["Lambda"][i-1]+")" + "\n";
+   // add custom/full wavelength range
+   RVwindow = [parseFloat(document.getElementById("Lam_min").value) || Wavelengths["Lambda"][0],
+               parseFloat(document.getElementById("Lam_max").value) || Wavelengths["Lambda"].slice(-1)]
+   output += "RV_Prec("+RVwindow[0]+" - "+RVwindow[1]+")" + "\n";
 
    for (let i=0; i < values["SpT"].length; i++) {
       output += values["Id"][i] + delim + values["Coord"][i] + delim;
-      output += values["SpT"][i] + delim + values["Temp"][i] + delim; //+ values["RVPrecision"][i] + delim;
+      output += values["SpT"][i] + delim + values["Temp"][i] + delim;
+      output += values["Vmag"][i] + delim + values["Jmag"][i] + delim;
       for (let j=0; j < values["RVPrecision"][i].length; j++) {
          output += values["RVPrecision"][i][j];
          output += delim;
@@ -132,11 +135,10 @@ function PrepareDownload(values, fileEnding="") {
       output += GetCustomRVP(values, i);
       output += "\n";
    }
-   download("output"+fileEnding+".csv", output);
+   return output
 }
 
-//function SpectralToTemperature(classification, id, coord, SpT, Vmag, writeToHtml) {
-function SpectralToTemperature(classification, id, coord, SpT, writeToHtml) {
+function SpectralToTemperature(classification, id, coord, SpT) {
    let simpleSpT = simplifySpT(SpT);
    for (let classirow of classification) {
       // check if this element from classification.csv is simbad's spectral type.
@@ -254,6 +256,7 @@ function GetCustomRVP(values, k=0) {
    for (let x of customRVP) {
        if (!isNaN(x)) sum += 1. / (x*x);
    }
+   console.log(1. / Math.sqrt(sum))
    return 1. / Math.sqrt(sum);
 }
 
@@ -334,7 +337,9 @@ function rvPrecision(allRows, values, writeToHtml) {
       }
       // not erroneous temperature and more than one object
       else {
-         PrepareDownload(values, mag);
+         var output = PrepareDownload(values, mag)
+         download("output"+mag+".csv", output)
+         csv_output.innerHTML = output
       }
    }
 }
@@ -361,33 +366,35 @@ function analyseSimbadQuery(URLRows, classificationRows, writeToHtml) {
       // TODO: Das writeToHTml aus SpectralToTemperature rausnehmen und hier hinmachen!
       // Dann den File output definieren!
       var row = URLRows[i];
-      variables["SpT"][i] = row["SpT"].split(' ')[0];
+      variables["SpT"][i] = (row["SpT"] || "").split(' ')[0];
       variables["Vmag"][i] = parseFloat(row["Vmag"]);
       variables["Jmag"][i] = parseFloat(row["Jmag"]);
       variables["Id"][i] = row["Name"];
       variables["Coord"][i] = row["Coo"];
-      variables["Temp"][i] = SpectralToTemperature(classificationRows, variables["Id"][i], variables["Coord"][i], variables["SpT"][i], writeToHtml);
+      variables["Temp"][i] = row["Temperature"] || SpectralToTemperature(classificationRows, variables["Id"][i], variables["Coord"][i], variables["SpT"][i]);
 
       //if (magNaN != "vmag" && !isNaN(variables["Jmag"][i]) && (isNaN(variables["Vmag"][i]) || variables["Vmag"][i] >= variables["Jmag"][i])) {
-      if (writeToHtml) {
       if (magNaN != "vmag" && !isNaN(variables["Jmag"][i]) && (isNaN(variables["Vmag"][i]) || variables["Temp"][i] <= 4000)) {
-         document.getElementById("Magnitude-jband").selected = "true";
          magnitude = "jmag";
+         if (writeToHtml) {
+         document.getElementById("Magnitude-jband").selected = "true";
          document.getElementById("jmag").style.display = "";
          document.getElementById("vmag").style.display = "none";
          document.getElementById("snrJmag").parentElement.style.display = ""
          document.getElementById("snrVmag").parentElement.style.display = "none"
          if ('snr' == document.querySelector('.master > input').name) togglemaster(document.getElementById("snrJmag"))
+         }
       } else { //if (magNaN != "jmag" && !isNaN(variables["Vmag"][i]) && (isNaN(variables["Jmag"][i]) || variables["Jmag"][i] > variables["Vmag"][i])) {
-         document.getElementById("Magnitude-vband").selected = "true";
          magnitude = "vmag";
+         if (writeToHtml) {
+         document.getElementById("Magnitude-vband").selected = "true";
          // magNaN = "";
          document.getElementById("jmag").style.display = "none";
          document.getElementById("vmag").style.display = "";
          document.getElementById("snrVmag").parentElement.style.display = ""
          document.getElementById("snrJmag").parentElement.style.display = "none"
          if ('snr' == document.querySelector('.master > input').name) togglemaster(document.getElementById("snrVmag"))
-      }
+         }
       }
    }
 
@@ -405,6 +412,7 @@ function analyseSimbadQuery(URLRows, classificationRows, writeToHtml) {
     if (isnewjmag) coloring(document.getElementById("jmag").parentElement);
 
    magNaN = "";
+   // load lookup tables RVP(lam,T) and compute RV precision
    if (magnitude == "vmag") {
       Plotly.d3.csv("dataVmag.csv", function(allRows) {
          rvPrecision(allRows, variables, writeToHtml);
@@ -433,7 +441,7 @@ function querySimbad(url, writeToHtml) {
    document.getElementById("simbad_err").innerHTML = "";
    // simbad returns file in csv format. read the csv and analyse simbad (call function)
    Plotly.d3.csv(URL, function(URLRows) {
-      URLRows.pop(); // necessary as the csv always ends with an empty line
+      URLRows.pop() // simbad appends an empty line
       // check if output is actually only fault. possible only if all inputs are invalid
       if (URLRows === undefined || URLRows.length == 0 || Object.keys(URLRows[0])[0].slice(2, 7) == "error") {
          document.getElementById("simbad_err").innerHTML = "Given object(s) not found by simbad!";
@@ -444,6 +452,23 @@ function querySimbad(url, writeToHtml) {
       });
    });
 }
+
+
+function queryBatch(csvfileobj) {
+    Plotly.d3.csv(URL.createObjectURL(csvfileobj), function(URLRows) {
+//        URLRows.pop() // d3.csv appends a newline
+        var writeToHtml = URLRows.length < 2
+        // check if output is actually only fault. possible only if all inputs are invalid
+        if (URLRows === undefined || URLRows.length == 0 || Object.keys(URLRows[0])[0].slice(2, 7) == "error") {
+            document.getElementById("simbad_err").innerHTML = "Given object(s) not found by simbad!"
+            return
+        }
+        Plotly.d3.csv("classification.csv", function(classiRows) {
+            analyseSimbadQuery(URLRows, classiRows, writeToHtml)
+        })
+    })
+}
+
 
 function fileUpload() {
    const file = document.getElementById("file").files[0];
@@ -563,6 +588,9 @@ function whichRadio() {
       } else if (magNaN != "jmag" && magnitude=="vmag") {
       }
    }
+   else if (fileParam.checked) {
+      inputSelection = "fileParam"
+   }
    else if (idQuery.checked || coQuery.checked) {
       inputSelection = "idcoQuery";
       // switch from input to show field
@@ -585,6 +613,7 @@ function whichRadio() {
 
 function inputFunction() {
     updateSlave(true)
+    csv_output.innerHTML = ""
 
     document.getElementById("simbad_err").innerHTML = "";
     if (inputSelection == "") {
@@ -593,6 +622,9 @@ function inputFunction() {
         simbadFieldInput();
     } else if (inputSelection == "fileInput") {
         fileUpload();
+        coloring(outputfile);
+    } else if (inputSelection == "fileParam") {
+        queryBatch(document.getElementById("file").files[0])
         coloring(outputfile);
     } else if (inputSelection == "manual") {
         var variables = getManualValues();
@@ -625,6 +657,7 @@ document.getElementById("Magnitude").addEventListener("change", whichMagBand);
 
 //////////////////// radio button event listeners ////////////////////
 document.getElementById("fileInput").addEventListener("change", whichRadio);
+document.getElementById("fileParam").addEventListener("change", whichRadio);
 document.getElementById("id_query").addEventListener("change", whichRadio);
 document.getElementById("co_query").addEventListener("change", whichRadio);
 document.getElementById("setManually").addEventListener("change", whichRadio);
@@ -649,3 +682,4 @@ document.getElementById("simbadField").addEventListener("keydown", keyDown);
 // onload plot the default values
 whichRadio()
 inputFunction()
+
