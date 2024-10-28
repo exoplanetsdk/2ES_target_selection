@@ -59,8 +59,8 @@ def interpolate_temperature(rv_precision, temperatures, temp):
     elif temp >= max(temperatures):
         return rv_precision[max(temperatures)]
     else:
-        lower_temp = max(t for t in temperatures if t < temp)
-        upper_temp = min(t for t in temperatures if t > temp)
+        lower_temp = max(t for t in temperatures if t <= temp)
+        upper_temp = min(t for t in temperatures if t >= temp)
         lower_rv = rv_precision[lower_temp]
         upper_rv = rv_precision[upper_temp]
         return [np.interp(temp, [lower_temp, upper_temp], [lower_rv[i], upper_rv[i]]) 
