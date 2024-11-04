@@ -21,8 +21,8 @@ def get_manual_values(Temp: float = 4200.0, Vmag: float = 7.0) -> Dict[str, floa
         "MiDia": 2.2,    # Mirror Diameter in m
         "SpRes": 120000, # Spectral Resolution
         "TObs": 30.0,    # Observation Time in min
-        "Lam_min": 390,  # Minimum wavelength in nm
-        "Lam_max": 870   # Maximum wavelength in nm
+        "Lam_min": 390,  # Minimum wavelength in nm; 380 from Melissa
+        "Lam_max": 870   # Maximum wavelength in nm; 670 from Melissa
     }
 
 
