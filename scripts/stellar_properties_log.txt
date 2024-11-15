@@ -1,0 +1,600 @@
+2024-11-13 13:13:32,188 - INFO - Index: 9133, Source ID: 605060737664539648, Original: K5V, Processed: K5V
+2024-11-13 13:13:32,704 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '605060737664539648': No known catalog could be found
+2024-11-13 13:13:33,227 - INFO - Index: 9135, Source ID: 6594820754276558080, Original: , Processed: None
+2024-11-13 13:13:33,763 - INFO - Index: 9137, Source ID: 3028847397126306432, Original: , Processed: None
+2024-11-13 13:13:35,853 - INFO - Index: 9139, Source ID: 6629790584164278016, Original: , Processed: None
+2024-11-13 13:13:36,388 - INFO - Index: 9140, Source ID: 1523645047031954944, Original: G5, Processed: G5
+2024-11-13 13:13:36,388 - WARNING - No data found for stellar type (2) G5.
+2024-11-13 13:13:36,918 - INFO - Index: 9141, Source ID: 1523644978312478976, Original: K3V, Processed: K3V
+2024-11-13 13:13:37,090 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '1523644978312478976': No known catalog could be found
+2024-11-13 13:13:37,616 - INFO - Index: 9144, Source ID: 3413567786985813248, Original: , Processed: None
+2024-11-13 13:13:38,140 - INFO - Index: 9145, Source ID: 2913314288686472576, Original: M3.5Ve, Processed: M3.5V
+2024-11-13 13:13:38,141 - INFO - Base Type: M3V, Next Type: M4V
+2024-11-13 13:13:38,310 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '2913314288686472576': No known catalog could be found
+2024-11-13 13:13:38,899 - INFO - Index: 9146, Source ID: 4055585060376248832, Original: M1.5, Processed: M1.5
+2024-11-13 13:13:38,900 - INFO - Base Type: M15, Next Type: M25
+2024-11-13 13:13:38,900 - WARNING - No data found for stellar type M1.5.
+2024-11-13 13:13:39,526 - INFO - Index: 9147, Source ID: 1572081660971767552, Original: M0.0V, Processed: M0
+2024-11-13 13:13:39,527 - WARNING - No data found for stellar type (2) M0.
+2024-11-13 13:13:41,447 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): Identifier not found in the database : Gaia DR2 5373084596458377088
+2024-11-13 13:13:41,450 - INFO - Index: 9148, Source ID: 5373084596458377088, Original: None, Processed: None
+2024-11-13 13:13:41,992 - INFO - Index: 9150, Source ID: 5097127243975402752, Original: , Processed: None
+2024-11-13 13:13:42,505 - INFO - Index: 9151, Source ID: 5096847418266008064, Original: , Processed: None
+2024-11-13 13:13:43,039 - INFO - Index: 9152, Source ID: 5955737484721706112, Original: , Processed: None
+2024-11-13 13:13:43,557 - INFO - Index: 9153, Source ID: 4055584308787727488, Original: M2.5, Processed: M2.5
+2024-11-13 13:13:43,559 - INFO - Base Type: M25, Next Type: M35
+2024-11-13 13:13:43,559 - WARNING - No data found for stellar type M2.5.
+2024-11-13 13:13:44,088 - INFO - Index: 9154, Source ID: 4279420996156850048, Original: M0.5V, Processed: M0.5V
+2024-11-13 13:13:44,088 - INFO - Base Type: M0V, Next Type: M1V
+2024-11-13 13:13:44,771 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '4279420996156850048': No known catalog could be found
+2024-11-13 13:13:45,285 - INFO - Index: 9156, Source ID: 6093381394034220544, Original: , Processed: None
+2024-11-13 13:13:47,085 - INFO - Index: 9160, Source ID: 356805237045202432, Original: , Processed: None
+2024-11-13 13:13:47,576 - INFO - Index: 9161, Source ID: 5348350154694000000, Original: M1e, Processed: M1
+2024-11-13 13:13:47,576 - WARNING - No data found for stellar type (2) M1.
+2024-11-13 13:13:48,102 - INFO - Index: 9162, Source ID: 4025549877332744832, Original: , Processed: None
+2024-11-13 13:13:48,631 - INFO - Index: 9164, Source ID: 4295095221652796160, Original: K3-IIIbFe0.5, Processed: K3
+2024-11-13 13:13:48,632 - WARNING - No data found for stellar type (2) K3.
+2024-11-13 13:13:49,154 - INFO - Index: 9167, Source ID: 356764413385350144, Original: M1.5V, Processed: M1.5V
+2024-11-13 13:13:49,154 - INFO - Base Type: M1V, Next Type: M2V
+2024-11-13 13:13:49,311 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '356764413385350144': No known catalog could be found
+2024-11-13 13:13:49,855 - INFO - Index: 9168, Source ID: 157915536473892224, Original: M4.0, Processed: M4
+2024-11-13 13:13:49,856 - WARNING - No data found for stellar type (2) M4.
+2024-11-13 13:13:50,359 - INFO - Index: 9169, Source ID: 1375767325868833152, Original: K5V, Processed: K5V
+2024-11-13 13:13:50,536 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '1375767325868833152': No known catalog could be found
+2024-11-13 13:13:51,125 - INFO - Index: 9173, Source ID: 2940856402123426176, Original: M1V, Processed: M1V
+2024-11-13 13:13:51,579 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '2940856402123426176': No known catalog could be found
+2024-11-13 13:13:52,113 - INFO - Index: 9176, Source ID: 5381537023379295744, Original: M4V, Processed: M4V
+2024-11-13 13:13:52,293 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '5381537023379295744': No known catalog could be found
+2024-11-13 13:13:53,490 - INFO - Index: 9178, Source ID: 4578031174397285504, Original: K5V, Processed: K5V
+2024-11-13 13:13:53,746 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '4578031174397285504': No known catalog could be found
+2024-11-13 13:13:54,273 - INFO - Index: 9182, Source ID: 1446540213584440704, Original: M4V, Processed: M4V
+2024-11-13 13:13:54,433 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '1446540213584440704': No known catalog could be found
+2024-11-13 13:13:54,940 - INFO - Index: 9183, Source ID: 1446774890598042880, Original: K0, Processed: K0
+2024-11-13 13:13:54,940 - WARNING - No data found for stellar type (2) K0.
+2024-11-13 13:13:56,485 - INFO - Index: 9184, Source ID: 2166211633861548800, Original: M2.5V, Processed: M2.5V
+2024-11-13 13:13:56,485 - INFO - Base Type: M2V, Next Type: M3V
+2024-11-13 13:13:56,638 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '2166211633861548800': No known catalog could be found
+2024-11-13 13:13:57,201 - INFO - Index: 9186, Source ID: 5004776376139340672, Original: , Processed: None
+2024-11-13 13:13:57,695 - INFO - Index: 9187, Source ID: 3379666746830064384, Original: , Processed: None
+2024-11-13 13:13:58,243 - INFO - Index: 9189, Source ID: 4158525844409915776, Original: , Processed: None
+2024-11-13 13:13:58,744 - INFO - Index: 9191, Source ID: 6396701128458440960, Original: , Processed: None
+2024-11-13 13:13:59,289 - INFO - Index: 9192, Source ID: 4032040225752242176, Original: K5, Processed: K5
+2024-11-13 13:13:59,289 - WARNING - No data found for stellar type (2) K5.
+2024-11-13 13:13:59,817 - INFO - Index: 9195, Source ID: 4060525234839203840, Original: , Processed: None
+2024-11-13 13:14:00,321 - INFO - Index: 9196, Source ID: 3856935336807018368, Original: M2.0V, Processed: M2
+2024-11-13 13:14:00,321 - WARNING - No data found for stellar type (2) M2.
+2024-11-13 13:14:00,846 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): Identifier not found in the database : Gaia DR3 4121827169981644800
+2024-11-13 13:14:00,849 - INFO - Index: 9198, Source ID: 4121827169981644800, Original: None, Processed: None
+2024-11-13 13:14:01,586 - INFO - Index: 9199, Source ID: 6229798729398904832, Original: , Processed: None
+2024-11-13 13:14:02,088 - INFO - Index: 9200, Source ID: 5816012513445323904, Original: K7V, Processed: K7V
+2024-11-13 13:14:02,586 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '5816012513445323904': No known catalog could be found
+2024-11-13 13:14:03,137 - INFO - Index: 9202, Source ID: 6143175840408947840, Original: K4Vk:, Processed: K4V
+2024-11-13 13:14:03,301 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '6143175840408947840': No known catalog could be found
+2024-11-13 13:14:03,831 - INFO - Index: 9205, Source ID: 4955395178633330432, Original: , Processed: None
+2024-11-13 13:14:05,219 - INFO - Index: 9207, Source ID: 3810811579936440960, Original: M1.0V, Processed: M1
+2024-11-13 13:14:05,220 - WARNING - No data found for stellar type (2) M1.
+2024-11-13 13:14:05,738 - INFO - Index: 9209, Source ID: 3016083407149428096, Original: A4Vn, Processed: A4V
+2024-11-13 13:14:05,929 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '3016083407149428096': No known catalog could be found
+2024-11-13 13:14:06,448 - INFO - Index: 9211, Source ID: 5830410480793184128, Original: , Processed: None
+2024-11-13 13:14:06,975 - INFO - Index: 9212, Source ID: 153470765013858176, Original: M2.5, Processed: M2.5
+2024-11-13 13:14:06,976 - INFO - Base Type: M25, Next Type: M35
+2024-11-13 13:14:06,976 - WARNING - No data found for stellar type M2.5.
+2024-11-13 13:14:07,498 - INFO - Index: 9213, Source ID: 4051102076590100224, Original: , Processed: None
+2024-11-13 13:14:08,035 - INFO - Index: 9215, Source ID: 2101992694430576256, Original: M2.0Ve, Processed: M2
+2024-11-13 13:14:08,036 - WARNING - No data found for stellar type (2) M2.
+2024-11-13 13:14:08,548 - INFO - Index: 9217, Source ID: 92102618725254912, Original: K7.5V, Processed: K7.5V
+2024-11-13 13:14:08,549 - INFO - Base Type: K7V, Next Type: K8V
+2024-11-13 13:14:09,075 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '92102618725254912': No known catalog could be found
+2024-11-13 13:14:09,598 - INFO - Index: 9218, Source ID: 91887977735200000, Original: K6/7V, Processed: K6/7V
+2024-11-13 13:14:09,599 - INFO - Base Type: K6V, Next Type: K7V
+2024-11-13 13:14:09,775 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '91887977735200000': No known catalog could be found
+2024-11-13 13:14:10,463 - INFO - Index: 9219, Source ID: 92048540792594816, Original: K5V, Processed: K5V
+2024-11-13 13:14:10,645 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '92048540792594816': No known catalog could be found
+2024-11-13 13:14:11,169 - INFO - Index: 9220, Source ID: 3459773354395918080, Original: M1V, Processed: M1V
+2024-11-13 13:14:11,353 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '3459773354395918080': No known catalog could be found
+2024-11-13 13:14:11,894 - INFO - Index: 9221, Source ID: 4809858558243917440, Original: , Processed: None
+2024-11-13 13:14:12,393 - INFO - Index: 9222, Source ID: 1478353792260736768, Original: , Processed: None
+2024-11-13 13:14:14,125 - INFO - Index: 9223, Source ID: 4809951024596804096, Original: , Processed: None
+2024-11-13 13:14:14,667 - INFO - Index: 9224, Source ID: 4395113396338721024, Original: M2.5V, Processed: M2.5V
+2024-11-13 13:14:14,668 - INFO - Base Type: M2V, Next Type: M3V
+2024-11-13 13:14:14,883 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '4395113396338721024': No known catalog could be found
+2024-11-13 13:14:15,398 - INFO - Index: 9225, Source ID: 3401246178652087296, Original: K4?, Processed: K4
+2024-11-13 13:14:15,399 - WARNING - No data found for stellar type (2) K4.
+2024-11-13 13:14:15,907 - INFO - Index: 9227, Source ID: 3401246178651454976, Original: G9, Processed: G9
+2024-11-13 13:14:15,907 - WARNING - No data found for stellar type (2) G9.
+2024-11-13 13:14:16,412 - INFO - Index: 9228, Source ID: 3401175844265992448, Original: , Processed: None
+2024-11-13 13:14:16,937 - INFO - Index: 9231, Source ID: 5168974620837113984, Original: K7, Processed: K7
+2024-11-13 13:14:16,937 - WARNING - No data found for stellar type (2) K7.
+2024-11-13 13:14:17,461 - INFO - Index: 9232, Source ID: 4174183710306651904, Original: , Processed: None
+2024-11-13 13:14:17,991 - INFO - Index: 9233, Source ID: 3389663373408271872, Original: K4, Processed: K4
+2024-11-13 13:14:17,991 - WARNING - No data found for stellar type (2) K4.
+2024-11-13 13:14:18,506 - INFO - Index: 9235, Source ID: 1449398256622357632, Original: M1.5Ve, Processed: M1.5V
+2024-11-13 13:14:18,507 - INFO - Base Type: M1V, Next Type: M2V
+2024-11-13 13:14:18,680 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '1449398256622357632': No known catalog could be found
+2024-11-13 13:14:19,197 - INFO - Index: 9236, Source ID: 1449467422775745792, Original: M1.9, Processed: M1
+2024-11-13 13:14:19,198 - WARNING - No data found for stellar type (2) M1.
+2024-11-13 13:14:19,795 - INFO - Index: 9237, Source ID: 1537992501630401920, Original: K5V, Processed: K5V
+2024-11-13 13:14:20,433 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '1537992501630401920': No known catalog could be found
+2024-11-13 13:14:20,939 - INFO - Index: 9239, Source ID: 4027755532017240960, Original: M1, Processed: M1
+2024-11-13 13:14:20,939 - WARNING - No data found for stellar type (2) M1.
+2024-11-13 13:14:21,480 - INFO - Index: 9240, Source ID: 5548105647657011456, Original: , Processed: None
+2024-11-13 13:14:21,993 - INFO - Index: 9245, Source ID: 605324994116863360, Original: M2.0V, Processed: M2
+2024-11-13 13:14:21,993 - WARNING - No data found for stellar type (2) M2.
+2024-11-13 13:14:22,510 - INFO - Index: 9246, Source ID: 6230733559097425152, Original: K7V, Processed: K7V
+2024-11-13 13:14:22,701 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '6230733559097425152': No known catalog could be found
+2024-11-13 13:14:23,223 - INFO - Index: 9247, Source ID: 5821903181355001856, Original: , Processed: None
+2024-11-13 13:14:23,752 - INFO - Index: 9248, Source ID: 4547881191164080768, Original: M3V, Processed: M3V
+2024-11-13 13:14:23,916 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '4547881191164080768': No known catalog could be found
+2024-11-13 13:14:25,324 - INFO - Index: 9249, Source ID: 2525804540894629504, Original: K0/1V, Processed: K0/1V
+2024-11-13 13:14:25,324 - INFO - Base Type: K0V, Next Type: K1V
+2024-11-13 13:14:25,483 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '2525804540894629504': No known catalog could be found
+2024-11-13 13:14:26,024 - INFO - Index: 9250, Source ID: 2525688198820543360, Original: M2.5V, Processed: M2.5V
+2024-11-13 13:14:26,025 - INFO - Base Type: M2V, Next Type: M3V
+2024-11-13 13:14:26,188 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '2525688198820543360': No known catalog could be found
+2024-11-13 13:14:26,699 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): Identifier not found in the database : Gaia DR3 2026285138455971200
+2024-11-13 13:14:26,702 - INFO - Index: 9252, Source ID: 2026285138455971200, Original: None, Processed: None
+2024-11-13 13:14:27,243 - INFO - Index: 9256, Source ID: 5943550124208359552, Original: M3, Processed: M3
+2024-11-13 13:14:27,243 - WARNING - No data found for stellar type (2) M3.
+2024-11-13 13:14:27,750 - INFO - Index: 9257, Source ID: 3413754360367271168, Original: K5V, Processed: K5V
+2024-11-13 13:14:27,942 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '3413754360367271168': No known catalog could be found
+2024-11-13 13:14:28,486 - INFO - Index: 9258, Source ID: 6588749457226272512, Original: M4, Processed: M4
+2024-11-13 13:14:28,486 - WARNING - No data found for stellar type (2) M4.
+2024-11-13 13:14:29,004 - INFO - Index: 9259, Source ID: 4373199682919087616, Original: , Processed: None
+2024-11-13 13:14:29,672 - INFO - Index: 9260, Source ID: 4373199678620639744, Original: , Processed: None
+2024-11-13 13:14:30,238 - INFO - Index: 9262, Source ID: 3912369208386557440, Original: M4.0Ve, Processed: M4
+2024-11-13 13:14:30,239 - WARNING - No data found for stellar type (2) M4.
+2024-11-13 13:14:30,741 - INFO - Index: 9264, Source ID: 2565529071371410048, Original: M4V, Processed: M4V
+2024-11-13 13:14:31,263 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '2565529071371410048': No known catalog could be found
+2024-11-13 13:14:31,949 - INFO - Index: 9265, Source ID: 378607281314502016, Original: A2V, Processed: A2V
+2024-11-13 13:14:32,204 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '378607281314502016': No known catalog could be found
+2024-11-13 13:14:32,872 - INFO - Index: 9268, Source ID: 2993676867708999296, Original: M0V, Processed: M0V
+2024-11-13 13:14:33,029 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '2993676867708999296': No known catalog could be found
+2024-11-13 13:14:33,540 - INFO - Index: 9269, Source ID: 2707393352986852608, Original: K0V, Processed: K0V
+2024-11-13 13:14:33,712 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '2707393352986852608': No known catalog could be found
+2024-11-13 13:14:34,254 - INFO - Index: 9271, Source ID: 5480636002093933312, Original: M, Processed: None
+2024-11-13 13:14:36,332 - INFO - Index: 9272, Source ID: 1301701718658018048, Original: F8, Processed: F8
+2024-11-13 13:14:36,333 - WARNING - No data found for stellar type (2) F8.
+2024-11-13 13:14:36,853 - INFO - Index: 9274, Source ID: 2707385278448285696, Original: F7V, Processed: F7V
+2024-11-13 13:14:37,025 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '2707385278448285696': No known catalog could be found
+2024-11-13 13:14:37,594 - INFO - Index: 9275, Source ID: 2707420359741156864, Original: K1-III-IV, Processed: K1
+2024-11-13 13:14:37,594 - WARNING - No data found for stellar type (2) K1.
+2024-11-13 13:14:38,258 - INFO - Index: 9278, Source ID: 2044341077844183040, Original: G1V+K1V, Processed: G1V
+2024-11-13 13:14:38,481 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '2044341077844183040': No known catalog could be found
+2024-11-13 13:14:39,139 - INFO - Index: 9279, Source ID: 5424925195325703424, Original: M0, Processed: M0
+2024-11-13 13:14:39,139 - WARNING - No data found for stellar type (2) M0.
+2024-11-13 13:14:39,648 - INFO - Index: 9281, Source ID: 1328078796458810240, Original: M2V, Processed: M2V
+2024-11-13 13:14:39,829 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '1328078796458810240': No known catalog could be found
+2024-11-13 13:14:40,525 - INFO - Index: 9282, Source ID: 1869302503184405760, Original: K0III, Processed: K0
+2024-11-13 13:14:40,525 - WARNING - No data found for stellar type (2) K0.
+2024-11-13 13:14:41,050 - INFO - Index: 9284, Source ID: 4350368633207571200, Original: , Processed: None
+2024-11-13 13:14:41,753 - INFO - Index: 9286, Source ID: 4414858219987352320, Original: M0V, Processed: M0V
+2024-11-13 13:14:41,928 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '4414858219987352320': No known catalog could be found
+2024-11-13 13:14:42,438 - INFO - Index: 9287, Source ID: 4414849698772235136, Original: K2III, Processed: K2
+2024-11-13 13:14:42,438 - WARNING - No data found for stellar type (2) K2.
+2024-11-13 13:14:42,955 - INFO - Index: 9288, Source ID: 3849259470039948416, Original: , Processed: None
+2024-11-13 13:14:43,512 - INFO - Index: 9289, Source ID: 4350344993707489920, Original: K7V, Processed: K7V
+2024-11-13 13:14:43,682 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '4350344993707489920': No known catalog could be found
+2024-11-13 13:14:44,194 - INFO - Index: 9293, Source ID: 6047179709272471808, Original: , Processed: None
+2024-11-13 13:14:44,742 - INFO - Index: 9297, Source ID: 5531191997722748160, Original: , Processed: None
+2024-11-13 13:14:45,244 - INFO - Index: 9299, Source ID: 1349504429784383616, Original: , Processed: None
+2024-11-13 13:14:45,781 - INFO - Index: 9300, Source ID: 1971163631220899968, Original: G8IIIFe-0.5, Processed: G8
+2024-11-13 13:14:45,782 - WARNING - No data found for stellar type (2) G8.
+2024-11-13 13:14:46,295 - INFO - Index: 9301, Source ID: 5924203182025615616, Original: , Processed: None
+2024-11-13 13:14:46,822 - INFO - Index: 9302, Source ID: 47804394753757056, Original: K5V, Processed: K5V
+2024-11-13 13:14:47,001 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '47804394753757056': No known catalog could be found
+2024-11-13 13:14:47,507 - INFO - Index: 9303, Source ID: 5924187617032756736, Original: M1V, Processed: M1V
+2024-11-13 13:14:47,682 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '5924187617032756736': No known catalog could be found
+2024-11-13 13:14:48,220 - INFO - Index: 9305, Source ID: 47965443143743488, Original: F4V, Processed: F4V
+2024-11-13 13:14:50,500 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '47965443143743488': No known catalog could be found
+2024-11-13 13:14:51,036 - INFO - Index: 9309, Source ID: 5169415013899320576, Original: K7, Processed: K7
+2024-11-13 13:14:51,036 - WARNING - No data found for stellar type (2) K7.
+2024-11-13 13:14:51,551 - INFO - Index: 9310, Source ID: 3372287649418102016, Original: , Processed: None
+2024-11-13 13:14:52,205 - INFO - Index: 9311, Source ID: 2768404669096691072, Original: G8V+K5V, Processed: G8V
+2024-11-13 13:14:52,607 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '2768404669096691072': No known catalog could be found
+2024-11-13 13:14:53,122 - INFO - Index: 9312, Source ID: 254564055962696832, Original: M1, Processed: M1
+2024-11-13 13:14:53,122 - WARNING - No data found for stellar type (2) M1.
+2024-11-13 13:14:53,649 - INFO - Index: 9314, Source ID: 2456487788826106112, Original: M1V, Processed: M1V
+2024-11-13 13:14:53,817 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '2456487788826106112': No known catalog could be found
+2024-11-13 13:14:54,409 - INFO - Index: 9315, Source ID: 5153523497465264000, Original: , Processed: None
+2024-11-13 13:14:55,037 - INFO - Index: 9316, Source ID: 2899142301062372608, Original: M4e, Processed: M4
+2024-11-13 13:14:55,037 - WARNING - No data found for stellar type (2) M4.
+2024-11-13 13:18:14,521 - INFO - (9133, '605060737664539648', 'K5V', 'K5V')
+2024-11-13 13:18:14,533 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '605060737664539648': No known catalog could be found
+2024-11-13 13:18:14,543 - INFO - (9135, '6594820754276558080', '', None)
+2024-11-13 13:18:14,547 - INFO - (9137, '3028847397126306432', '', None)
+2024-11-13 13:18:14,550 - INFO - (9139, '6629790584164278016', '', None)
+2024-11-13 13:18:14,553 - INFO - (9140, '1523645047031954944', 'G5', 'G5')
+2024-11-13 13:18:14,554 - WARNING - No data found for stellar type (2) G5.
+2024-11-13 13:18:14,557 - INFO - (9141, '1523644978312478976', 'K3V', 'K3V')
+2024-11-13 13:18:14,560 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '1523644978312478976': No known catalog could be found
+2024-11-13 13:18:14,566 - INFO - (9144, '3413567786985813248', '', None)
+2024-11-13 13:18:14,568 - INFO - (9145, '2913314288686472576', 'M3.5Ve', 'M3.5V')
+2024-11-13 13:18:14,569 - INFO - Base Type: M3V, Next Type: M4V
+2024-11-13 13:18:14,572 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '2913314288686472576': No known catalog could be found
+2024-11-13 13:18:14,577 - INFO - (9146, '4055585060376248832', 'M1.5', 'M1.5')
+2024-11-13 13:18:14,578 - INFO - Base Type: M15, Next Type: M25
+2024-11-13 13:18:14,578 - WARNING - No data found for stellar type M1.5.
+2024-11-13 13:18:14,581 - INFO - (9147, '1572081660971767552', 'M0.0V', 'M0')
+2024-11-13 13:18:14,581 - WARNING - No data found for stellar type (2) M0.
+2024-11-13 13:18:14,584 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): Identifier not found in the database : Gaia DR2 5373084596458377088
+2024-11-13 13:18:14,586 - INFO - (9148, '5373084596458377088', None, None)
+2024-11-13 13:18:14,588 - INFO - (9150, '5097127243975402752', '', None)
+2024-11-13 13:18:14,590 - INFO - (9151, '5096847418266008064', '', None)
+2024-11-13 13:18:14,593 - INFO - (9152, '5955737484721706112', '', None)
+2024-11-13 13:18:14,597 - INFO - (9153, '4055584308787727488', 'M2.5', 'M2.5')
+2024-11-13 13:18:14,597 - INFO - Base Type: M25, Next Type: M35
+2024-11-13 13:18:14,597 - WARNING - No data found for stellar type M2.5.
+2024-11-13 13:18:14,600 - INFO - (9154, '4279420996156850048', 'M0.5V', 'M0.5V')
+2024-11-13 13:18:14,600 - INFO - Base Type: M0V, Next Type: M1V
+2024-11-13 13:18:14,603 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '4279420996156850048': No known catalog could be found
+2024-11-13 13:18:14,608 - INFO - (9156, '6093381394034220544', '', None)
+2024-11-13 13:18:14,610 - INFO - (9160, '356805237045202432', '', None)
+2024-11-13 13:18:14,613 - INFO - (9161, '5348350154694000000', 'M1e', 'M1')
+2024-11-13 13:18:14,613 - WARNING - No data found for stellar type (2) M1.
+2024-11-13 13:18:14,615 - INFO - (9162, '4025549877332744832', '', None)
+2024-11-13 13:18:14,617 - INFO - (9164, '4295095221652796160', 'K3-IIIbFe0.5', 'K3')
+2024-11-13 13:18:14,618 - WARNING - No data found for stellar type (2) K3.
+2024-11-13 13:18:14,621 - INFO - (9167, '356764413385350144', 'M1.5V', 'M1.5V')
+2024-11-13 13:18:14,621 - INFO - Base Type: M1V, Next Type: M2V
+2024-11-13 13:18:14,624 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '356764413385350144': No known catalog could be found
+2024-11-13 13:18:14,628 - INFO - (9168, '157915536473892224', 'M4.0', 'M4')
+2024-11-13 13:18:14,628 - WARNING - No data found for stellar type (2) M4.
+2024-11-13 13:18:14,630 - INFO - (9169, '1375767325868833152', 'K5V', 'K5V')
+2024-11-13 13:18:14,633 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '1375767325868833152': No known catalog could be found
+2024-11-13 13:18:14,636 - INFO - (9173, '2940856402123426176', 'M1V', 'M1V')
+2024-11-13 13:18:14,638 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '2940856402123426176': No known catalog could be found
+2024-11-13 13:18:14,642 - INFO - (9176, '5381537023379295744', 'M4V', 'M4V')
+2024-11-13 13:18:14,644 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '5381537023379295744': No known catalog could be found
+2024-11-13 13:18:14,648 - INFO - (9178, '4578031174397285504', 'K5V', 'K5V')
+2024-11-13 13:18:14,650 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '4578031174397285504': No known catalog could be found
+2024-11-13 13:18:14,655 - INFO - (9182, '1446540213584440704', 'M4V', 'M4V')
+2024-11-13 13:18:14,657 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '1446540213584440704': No known catalog could be found
+2024-11-13 13:18:14,662 - INFO - (9183, '1446774890598042880', 'K0', 'K0')
+2024-11-13 13:18:14,662 - WARNING - No data found for stellar type (2) K0.
+2024-11-13 13:18:14,665 - INFO - (9184, '2166211633861548800', 'M2.5V', 'M2.5V')
+2024-11-13 13:18:14,665 - INFO - Base Type: M2V, Next Type: M3V
+2024-11-13 13:18:14,668 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '2166211633861548800': No known catalog could be found
+2024-11-13 13:18:14,671 - INFO - (9186, '5004776376139340672', '', None)
+2024-11-13 13:18:14,674 - INFO - (9187, '3379666746830064384', '', None)
+2024-11-13 13:18:14,676 - INFO - (9189, '4158525844409915776', '', None)
+2024-11-13 13:18:14,679 - INFO - (9191, '6396701128458440960', '', None)
+2024-11-13 13:18:14,681 - INFO - (9192, '4032040225752242176', 'K5', 'K5')
+2024-11-13 13:18:14,682 - WARNING - No data found for stellar type (2) K5.
+2024-11-13 13:18:14,684 - INFO - (9195, '4060525234839203840', '', None)
+2024-11-13 13:18:14,686 - INFO - (9196, '3856935336807018368', 'M2.0V', 'M2')
+2024-11-13 13:18:14,687 - WARNING - No data found for stellar type (2) M2.
+2024-11-13 13:18:14,689 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): Identifier not found in the database : Gaia DR3 4121827169981644800
+2024-11-13 13:18:14,691 - INFO - (9198, '4121827169981644800', None, None)
+2024-11-13 13:18:14,695 - INFO - (9199, '6229798729398904832', '', None)
+2024-11-13 13:18:14,697 - INFO - (9200, '5816012513445323904', 'K7V', 'K7V')
+2024-11-13 13:18:14,700 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '5816012513445323904': No known catalog could be found
+2024-11-13 13:18:14,704 - INFO - (9202, '6143175840408947840', 'K4Vk:', 'K4V')
+2024-11-13 13:18:14,706 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '6143175840408947840': No known catalog could be found
+2024-11-13 13:18:14,710 - INFO - (9205, '4955395178633330432', '', None)
+2024-11-13 13:18:14,712 - INFO - (9207, '3810811579936440960', 'M1.0V', 'M1')
+2024-11-13 13:18:14,713 - WARNING - No data found for stellar type (2) M1.
+2024-11-13 13:18:14,715 - INFO - (9209, '3016083407149428096', 'A4Vn', 'A4V')
+2024-11-13 13:18:14,717 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '3016083407149428096': No known catalog could be found
+2024-11-13 13:18:14,722 - INFO - (9211, '5830410480793184128', '', None)
+2024-11-13 13:18:14,725 - INFO - (9212, '153470765013858176', 'M2.5', 'M2.5')
+2024-11-13 13:18:14,726 - INFO - Base Type: M25, Next Type: M35
+2024-11-13 13:18:14,726 - WARNING - No data found for stellar type M2.5.
+2024-11-13 13:18:14,729 - INFO - (9213, '4051102076590100224', '', None)
+2024-11-13 13:18:14,732 - INFO - (9215, '2101992694430576256', 'M2.0Ve', 'M2')
+2024-11-13 13:18:14,732 - WARNING - No data found for stellar type (2) M2.
+2024-11-13 13:18:14,735 - INFO - (9217, '92102618725254912', 'K7.5V', 'K7.5V')
+2024-11-13 13:18:14,735 - INFO - Base Type: K7V, Next Type: K8V
+2024-11-13 13:18:14,739 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '92102618725254912': No known catalog could be found
+2024-11-13 13:18:14,745 - INFO - (9218, '91887977735200000', 'K6/7V', 'K6/7V')
+2024-11-13 13:18:14,746 - INFO - Base Type: K6V, Next Type: K7V
+2024-11-13 13:18:14,749 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '91887977735200000': No known catalog could be found
+2024-11-13 13:18:14,753 - INFO - (9219, '92048540792594816', 'K5V', 'K5V')
+2024-11-13 13:18:14,756 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '92048540792594816': No known catalog could be found
+2024-11-13 13:18:14,761 - INFO - (9220, '3459773354395918080', 'M1V', 'M1V')
+2024-11-13 13:18:14,764 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '3459773354395918080': No known catalog could be found
+2024-11-13 13:18:14,768 - INFO - (9221, '4809858558243917440', '', None)
+2024-11-13 13:18:14,771 - INFO - (9222, '1478353792260736768', '', None)
+2024-11-13 13:18:14,774 - INFO - (9223, '4809951024596804096', '', None)
+2024-11-13 13:18:14,777 - INFO - (9224, '4395113396338721024', 'M2.5V', 'M2.5V')
+2024-11-13 13:18:14,777 - INFO - Base Type: M2V, Next Type: M3V
+2024-11-13 13:18:14,780 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '4395113396338721024': No known catalog could be found
+2024-11-13 13:18:14,784 - INFO - (9225, '3401246178652087296', 'K4?', 'K4')
+2024-11-13 13:18:14,785 - WARNING - No data found for stellar type (2) K4.
+2024-11-13 13:18:14,787 - INFO - (9227, '3401246178651454976', 'G9', 'G9')
+2024-11-13 13:18:14,787 - WARNING - No data found for stellar type (2) G9.
+2024-11-13 13:18:14,791 - INFO - (9228, '3401175844265992448', '', None)
+2024-11-13 13:18:14,793 - INFO - (9231, '5168974620837113984', 'K7', 'K7')
+2024-11-13 13:18:14,794 - WARNING - No data found for stellar type (2) K7.
+2024-11-13 13:18:14,796 - INFO - (9232, '4174183710306651904', '', None)
+2024-11-13 13:18:14,799 - INFO - (9233, '3389663373408271872', 'K4', 'K4')
+2024-11-13 13:18:14,799 - WARNING - No data found for stellar type (2) K4.
+2024-11-13 13:18:14,802 - INFO - (9235, '1449398256622357632', 'M1.5Ve', 'M1.5V')
+2024-11-13 13:18:14,802 - INFO - Base Type: M1V, Next Type: M2V
+2024-11-13 13:18:14,805 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '1449398256622357632': No known catalog could be found
+2024-11-13 13:18:14,809 - INFO - (9236, '1449467422775745792', 'M1.9', 'M1')
+2024-11-13 13:18:14,809 - WARNING - No data found for stellar type (2) M1.
+2024-11-13 13:18:14,812 - INFO - (9237, '1537992501630401920', 'K5V', 'K5V')
+2024-11-13 13:18:14,814 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '1537992501630401920': No known catalog could be found
+2024-11-13 13:18:14,818 - INFO - (9239, '4027755532017240960', 'M1', 'M1')
+2024-11-13 13:18:14,819 - WARNING - No data found for stellar type (2) M1.
+2024-11-13 13:18:14,821 - INFO - (9240, '5548105647657011456', '', None)
+2024-11-13 13:18:14,824 - INFO - (9245, '605324994116863360', 'M2.0V', 'M2')
+2024-11-13 13:18:14,824 - WARNING - No data found for stellar type (2) M2.
+2024-11-13 13:18:14,826 - INFO - (9246, '6230733559097425152', 'K7V', 'K7V')
+2024-11-13 13:18:14,829 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '6230733559097425152': No known catalog could be found
+2024-11-13 13:18:14,834 - INFO - (9247, '5821903181355001856', '', None)
+2024-11-13 13:18:14,837 - INFO - (9248, '4547881191164080768', 'M3V', 'M3V')
+2024-11-13 13:18:14,839 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '4547881191164080768': No known catalog could be found
+2024-11-13 13:18:14,842 - INFO - (9249, '2525804540894629504', 'K0/1V', 'K0/1V')
+2024-11-13 13:18:14,843 - INFO - Base Type: K0V, Next Type: K1V
+2024-11-13 13:18:14,845 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '2525804540894629504': No known catalog could be found
+2024-11-13 13:18:14,848 - INFO - (9250, '2525688198820543360', 'M2.5V', 'M2.5V')
+2024-11-13 13:18:14,849 - INFO - Base Type: M2V, Next Type: M3V
+2024-11-13 13:18:14,851 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '2525688198820543360': No known catalog could be found
+2024-11-13 13:18:14,854 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): Identifier not found in the database : Gaia DR3 2026285138455971200
+2024-11-13 13:18:14,856 - INFO - (9252, '2026285138455971200', None, None)
+2024-11-13 13:18:14,858 - INFO - (9256, '5943550124208359552', 'M3', 'M3')
+2024-11-13 13:18:14,858 - WARNING - No data found for stellar type (2) M3.
+2024-11-13 13:18:14,861 - INFO - (9257, '3413754360367271168', 'K5V', 'K5V')
+2024-11-13 13:18:14,863 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '3413754360367271168': No known catalog could be found
+2024-11-13 13:18:14,867 - INFO - (9258, '6588749457226272512', 'M4', 'M4')
+2024-11-13 13:18:14,867 - WARNING - No data found for stellar type (2) M4.
+2024-11-13 13:18:14,869 - INFO - (9259, '4373199682919087616', '', None)
+2024-11-13 13:18:14,872 - INFO - (9260, '4373199678620639744', '', None)
+2024-11-13 13:18:14,874 - INFO - (9262, '3912369208386557440', 'M4.0Ve', 'M4')
+2024-11-13 13:18:14,874 - WARNING - No data found for stellar type (2) M4.
+2024-11-13 13:18:14,877 - INFO - (9264, '2565529071371410048', 'M4V', 'M4V')
+2024-11-13 13:18:14,880 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '2565529071371410048': No known catalog could be found
+2024-11-13 13:18:14,884 - INFO - (9265, '378607281314502016', 'A2V', 'A2V')
+2024-11-13 13:18:14,888 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '378607281314502016': No known catalog could be found
+2024-11-13 13:18:14,892 - INFO - (9268, '2993676867708999296', 'M0V', 'M0V')
+2024-11-13 13:18:14,895 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '2993676867708999296': No known catalog could be found
+2024-11-13 13:18:14,899 - INFO - (9269, '2707393352986852608', 'K0V', 'K0V')
+2024-11-13 13:18:14,901 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '2707393352986852608': No known catalog could be found
+2024-11-13 13:18:14,904 - INFO - (9271, '5480636002093933312', 'M', None)
+2024-11-13 13:18:14,907 - INFO - (9272, '1301701718658018048', 'F8', 'F8')
+2024-11-13 13:18:14,907 - WARNING - No data found for stellar type (2) F8.
+2024-11-13 13:18:14,910 - INFO - (9274, '2707385278448285696', 'F7V', 'F7V')
+2024-11-13 13:18:14,915 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '2707385278448285696': No known catalog could be found
+2024-11-13 13:18:14,920 - INFO - (9275, '2707420359741156864', 'K1-III-IV', 'K1')
+2024-11-13 13:18:14,920 - WARNING - No data found for stellar type (2) K1.
+2024-11-13 13:18:14,923 - INFO - (9278, '2044341077844183040', 'G1V+K1V', 'G1V')
+2024-11-13 13:18:14,925 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '2044341077844183040': No known catalog could be found
+2024-11-13 13:18:14,931 - INFO - (9279, '5424925195325703424', 'M0', 'M0')
+2024-11-13 13:18:14,931 - WARNING - No data found for stellar type (2) M0.
+2024-11-13 13:18:14,933 - INFO - (9281, '1328078796458810240', 'M2V', 'M2V')
+2024-11-13 13:18:14,936 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '1328078796458810240': No known catalog could be found
+2024-11-13 13:18:14,940 - INFO - (9282, '1869302503184405760', 'K0III', 'K0')
+2024-11-13 13:18:14,941 - WARNING - No data found for stellar type (2) K0.
+2024-11-13 13:18:14,945 - INFO - (9284, '4350368633207571200', '', None)
+2024-11-13 13:18:14,950 - INFO - (9286, '4414858219987352320', 'M0V', 'M0V')
+2024-11-13 13:18:14,955 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '4414858219987352320': No known catalog could be found
+2024-11-13 13:18:14,960 - INFO - (9287, '4414849698772235136', 'K2III', 'K2')
+2024-11-13 13:18:14,961 - WARNING - No data found for stellar type (2) K2.
+2024-11-13 13:18:14,963 - INFO - (9288, '3849259470039948416', '', None)
+2024-11-13 13:18:14,967 - INFO - (9289, '4350344993707489920', 'K7V', 'K7V')
+2024-11-13 13:18:14,970 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '4350344993707489920': No known catalog could be found
+2024-11-13 13:18:14,975 - INFO - (9293, '6047179709272471808', '', None)
+2024-11-13 13:18:14,979 - INFO - (9297, '5531191997722748160', '', None)
+2024-11-13 13:18:14,982 - INFO - (9299, '1349504429784383616', '', None)
+2024-11-13 13:18:14,989 - INFO - (9300, '1971163631220899968', 'G8IIIFe-0.5', 'G8')
+2024-11-13 13:18:14,990 - WARNING - No data found for stellar type (2) G8.
+2024-11-13 13:18:14,994 - INFO - (9301, '5924203182025615616', '', None)
+2024-11-13 13:18:14,997 - INFO - (9302, '47804394753757056', 'K5V', 'K5V')
+2024-11-13 13:18:15,000 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '47804394753757056': No known catalog could be found
+2024-11-13 13:18:15,004 - INFO - (9303, '5924187617032756736', 'M1V', 'M1V')
+2024-11-13 13:18:15,024 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '5924187617032756736': No known catalog could be found
+2024-11-13 13:18:15,030 - INFO - (9305, '47965443143743488', 'F4V', 'F4V')
+2024-11-13 13:18:15,032 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '47965443143743488': No known catalog could be found
+2024-11-13 13:18:15,037 - INFO - (9309, '5169415013899320576', 'K7', 'K7')
+2024-11-13 13:18:15,037 - WARNING - No data found for stellar type (2) K7.
+2024-11-13 13:18:15,040 - INFO - (9310, '3372287649418102016', '', None)
+2024-11-13 13:18:15,043 - INFO - (9311, '2768404669096691072', 'G8V+K5V', 'G8V')
+2024-11-13 13:18:15,046 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '2768404669096691072': No known catalog could be found
+2024-11-13 13:18:15,051 - INFO - (9312, '254564055962696832', 'M1', 'M1')
+2024-11-13 13:18:15,051 - WARNING - No data found for stellar type (2) M1.
+2024-11-13 13:18:15,054 - INFO - (9314, '2456487788826106112', 'M1V', 'M1V')
+2024-11-13 13:18:15,057 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '2456487788826106112': No known catalog could be found
+2024-11-13 13:18:15,061 - INFO - (9315, '5153523497465264000', '', None)
+2024-11-13 13:18:15,065 - INFO - (9316, '2899142301062372608', 'M4e', 'M4')
+2024-11-13 13:18:15,065 - WARNING - No data found for stellar type (2) M4.
+2024-11-13 13:18:15,933 - INFO - (9317, '1022456139210632064', 'K7V', 'K7V')
+2024-11-13 13:18:16,445 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '1022456139210632064': No known catalog could be found
+2024-11-13 13:18:17,109 - INFO - (9318, '1022215621041121792', 'K4/5', 'K4/5')
+2024-11-13 13:18:17,110 - INFO - Base Type: K4, Next Type: K5
+2024-11-13 13:18:17,110 - WARNING - No data found for stellar type K4/5.
+2024-11-13 13:18:17,655 - INFO - (9319, '1022456104850892928', 'M0V', 'M0V')
+2024-11-13 13:18:17,830 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '1022456104850892928': No known catalog could be found
+2024-11-13 13:18:18,477 - INFO - (9321, '2456361448068627712', 'K0VCN+2', 'K0V')
+2024-11-13 13:18:18,668 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '2456361448068627712': No known catalog could be found
+2024-11-13 13:18:19,214 - INFO - (9322, '2456361654225919488', '', None)
+2024-11-13 13:18:19,237 - INFO - (9323, '2456361654225919488', '', None)
+2024-11-13 13:18:19,752 - INFO - (9324, '2456594647612706432', 'M2', 'M2')
+2024-11-13 13:18:19,753 - WARNING - No data found for stellar type (2) M2.
+2024-11-13 13:18:20,256 - INFO - (9326, '4038055447710652032', '', None)
+2024-11-13 13:18:20,789 - INFO - (9327, '2856765684112654336', 'K3V', 'K3V')
+2024-11-13 13:18:20,968 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '2856765684112654336': No known catalog could be found
+2024-11-13 13:18:21,527 - INFO - (9329, '35773474098974592', 'F6V', 'F6V')
+2024-11-13 13:18:21,816 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '35773474098974592': No known catalog could be found
+2024-11-13 13:18:22,348 - INFO - (9330, '434690036555954304', 'M2.0V', 'M2')
+2024-11-13 13:18:22,348 - WARNING - No data found for stellar type (2) M2.
+2024-11-13 13:18:22,864 - INFO - (9331, '5941374534288441728', 'M1', 'M1')
+2024-11-13 13:18:22,865 - WARNING - No data found for stellar type (2) M1.
+2024-11-13 13:18:24,602 - INFO - (9333, '4283361027353595520', '', None)
+2024-11-13 13:18:24,619 - INFO - (9336, '5378886891123024512', 'K4.5Vk:', 'K4.5V')
+2024-11-13 13:18:24,619 - INFO - Base Type: K4V, Next Type: K5V
+2024-11-13 13:18:24,634 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '5378886891123024512': No known catalog could be found
+2024-11-13 13:18:25,296 - INFO - (9338, '5853498713160606720', 'M5.5Ve', 'M5.5V')
+2024-11-13 13:18:25,297 - INFO - Base Type: M5V, Next Type: M6V
+2024-11-13 13:18:26,141 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '5853498713160606720': No known catalog could be found
+2024-11-13 13:18:26,715 - INFO - (9339, '1548107600202207488', 'M4.0Ve', 'M4')
+2024-11-13 13:18:26,716 - WARNING - No data found for stellar type (2) M4.
+2024-11-13 13:18:27,220 - INFO - (9342, '4548159809988433024', 'M2.5V', 'M2.5V')
+2024-11-13 13:18:27,221 - INFO - Base Type: M2V, Next Type: M3V
+2024-11-13 13:18:27,640 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '4548159809988433024': No known catalog could be found
+2024-11-13 13:18:28,146 - INFO - (9343, '3366718833479009408', 'G9V', 'G9V')
+2024-11-13 13:18:28,303 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '3366718833479009408': No known catalog could be found
+2024-11-13 13:18:28,963 - INFO - (9345, '1573172337850355200', 'M0.5V', 'M0.5V')
+2024-11-13 13:18:28,963 - INFO - Base Type: M0V, Next Type: M1V
+2024-11-13 13:18:29,150 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '1573172337850355200': No known catalog could be found
+2024-11-13 13:18:29,677 - INFO - (9346, '1572914025633785728', 'K2', 'K2')
+2024-11-13 13:18:29,678 - WARNING - No data found for stellar type (2) K2.
+2024-11-13 13:18:30,409 - INFO - (9347, '1572914025633785472', 'K3', 'K3')
+2024-11-13 13:18:30,410 - WARNING - No data found for stellar type (2) K3.
+2024-11-13 13:18:30,934 - INFO - (9349, '1573172307785130496', 'K5', 'K5')
+2024-11-13 13:18:30,934 - WARNING - No data found for stellar type (2) K5.
+2024-11-13 13:18:32,101 - INFO - (9353, '57890528450770560', 'K6/7', 'K6/7')
+2024-11-13 13:18:32,101 - INFO - Base Type: K6, Next Type: K7
+2024-11-13 13:18:32,101 - WARNING - No data found for stellar type K6/7.
+2024-11-13 13:18:32,689 - INFO - (9354, '1376860377865794944', 'M2.4', 'M2')
+2024-11-13 13:18:32,689 - WARNING - No data found for stellar type (2) M2.
+2024-11-13 13:18:33,204 - INFO - (9355, '4009907091045107584', 'K7V', 'K7V')
+2024-11-13 13:18:33,357 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '4009907091045107584': No known catalog could be found
+2024-11-13 13:18:35,055 - INFO - (9356, '1026337587055011968', '', None)
+2024-11-13 13:18:35,624 - INFO - (9357, '4334643452263994880', '', None)
+2024-11-13 13:18:36,123 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): Identifier not found in the database : Gaia DR3 6876255323940468352
+2024-11-13 13:18:36,125 - INFO - (9360, '6876255323940468352', None, None)
+2024-11-13 13:18:36,853 - INFO - (9361, '1499696549907455360', 'K7V', 'K7V')
+2024-11-13 13:18:37,350 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '1499696549907455360': No known catalog could be found
+2024-11-13 13:18:39,278 - INFO - (9364, '3407785622839603968', 'M0V', 'M0V')
+2024-11-13 13:18:39,446 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '3407785622839603968': No known catalog could be found
+2024-11-13 13:18:39,980 - INFO - (9367, '1803284595237131904', 'M0.5', 'M0.5')
+2024-11-13 13:18:39,981 - INFO - Base Type: M05, Next Type: M15
+2024-11-13 13:18:39,981 - WARNING - No data found for stellar type M0.5.
+2024-11-13 13:18:40,507 - INFO - (9369, '1803475188714186368', 'K6V', 'K6V')
+2024-11-13 13:18:40,688 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '1803475188714186368': No known catalog could be found
+2024-11-13 13:18:41,217 - INFO - (9370, '5851167679807239808', 'M3', 'M3')
+2024-11-13 13:18:41,217 - WARNING - No data found for stellar type (2) M3.
+2024-11-13 13:18:41,875 - INFO - (9378, '5358900174919209984', '', None)
+2024-11-13 13:18:42,422 - INFO - (9381, '4450372376847499904', 'K5V', 'K5V')
+2024-11-13 13:18:42,597 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '4450372376847499904': No known catalog could be found
+2024-11-13 13:18:43,133 - INFO - (9384, '378851098016946816', 'M3.0V', 'M3')
+2024-11-13 13:18:43,134 - WARNING - No data found for stellar type (2) M3.
+2024-11-13 13:18:43,832 - INFO - (9388, '378026395579692672', 'M0V', 'M0V')
+2024-11-13 13:18:43,994 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '378026395579692672': No known catalog could be found
+2024-11-13 13:18:44,524 - INFO - (9390, '6421374031949679744', 'M3.0V', 'M3')
+2024-11-13 13:18:44,524 - WARNING - No data found for stellar type (2) M3.
+2024-11-13 13:18:45,042 - INFO - (9395, '5522879208777731200', 'M3', 'M3')
+2024-11-13 13:18:45,043 - WARNING - No data found for stellar type (2) M3.
+2024-11-13 13:18:45,740 - INFO - (9397, '606004183065166720', '', None)
+2024-11-13 13:18:46,267 - INFO - (9398, '4548462729742343296', 'K2.5V', 'K2.5V')
+2024-11-13 13:18:46,268 - INFO - Base Type: K2V, Next Type: K3V
+2024-11-13 13:18:46,453 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '4548462729742343296': No known catalog could be found
+2024-11-13 13:18:46,975 - INFO - (9399, '5079592851010222336', 'K7/M0V', 'K7/M0V')
+2024-11-13 13:18:46,976 - INFO - Base Type: K7V, Next Type: M0V
+2024-11-13 13:18:47,137 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '5079592851010222336': No known catalog could be found
+2024-11-13 13:18:47,160 - INFO - (9400, '3812355294262255104', 'K3', 'K3')
+2024-11-13 13:18:47,160 - WARNING - No data found for stellar type (2) K3.
+2024-11-13 13:18:47,684 - INFO - (9402, '6188345358621678592', 'K7', 'K7')
+2024-11-13 13:18:47,685 - WARNING - No data found for stellar type (2) K7.
+2024-11-13 13:18:48,203 - INFO - (9403, '6188331614726318720', 'M1', 'M1')
+2024-11-13 13:18:48,204 - WARNING - No data found for stellar type (2) M1.
+2024-11-13 13:18:48,717 - INFO - (9404, '351781598485715712', 'M1', 'M1')
+2024-11-13 13:18:48,718 - WARNING - No data found for stellar type (2) M1.
+2024-11-13 13:18:49,247 - INFO - (9405, '1609586552350380928', 'K0', 'K0')
+2024-11-13 13:18:49,248 - WARNING - No data found for stellar type (2) K0.
+2024-11-13 13:18:49,757 - INFO - (9406, '1609585452838737536', 'K2', 'K2')
+2024-11-13 13:18:49,757 - WARNING - No data found for stellar type (2) K2.
+2024-11-13 13:18:50,295 - INFO - (9408, '2822328189657389824', 'M3.67', 'M3')
+2024-11-13 13:18:50,295 - WARNING - No data found for stellar type (2) M3.
+2024-11-13 13:18:50,822 - INFO - (9409, '6256024383824291712', 'K4V', 'K4V')
+2024-11-13 13:18:51,172 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '6256024383824291712': No known catalog could be found
+2024-11-13 13:18:51,700 - INFO - (9410, '3403722072679163520', '', None)
+2024-11-13 13:18:52,215 - INFO - (9411, '950395658954590080', 'K4.5V', 'K4.5V')
+2024-11-13 13:18:52,216 - INFO - Base Type: K4V, Next Type: K5V
+2024-11-13 13:18:52,384 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '950395658954590080': No known catalog could be found
+2024-11-13 13:18:52,922 - INFO - (9412, '950362158209755008', 'K3V', 'K3V')
+2024-11-13 13:18:53,084 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '950362158209755008': No known catalog could be found
+2024-11-13 13:18:53,616 - INFO - (9413, '5982775854377691136', 'G5', 'G5')
+2024-11-13 13:18:53,617 - WARNING - No data found for stellar type (2) G5.
+2024-11-13 13:18:54,122 - INFO - (9415, '369092520004831232', 'K2V', 'K2V')
+2024-11-13 13:18:54,319 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '369092520004831232': No known catalog could be found
+2024-11-13 13:18:54,836 - INFO - (9416, '950395654664758272', 'M1.0V', 'M1')
+2024-11-13 13:18:54,837 - WARNING - No data found for stellar type (2) M1.
+2024-11-13 13:18:55,364 - INFO - (9417, '3364557601640710272', 'M3.5', 'M3.5')
+2024-11-13 13:18:55,365 - INFO - Base Type: M35, Next Type: M45
+2024-11-13 13:18:55,365 - WARNING - No data found for stellar type M3.5.
+2024-11-13 13:18:56,035 - INFO - (9419, '5530317851619425024', 'F3/5V', 'F3/5V')
+2024-11-13 13:18:56,036 - INFO - Base Type: F3V, Next Type: F5V
+2024-11-13 13:18:56,236 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '5530317851619425024': No known catalog could be found
+2024-11-13 13:18:56,748 - INFO - (9425, '3016264895288516096', 'K6V', 'K6V')
+2024-11-13 13:18:56,938 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '3016264895288516096': No known catalog could be found
+2024-11-13 13:18:57,456 - INFO - (9427, '4534907125764957184', 'K3', 'K3')
+2024-11-13 13:18:57,456 - WARNING - No data found for stellar type (2) K3.
+2024-11-13 13:18:57,997 - INFO - (9428, '144377803854541184', 'K7V', 'K7V')
+2024-11-13 13:18:58,160 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '144377803854541184': No known catalog could be found
+2024-11-13 13:18:58,681 - INFO - (9429, '144357737767321600', '', None)
+2024-11-13 13:18:59,188 - INFO - (9430, '144290220880929664', '', None)
+2024-11-13 13:18:59,742 - INFO - (9431, '144410205086676480', 'M1.5V', 'M1.5V')
+2024-11-13 13:18:59,743 - INFO - Base Type: M1V, Next Type: M2V
+2024-11-13 13:18:59,953 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '144410205086676480': No known catalog could be found
+2024-11-13 13:19:00,717 - INFO - (9433, '5090382015016433920', 'A5mA5-F2', 'A5')
+2024-11-13 13:19:00,718 - WARNING - No data found for stellar type (2) A5.
+2024-11-13 13:19:01,301 - INFO - (9435, '5074223179817696384', '', None)
+2024-11-13 13:19:01,826 - INFO - (9436, '5074604160596736640', 'K7Ve', 'K7V')
+2024-11-13 13:19:01,992 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '5074604160596736640': No known catalog could be found
+2024-11-13 13:19:02,514 - INFO - (9438, '3007203682525892096', 'M0', 'M0')
+2024-11-13 13:19:02,514 - WARNING - No data found for stellar type (2) M0.
+2024-11-13 13:19:03,048 - INFO - (9440, '3812756203689026048', 'M0.0V', 'M0')
+2024-11-13 13:19:03,048 - WARNING - No data found for stellar type (2) M0.
+2024-11-13 13:19:03,564 - INFO - (9445, '65371399405314304', '', None)
+2024-11-13 13:19:04,278 - INFO - (9450, '4264630567601100672', '', None)
+2024-11-13 13:19:04,803 - INFO - (9451, '4267422193264246784', 'M1.5V', 'M1.5V')
+2024-11-13 13:19:04,804 - INFO - Base Type: M1V, Next Type: M2V
+2024-11-13 13:19:05,335 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '4267422193264246784': No known catalog could be found
+2024-11-13 13:19:05,957 - INFO - (9452, '1487978985771281792', '', None)
+2024-11-13 13:19:06,536 - INFO - (9454, '5343936233991963392', 'K5Ve', 'K5V')
+2024-11-13 13:19:06,714 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '5343936233991963392': No known catalog could be found
+2024-11-13 13:19:07,233 - INFO - (9455, '3468503030042878080', '', None)
+2024-11-13 13:19:07,762 - INFO - (9460, '3312197934506930944', 'K7', 'K7')
+2024-11-13 13:19:07,763 - WARNING - No data found for stellar type (2) K7.
+2024-11-13 13:19:08,282 - INFO - (9465, '4001560011083799168', 'K0V', 'K0V')
+2024-11-13 13:19:08,473 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '4001560011083799168': No known catalog could be found
+2024-11-13 13:19:09,196 - INFO - (9467, '4530873876601669504', '', None)
+2024-11-13 13:19:09,685 - INFO - (9468, '3468503747302478336', 'M1.5Ve', 'M1.5V')
+2024-11-13 13:19:09,686 - INFO - Base Type: M1V, Next Type: M2V
+2024-11-13 13:19:09,850 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '3468503747302478336': No known catalog could be found
+2024-11-13 13:19:10,378 - INFO - (9471, '1450067137649449728', 'M4Ve', 'M4V')
+2024-11-13 13:19:10,565 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '1450067137649449728': No known catalog could be found
+2024-11-13 13:19:11,097 - INFO - (9473, '4522817514378193280', 'M1.5', 'M1.5')
+2024-11-13 13:19:11,098 - INFO - Base Type: M15, Next Type: M25
+2024-11-13 13:19:11,098 - WARNING - No data found for stellar type M1.5.
+2024-11-13 13:19:12,326 - INFO - (9474, '5509620021956148736', 'K', None)
+2024-11-13 13:19:13,002 - INFO - (9476, '5927872978146315904', '', None)
+2024-11-13 13:19:13,528 - INFO - (9479, '4548562265603840768', '', None)
+2024-11-13 13:19:13,599 - INFO - (9480, '4548562265603840768', '', None)
+2024-11-13 13:19:14,045 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): Identifier not found in the database : Gaia DR2 378941498488376704
+2024-11-13 13:19:14,048 - INFO - (9481, '378941498488376704', None, None)
+2024-11-13 13:19:14,578 - INFO - (9483, '4128437433842765184', 'M2.0', 'M2')
+2024-11-13 13:19:14,578 - WARNING - No data found for stellar type (2) M2.
+2024-11-13 13:19:15,093 - INFO - (9486, '6223456372670070656', '', None)
+2024-11-13 13:19:15,641 - INFO - (9488, '148709810947139968', 'K7V', 'K7V')
+2024-11-13 13:19:16,147 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '148709810947139968': No known catalog could be found
+2024-11-13 13:19:16,861 - INFO - (9489, '1561056995318526848', '', None)
+2024-11-13 13:19:18,081 - INFO - (9493, '2708264509793292544', 'M1.5V', 'M1.5V')
+2024-11-13 13:19:18,082 - INFO - Base Type: M1V, Next Type: M2V
+2024-11-13 13:19:18,305 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '2708264509793292544': No known catalog could be found
+2024-11-13 13:19:18,783 - INFO - (9494, '1328175244235184512', 'K8V', 'K8V')
+2024-11-13 13:19:18,959 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '1328175244235184512': No known catalog could be found
+2024-11-13 13:19:19,598 - INFO - (9496, '6582715955889940608', '', None)
+2024-11-13 13:19:19,605 - INFO - (9497, '6427464123776727168', 'G8IV', 'G8IV')
+2024-11-13 13:19:19,613 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '6427464123776727168': No known catalog could be found
+2024-11-13 13:19:20,168 - INFO - (9498, '3028261872825610368', '', None)
+2024-11-13 13:19:20,701 - INFO - (9499, '3028229020612461824', '', None)
+2024-11-13 13:19:21,230 - INFO - (9500, '11037726649058432', 'K4/5V', 'K4/5V')
+2024-11-13 13:19:21,231 - INFO - Base Type: K4V, Next Type: K5V
+2024-11-13 13:19:21,390 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '11037726649058432': No known catalog could be found
+2024-11-13 13:19:21,934 - INFO - (9502, '5077642283022422656', 'K5V', 'K5V')
+2024-11-13 13:19:22,109 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '5077642283022422656': No known catalog could be found
+2024-11-13 13:19:22,628 - INFO - (9503, '4338433743723131648', 'K9Vkee', 'K9V')
+2024-11-13 13:19:22,795 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): '4338433743723131648': No known catalog could be found
+2024-11-13 13:19:23,342 - INFO - (9504, '2358524597030794112', 'M4.0Ve', 'M4')
+2024-11-13 13:19:23,343 - WARNING - No data found for stellar type (2) M4.
+2024-11-13 13:19:23,826 - INFO - (9505, '6089844230761486848', '', None)
+2024-11-13 13:19:24,376 - INFO - (9507, '3159373029497325824', '', None)
+2024-11-13 13:19:24,899 - WARNING - BlankResponseWarning: Warning: The script line number 3 raised an error (recorded in the `errors` attribute of the result table): Identifier not found in the database : Gaia DR3 198579603934059392
+2024-11-13 13:19:24,916 - INFO - (9510, '198579603934059392', None, None)
+2024-11-13 13:19:25,414 - INFO - (9514, '45142202225729024', '', None)
+2024-11-13 13:19:27,348 - INFO - (9517, '2845310284779026560', '', None)
+2024-11-13 13:19:27,363 - INFO - (9518, '2845310284779026560', '', None)
+2024-11-13 13:19:27,892 - INFO - (9519, '3026564158149723904', 'K2V', 'K2V')
