@@ -9054,3 +9054,578 @@
 2024-11-15 16:21:53,365 - INFO - (100, nan, None, None)
 2024-11-15 16:21:53,370 - INFO - (80, nan, None, None)
 2024-11-15 16:21:53,374 - INFO - (93, nan, None, None)
+2024-11-19 21:05:12,474 - INFO - (0, '5826168461855385472', 'F1V', 'F1V')
+2024-11-19 21:05:12,504 - INFO - (1, '4713424658274227456', 'F0IV', 'F0IV')
+2024-11-19 21:05:12,543 - INFO - (2, '6165699748415726848', 'kA1.5hA3mA3Va', None)
+2024-11-19 21:05:13,066 - INFO - (3, '4269932382607207040', 'K0III-IV', 'K0')
+2024-11-19 21:05:13,067 - WARNING - No data found for stellar type (2) K0.
+2024-11-19 21:05:13,088 - INFO - (5, '5849837854861497856', 'A7VpSrCrEu', 'A7V')
+2024-11-19 21:05:13,541 - INFO - (6, '4594497769766809216', 'G5IV', 'G5IV')
+2024-11-19 21:05:13,928 - INFO - (7, '3352485999058854912', 'F5IV-V', 'F5IV-V')
+2024-11-19 21:05:13,929 - INFO - Base Type: F5IV, Next Type: F5V
+2024-11-19 21:05:14,424 - INFO - (8, '2452378776434477184', 'G8V', 'G8V')
+2024-11-19 21:05:14,611 - INFO - (9, '5164120762333028736', 'K0+IV', 'K0')
+2024-11-19 21:05:14,611 - WARNING - No data found for stellar type (2) K0.
+2024-11-19 21:05:15,034 - INFO - (10, '299464296906886016', 'F5III', 'F5')
+2024-11-19 21:05:15,035 - WARNING - No data found for stellar type (2) F5.
+2024-11-19 21:05:15,466 - INFO - (11, '6427464123776727168', 'G8IV', 'G8IV')
+2024-11-19 21:05:15,624 - INFO - (13, '6356375508717699584', 'K1III', 'K1')
+2024-11-19 21:05:15,625 - WARNING - No data found for stellar type (2) K1.
+2024-11-19 21:05:15,636 - INFO - (14, '866177431955478144', 'F2VkF0mF0', 'F2V')
+2024-11-19 21:05:15,726 - INFO - (16, '4296708789290712064', 'G8IV', 'G8IV')
+2024-11-19 21:05:15,756 - INFO - (19, '4937200425857908992', 'G8IIIbCNIV', 'G8')
+2024-11-19 21:05:15,756 - WARNING - No data found for stellar type (2) G8.
+2024-11-19 21:05:15,767 - INFO - (22, '2939555954747554176', 'K1.5III-IVFe1', 'K1.5')
+2024-11-19 21:05:15,767 - INFO - Base Type: K15, Next Type: K25
+2024-11-19 21:05:15,767 - WARNING - No data found for stellar type K1.5.
+2024-11-19 21:05:15,778 - INFO - (24, '6337717036911729024', 'F2V', 'F2V')
+2024-11-19 21:05:15,802 - INFO - (40, '6171375049483037696', 'F2V', 'F2V')
+2024-11-19 21:05:15,826 - INFO - (46, '1743871762876699776', 'F7(V)+G0(V)', 'F7')
+2024-11-19 21:05:15,827 - WARNING - No data found for stellar type (2) F7.
+2024-11-19 21:05:15,837 - INFO - (56, '3269362645115584640', 'G5V', 'G5V')
+2024-11-19 21:05:16,297 - INFO - (94, '6232511606838403968', 'K4V', 'K4V')
+2024-11-19 21:05:16,858 - INFO - (108, '2029433521248546304', 'G7IV-V', 'G7IV-V')
+2024-11-19 21:05:16,859 - INFO - Base Type: G7IV, Next Type: G7V
+2024-11-19 21:05:17,012 - INFO - (114, '2802397960855105920', 'K0.5V', 'K0.5V')
+2024-11-19 21:05:17,012 - INFO - Base Type: K0V, Next Type: K1V
+2024-11-19 21:05:17,496 - INFO - (117, '704967037090946688', 'K0IV-V', 'K0IV-V')
+2024-11-19 21:05:17,498 - INFO - Base Type: K0IV, Next Type: K0V
+2024-11-19 21:05:17,655 - INFO - (123, '1236929488664453376', 'K0.5V', 'K0.5V')
+2024-11-19 21:05:17,656 - INFO - Base Type: K0V, Next Type: K1V
+2024-11-19 21:05:18,114 - INFO - (133, '3211461469444773376', 'K3+V', 'K3V')
+2024-11-19 21:05:18,686 - INFO - (136, '6863535898551993472', 'K3VaCN1', 'K3V')
+2024-11-19 21:05:19,084 - INFO - (140, '6583272171336048640', 'M1V', 'M1V')
+2024-11-19 21:05:19,523 - INFO - (146, '5117974602912370432', 'G8V', 'G8V')
+2024-11-19 21:05:19,685 - INFO - (150, '2595463996992115840', 'G2V+G3V', 'G2V')
+2024-11-19 21:05:20,121 - INFO - (151, '4377160604838377600', 'K3-V', 'K3V')
+2024-11-19 21:05:20,688 - INFO - (153, '6190970236474307200', 'G5Va', 'G5V')
+2024-11-19 21:05:21,242 - INFO - (159, '6742873637093574400', 'G2V', 'G2V')
+2024-11-19 21:05:21,909 - INFO - (160, '5866992641380992256', 'K3IV', 'K3IV')
+2024-11-19 21:05:22,474 - INFO - (161, '6029992663310612096', 'K0IV-V', 'K0IV-V')
+2024-11-19 21:05:22,476 - INFO - Base Type: K0IV, Next Type: K0V
+2024-11-19 21:05:23,046 - INFO - (163, '6791154257817212672', 'G7V', 'G7V')
+2024-11-19 21:05:23,211 - INFO - (165, '1237090738916392832', 'K5Ve', 'K5V')
+2024-11-19 21:05:23,650 - INFO - (169, '3372159045216183552', 'K2Ve', 'K2V')
+2024-11-19 21:05:23,820 - INFO - (170, '6553614253923452800', 'M2V', 'M2V')
+2024-11-19 21:05:23,849 - INFO - (173, '3487062064765702272', 'K4+V', 'K4V')
+2024-11-19 21:05:23,872 - INFO - (176, '5059349158319689344', 'G7V', 'G7V')
+2024-11-19 21:05:23,898 - INFO - (177, '6317854874752594048', 'G9V', 'G9V')
+2024-11-19 21:05:23,921 - INFO - (178, '4660766641264343680', 'K0V', 'K0V')
+2024-11-19 21:05:23,944 - INFO - (179, '6164998500516764160', 'K0V', 'K0V')
+2024-11-19 21:05:23,968 - INFO - (193, '3057712223051571200', 'K3V', 'K3V')
+2024-11-19 21:05:24,404 - INFO - (198, '4375233191015944192', 'K7V', 'K7V')
+2024-11-19 21:05:24,812 - INFO - (206, '6244076338858859776', 'K3V', 'K3V')
+2024-11-19 21:05:24,843 - INFO - (207, '5334356223546961536', 'K5-V', 'K5V')
+2024-11-19 21:05:24,872 - INFO - (209, '3209938366665770752', 'M1.5Ve', 'M1.5V')
+2024-11-19 21:05:24,873 - INFO - Base Type: M1V, Next Type: M2V
+2024-11-19 21:05:25,308 - INFO - (212, '5914096303621755520', 'K2.5Vk:', 'K2.5V')
+2024-11-19 21:05:25,310 - INFO - Base Type: K2V, Next Type: K3V
+2024-11-19 21:05:25,470 - INFO - (215, '5970956070030449792', 'K3V', 'K3V')
+2024-11-19 21:05:26,040 - INFO - (216, '5412947081295024896', 'K6Vk:', 'K6V')
+2024-11-19 21:05:26,571 - INFO - (217, '1451450048399808384', 'K4V', 'K4V')
+2024-11-19 21:05:27,128 - INFO - (220, '3210731015768096000', 'K5V', 'K5V')
+2024-11-19 21:05:27,288 - INFO - (224, '4187837450005193088', 'K2V', 'K2V')
+2024-11-19 21:05:27,715 - INFO - (228, '3812355294262255104', 'K3', 'K3')
+2024-11-19 21:05:27,716 - WARNING - No data found for stellar type (2) K3.
+2024-11-19 21:05:27,735 - INFO - (230, '2940856402123426176', 'M1V', 'M1V')
+2024-11-19 21:05:28,167 - INFO - (232, '5378886891123024512', 'K4.5Vk:', 'K4.5V')
+2024-11-19 21:05:28,168 - INFO - Base Type: K4V, Next Type: K5V
+2024-11-19 21:05:28,332 - INFO - (235, '6608490501308343168', 'K4.5Vk', 'K4.5V')
+2024-11-19 21:05:28,332 - INFO - Base Type: K4V, Next Type: K5V
+2024-11-19 21:05:28,359 - INFO - (237, '5170039467784804096', 'K4V', 'K4V')
+2024-11-19 21:05:28,387 - INFO - (238, '670216834655936128', 'K2.5V', 'K2.5V')
+2024-11-19 21:05:28,388 - INFO - Base Type: K2V, Next Type: K3V
+2024-11-19 21:05:28,829 - INFO - (240, '4224259562941398400', 'K1/2V', 'K1/2V')
+2024-11-19 21:05:28,830 - INFO - Base Type: K1V, Next Type: K2V
+2024-11-19 21:05:29,489 - INFO - (241, '5739942011185493888', 'K1Vp', 'K1V')
+2024-11-19 21:05:29,654 - INFO - (242, '3934198156329809152', 'K4.5V', 'K4.5V')
+2024-11-19 21:05:29,655 - INFO - Base Type: K4V, Next Type: K5V
+2024-11-19 21:05:29,685 - INFO - (244, '3411339626674506624', 'K4V', 'K4V')
+2024-11-19 21:05:29,710 - INFO - (245, '6060965699625586176', 'K4V', 'K4V')
+2024-11-19 21:05:29,737 - INFO - (250, '1743592452563243136', 'K3V', 'K3V')
+2024-11-19 21:05:30,171 - INFO - (251, '1451450048399313792', 'K6V', 'K6V')
+2024-11-19 21:05:30,322 - INFO - (254, '3741297293732404352', 'M2V', 'M2V')
+2024-11-19 21:05:30,357 - INFO - (257, '579567598501642368', 'K4V', 'K4V')
+2024-11-19 21:05:30,783 - INFO - (258, '5994771148252505216', 'K4V', 'K4V')
+2024-11-19 21:05:31,345 - INFO - (261, '4673947174316727040', 'K4.5V', 'K4.5V')
+2024-11-19 21:05:31,346 - INFO - Base Type: K4V, Next Type: K5V
+2024-11-19 21:05:31,509 - INFO - (262, '2306965202564744064', 'M2V', 'M2V')
+2024-11-19 21:05:31,931 - INFO - (263, '6288325222245417856', 'K6Va', 'K6V')
+2024-11-19 21:05:32,651 - INFO - (265, '151650076838458112', 'K2.5Ve', 'K2.5V')
+2024-11-19 21:05:32,652 - INFO - Base Type: K2V, Next Type: K3V
+2024-11-19 21:05:32,810 - INFO - (268, '6562924609150908416', 'M2/3V', 'M2/3V')
+2024-11-19 21:05:32,810 - INFO - Base Type: M2V, Next Type: M3V
+2024-11-19 21:05:33,226 - INFO - (269, '2974726131970829952', 'K7V', 'K7V')
+2024-11-19 21:05:33,689 - INFO - (272, '1736838805468812160', 'K6V', 'K6V')
+2024-11-19 21:05:33,855 - INFO - (274, '6391176735363140480', 'K6V', 'K6V')
+2024-11-19 21:05:33,883 - INFO - (275, '6794047652729201024', 'M1VeBa1', 'M1V')
+2024-11-19 21:05:33,910 - INFO - (276, '84675937371332608', 'K3.5Vk', 'K3.5V')
+2024-11-19 21:05:33,911 - INFO - Base Type: K3V, Next Type: K4V
+2024-11-19 21:05:33,939 - INFO - (278, '6187271616797377152', 'K5Vk:', 'K5V')
+2024-11-19 21:05:33,962 - INFO - (279, '2552288133874677760', 'K2V', 'K2V')
+2024-11-19 21:05:34,120 - INFO - (280, '4986970575602213504', 'K5Ve', 'K5V')
+2024-11-19 21:05:34,148 - INFO - (281, '5593584059906793088', 'K3V', 'K3V')
+2024-11-19 21:05:34,175 - INFO - (282, '866177431955017600', 'K6V', 'K6V')
+2024-11-19 21:05:34,202 - INFO - (283, '5951165616635298816', 'M0VpCa-3Cr-1', 'M0V')
+2024-11-19 21:05:34,225 - INFO - (286, '4683897617110115200', 'G0V', 'G0V')
+2024-11-19 21:05:34,245 - INFO - (287, '5698015743046182272', 'F5IIkF2IImF5II', 'F5')
+2024-11-19 21:05:34,245 - WARNING - No data found for stellar type (2) F5.
+2024-11-19 21:05:34,253 - INFO - (288, '6838311796136238976', 'kA5hF0mF2III', None)
+2024-11-19 21:05:34,265 - INFO - (293, '5702029029197580160', 'G3V+K0V', 'G3V')
+2024-11-19 21:05:34,289 - INFO - (294, '3213958769587525888', 'K3V', 'K3V')
+2024-11-19 21:17:50,075 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,075 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,076 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,076 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,076 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,076 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,076 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,076 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,077 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,077 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,077 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,077 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,077 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,078 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,078 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,078 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,079 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,079 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,079 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,079 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,080 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,080 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,080 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,080 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,080 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,080 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,080 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,081 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,148 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,149 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,150 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,150 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,150 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,151 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,151 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,152 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,154 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,155 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,155 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,156 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,156 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,156 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,157 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,158 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,160 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,161 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,161 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,161 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,163 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,163 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,164 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,165 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,165 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,165 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,165 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:50,166 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,160 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,161 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,161 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,161 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,161 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,161 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,161 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,162 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,162 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,163 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,163 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,163 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,163 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,163 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,163 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,164 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,164 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,164 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,165 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,165 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,165 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,165 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,166 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,166 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,166 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,194 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,194 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,195 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,195 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,195 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,196 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,196 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,196 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,198 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,199 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,199 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,199 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,199 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,199 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,200 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,202 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,202 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,203 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,203 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,204 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,204 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,205 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,205 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,205 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,206 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,274 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,274 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,275 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,275 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,275 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,275 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,275 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,276 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,277 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,278 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,278 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,278 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,278 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,279 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,280 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,282 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,282 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,282 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,282 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,283 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,283 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,284 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,284 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,284 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,285 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,308 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,309 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,309 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,309 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,309 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,309 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,309 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,310 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,310 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,311 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,311 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,311 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,311 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,311 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,311 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,312 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,312 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,312 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,313 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,313 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,313 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,313 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,313 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,314 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,314 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,391 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,393 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,394 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,394 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,394 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,395 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,395 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,396 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,398 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,399 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,399 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,399 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,399 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,400 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,401 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,404 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,404 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,405 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,405 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,406 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,407 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,408 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,408 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,408 - WARNING - posx and posy should be finite values
+2024-11-19 21:17:58,409 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,188 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,189 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,189 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,189 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,189 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,189 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,189 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,190 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,190 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,191 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,191 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,191 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,191 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,191 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,191 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,192 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,192 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,192 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,192 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,193 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,193 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,193 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,193 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,193 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,194 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,222 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,222 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,223 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,223 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,223 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,224 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,224 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,224 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,226 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,227 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,227 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,227 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,227 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,228 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,228 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,231 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,231 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,231 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,231 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,232 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,232 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,233 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,234 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,234 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,234 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,303 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,303 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,304 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,304 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,304 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,305 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,305 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,305 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,307 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,308 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,308 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,308 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,308 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,309 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,309 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,312 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,312 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,312 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,313 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,314 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,314 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,315 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,315 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,315 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,315 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,340 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,340 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,341 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,341 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,341 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,341 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,341 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,341 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,342 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,342 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,342 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,342 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,343 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,343 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,343 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,344 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,344 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,344 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,344 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,345 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,345 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,345 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,345 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,345 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,345 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,427 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,427 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,428 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,428 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,428 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,429 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,429 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,430 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,433 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,434 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,435 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,435 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,435 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,435 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,436 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,439 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,440 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,440 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,441 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,443 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,446 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,448 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,448 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,448 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:07,448 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,562 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,563 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,563 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,563 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,563 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,563 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,563 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,564 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,564 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,565 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,565 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,565 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,565 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,565 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,565 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,566 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,566 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,566 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,566 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,567 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,567 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,568 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,568 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,568 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,568 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,593 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,593 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,594 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,594 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,594 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,594 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,594 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,595 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,597 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,598 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,598 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,598 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,598 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,599 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,599 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,601 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,602 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,602 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,602 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,603 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,603 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,604 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,604 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,604 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,605 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,670 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,670 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,671 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,671 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,671 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,672 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,672 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,672 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,674 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,675 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,675 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,675 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,675 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,675 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,676 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,678 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,679 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,679 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,679 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,680 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,680 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,681 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,681 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,681 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,682 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,704 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,704 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,705 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,705 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,705 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,705 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,705 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,705 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,706 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,706 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,706 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,706 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,706 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,706 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,707 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,708 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,708 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,708 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,708 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,709 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,709 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,709 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,709 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,709 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,709 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,781 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,781 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,782 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,782 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,782 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,783 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,783 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,784 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,786 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,787 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,787 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,788 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,788 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,789 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,790 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,793 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,793 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,793 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,794 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,795 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,795 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,797 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,797 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,797 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:12,798 - WARNING - posx and posy should be finite values
+2024-11-19 21:18:50,032 - INFO - (26, nan, None, None)
+2024-11-19 21:18:50,037 - INFO - (27, nan, None, None)
+2024-11-19 21:18:50,042 - INFO - (13, nan, None, None)
+2024-11-19 21:18:50,047 - INFO - (15, nan, None, None)
+2024-11-19 21:18:50,050 - INFO - (21, nan, None, None)
+2024-11-19 21:18:50,054 - INFO - (22, nan, None, None)
+2024-11-19 21:18:50,057 - INFO - (23, nan, None, None)
+2024-11-19 21:18:50,061 - INFO - (30, nan, None, None)
+2024-11-19 21:18:50,064 - INFO - (51, nan, None, None)
+2024-11-19 21:18:50,068 - INFO - (49, nan, None, None)
+2024-11-19 21:18:50,071 - INFO - (44, nan, None, None)
+2024-11-19 21:18:50,074 - INFO - (55, nan, None, None)
+2024-11-19 21:18:50,078 - INFO - (60, nan, None, None)
+2024-11-19 21:18:50,081 - INFO - (52, nan, None, None)
+2024-11-19 21:18:50,085 - INFO - (50, nan, None, None)
+2024-11-19 21:18:50,090 - INFO - (99, nan, None, None)
+2024-11-19 21:18:50,093 - INFO - (82, nan, None, None)
+2024-11-19 21:18:50,097 - INFO - (88, nan, None, None)
+2024-11-19 21:18:50,100 - INFO - (100, nan, None, None)
+2024-11-19 21:18:50,105 - INFO - (80, nan, None, None)
+2024-11-19 21:18:50,108 - INFO - (78, nan, None, None)
+2024-11-19 21:18:50,113 - INFO - (97, nan, None, None)
+2024-11-19 21:18:50,116 - INFO - (75, nan, None, None)
+2024-11-19 21:18:50,120 - INFO - (90, nan, None, None)
+2024-11-19 21:18:50,124 - INFO - (102, nan, None, None)
