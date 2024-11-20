@@ -33,55 +33,7 @@ def adjust_column_widths(excel_file):
     workbook.save(excel_file)
 
 
-# def execute_gaia_query(query, str_columns=None, output_file=None):
-#     """
-#     Execute a Gaia query and optionally save results to Excel
-    
-#     Parameters:
-#     -----------
-#     query : str
-#         The ADQL query to execute
-#     str_columns : list, optional
-#         List of column names to convert to string type
-#     output_file : str, optional
-#         Path to save Excel file. If None, no file is saved
-        
-#     Returns:
-#     --------
-#     pandas.DataFrame
-#         Query results as a dataframe
-#     """
-#     try:
-#         # Execute query
-#         job = Gaia.launch_job_async(query)
-#         df = job.get_results().to_pandas()
-        
-#         # Convert specified columns to string
-#         if str_columns:
-#             for col in str_columns:
-#                 if col in df.columns:
-#                     df[col] = df[col].astype(str)
-        
-#         # Save to Excel if filename provided
-#         if output_file:
-#             df.to_excel(output_file, index=False)
-#             adjust_column_widths(output_file)
-            
-#         print(f"Number of results: {len(df)}")
-#         return df
-        
-#     except requests.exceptions.HTTPError as e:
-#         print(f"An HTTP error occurred: {e}")
-#         return None
-#     except Exception as e:
-#         print(f"An error occurred: {e}")
-#         return None
-    
-
-
-import time
-
-def execute_gaia_query(query, str_columns=None, output_file=None, retries=3, delay=5):
+def execute_gaia_query(query, str_columns=None, output_file=None):
     """
     Execute a Gaia query and optionally save results to Excel
     
@@ -93,43 +45,35 @@ def execute_gaia_query(query, str_columns=None, output_file=None, retries=3, del
         List of column names to convert to string type
     output_file : str, optional
         Path to save Excel file. If None, no file is saved
-    retries : int
-        Number of times to retry the query in case of failure
-    delay : int
-        Delay in seconds between retries
         
     Returns:
     --------
     pandas.DataFrame
         Query results as a dataframe
     """
-    for attempt in range(retries):
-        try:
-            # Execute query
-            job = Gaia.launch_job_async(query)
-            df = job.get_results().to_pandas()
-            
-            # Convert specified columns to string
-            if str_columns:
-                for col in str_columns:
-                    if col in df.columns:
-                        df[col] = df[col].astype(str)
-            
-            # Save to Excel if filename provided
-            if output_file:
-                df.to_excel(output_file, index=False)
-                adjust_column_widths(output_file)
-                
-            print(f"Number of results: {len(df)}")
-            return df
-            
-        except requests.exceptions.HTTPError as e:
-            print(f"An HTTP error occurred: {e}")
-        except Exception as e:
-            print(f"An error occurred: {e}")
+    try:
+        # Execute query
+        job = Gaia.launch_job_async(query)
+        df = job.get_results().to_pandas()
         
-        print(f"Retrying in {delay} seconds...")
-        time.sleep(delay)
-    
-    print("Failed to execute query after several attempts.")
-    return None
+        # Convert specified columns to string
+        if str_columns:
+            for col in str_columns:
+                if col in df.columns:
+                    df[col] = df[col].astype(str)
+        
+        # Save to Excel if filename provided
+        if output_file:
+            df.to_excel(output_file, index=False)
+            adjust_column_widths(output_file)
+            
+        print(f"Number of results: {len(df)}")
+        return df
+        
+    except requests.exceptions.HTTPError as e:
+        print(f"An HTTP error occurred: {e}")
+        return None
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return None
+
