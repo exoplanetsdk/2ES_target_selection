@@ -89,3 +89,5 @@ def execute_gaia_query(query, str_columns=None, output_file=None, retries=3, del
 
     print("Failed to execute query after several attempts.")
     return None
+
+

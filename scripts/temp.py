@@ -27,6 +27,46 @@
             AND gs.source_id != neighbors.source_id
     )
 
+
+# -------------------------------------------------------------
+# Add SIMBAD information (HD, GJ, HIP numbers and object type)
+# -------------------------------------------------------------
+# Customize Simbad to include the HD, GJ, and HIP identifiers and object type
+custom_simbad = Simbad()
+custom_simbad.add_votable_fields('ids', 'otype')
+
+# Function to get additional information from SIMBAD
+def get_simbad_info(source_id):
+    result_table = custom_simbad.query_object(f"Gaia DR3 {source_id}")
+    hd_numbers = []
+    gj_numbers = []
+    hip_numbers = []
+    object_type = None
+    
+    if result_table is not None:
+        ids = result_table['IDS'][0].split('|')
+        hd_numbers = [id.strip() for id in ids if id.startswith('HD')]
+        gj_numbers = [id.strip() for id in ids if id.startswith('GJ')]
+        hip_numbers = [id.strip() for id in ids if id.startswith('HIP')]
+        object_type = result_table['OTYPE'][0]
+    
+    return {
+        'HD Number': ', '.join(hd_numbers) if hd_numbers else None,
+        'GJ Number': ', '.join(gj_numbers) if gj_numbers else None,
+        'HIP Number': ', '.join(hip_numbers) if hip_numbers else None,
+        'Object Type': object_type
+    }
+
+
+# Fetch SIMBAD information for each star
+for index, row in df_new.iterrows():
+    simbad_info = get_simbad_info(row['source_id'])
+    df_new.loc[index, 'HD Number'] = simbad_info['HD Number']
+    df_new.loc[index, 'GJ Number'] = simbad_info['GJ Number']
+    df_new.loc[index, 'HIP Number'] = simbad_info['HIP Number']
+    df_new.loc[index, 'Object Type'] = simbad_info['Object Type']
+
+
 #----------------------------------------------------------------
 # Batch query for Gaia DR2 in parallel
 #----------------------------------------------------------------
@@ -231,3 +271,45 @@ df_dr2_combined = execute_gaia_query_in_batches(
 if not df_dr2_combined.empty:
     df_dr2_combined.to_excel(directory + 'dr2_results_combined.xlsx', index=False)
     adjust_column_widths(directory + 'dr2_results_combined.xlsx')
+
+
+
+
+
+
+
+
+
+
+
+from astroquery.vizier import Vizier
+import time
+
+df_consolidated_HD = df_consolidated_HIP.copy()
+
+# Define the Vizier catalog and set a limit for results
+catalog = "V/117A"
+Vizier.ROW_LIMIT = 1  # Limit to one result to avoid large datasets
+
+
+# Iterate over the DataFrame and fill missing values
+for index, row in df_consolidated_HD.iterrows():
+    if pd.isna(row["T_eff [K]"]) or pd.isna(row["Luminosity [L_Sun]"]):
+        hd_number = clean_hd_number(row["HD Number"])
+        
+        if hd_number:
+            temperature, luminosity = get_star_properties(hd_number)
+            mass = extract_mass(hd_number)
+            
+            if pd.isna(row["T_eff [K]"]) and temperature is not None:
+                df_consolidated_HD.at[index, "T_eff [K]"] = temperature
+            if pd.isna(row["Luminosity [L_Sun]"]) and luminosity is not None:
+                df_consolidated_HD.at[index, "Luminosity [L_Sun]"] = luminosity
+            if pd.isna(row["Mass [M_Sun]"]) and mass is not None:
+                df_consolidated_HD.at[index, "Mass [M_Sun]"] = mass                # 
+
+# Save the updated DataFrame to an Excel file
+df_consolidated_HD.to_excel(directory + 'consolidated_HD_results.xlsx', index=False)
+adjust_column_widths(directory + 'consolidated_HD_results.xlsx')
+
+
