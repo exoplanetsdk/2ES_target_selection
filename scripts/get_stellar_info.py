@@ -22,6 +22,10 @@ logging.basicConfig(
 warnings.simplefilter('ignore', category=UnitsWarning)
 
 def get_simbad_info_with_retry(source_id, retries=3, delay=5):
+
+    custom_simbad = Simbad()
+    custom_simbad.add_votable_fields('ids', 'otype')
+    
     for attempt in range(retries):
         try:
             result_table = custom_simbad.query_object(f"Gaia DR3 {source_id}")

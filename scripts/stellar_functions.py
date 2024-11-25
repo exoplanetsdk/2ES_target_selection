@@ -1,4 +1,5 @@
 import numpy as np
+from scipy import optimize
 
 def calculate_habitable_zone(T_eff, L_ratio):
     """
@@ -35,3 +36,35 @@ def calculate_habitable_zone(T_eff, L_ratio):
     distance = np.sqrt(L_ratio / S_eff)
     
     return distance
+
+# Constants
+G = 6.67430e-11  # Gravitational constant in m^3 kg^-1 s^-2
+M_earth = 5.97e24  # Earth mass in kg
+M_sun = 1.989e30  # Solar mass in kg
+AU = 1.496e11  # 1 AU in meters
+
+def calculate_hz_detection_limit(K, stellar_mass, orbital_radius):
+    """
+    Calculate the minimum detectable planet mass in the Habitable Zone.
+    
+    :param K: RV precision in m/s
+    :param stellar_mass: Mass of the star in solar masses
+    :param orbital_radius: Orbital radius (HZ limit) in AU
+    :return: Minimum detectable planet mass in Earth masses or np.nan if calculation fails
+    """
+    try:
+        stellar_mass_kg = stellar_mass * M_sun
+        orbital_radius_m = orbital_radius * AU
+        
+        if K <= 0 or stellar_mass_kg <= 0 or orbital_radius_m <= 0:
+            return np.nan
+        
+        def equation(m_p):
+            return K - (G**(1/2) * orbital_radius_m**(-1/2) * m_p * (stellar_mass_kg + m_p)**(-1/2))
+        
+        # Use numerical method to solve the equation
+        planet_mass_kg = optimize.brentq(equation, 0, stellar_mass_kg)
+        
+        return planet_mass_kg / M_earth
+    except:
+        return np.nan
