@@ -313,3 +313,72 @@ df_consolidated_HD.to_excel(directory + 'consolidated_HD_results.xlsx', index=Fa
 adjust_column_widths(directory + 'consolidated_HD_results.xlsx')
 
 
+
+
+
+
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Create a scatter plot with color mapping
+plt.figure(figsize=(8, 6), dpi=150)
+scatter = plt.scatter(
+    merged_RJ['magV     '], 
+    merged_RJ['V_mag'], 
+    c=merged_RJ['T_eff [K]'], 
+    cmap='autumn', 
+    edgecolor='k', 
+    alpha=0.7
+)
+
+# # Add labels to each point
+# for i, name in enumerate(merged_result['other name']):
+#     plt.text(merged_result['Vmag'][i], merged_result['V_mag'][i], name, fontsize=8, ha='right')
+
+# Add titles and labels
+plt.title('Selection Crossmatch', fontsize=14)
+plt.xlabel('V mag (Ralf)', fontsize=12)
+plt.ylabel('V mag (Jinglin)', fontsize=12)
+
+# Add a color bar
+cbar = plt.colorbar(scatter)
+cbar.set_label('T_eff [K]', fontsize=12)
+
+# Add grid for better readability
+plt.grid(True, linestyle='--', alpha=0.7)
+
+# Overplot the suitable points from df_Melissa
+suitable_indices = df_Melissa['suitable'] == 1
+name_suitable = df_Melissa.loc[suitable_indices, 'other name']
+
+x_suitable = []
+y_suitable = []
+
+# for name in name_suitable:
+#     x_value = df_Melissa.loc[df_Melissa['other name'] == name, 'Vmag'].values[0]
+#     if name in merged_result['other name'].values:        
+#         y_value = merged_result.loc[merged_result['other name'] == name, 'V_mag'].values[0]
+#     else:
+#         y_value = 0
+#     x_suitable.append(x_value)
+#     y_suitable.append(y_value)
+
+#     plt.text(x_value, y_value, name, fontsize=8, ha='right', color='green')
+
+# Plot the suitable points
+# plt.scatter(x_suitable, y_suitable, edgecolor='g', facecolors='none', label='Suitable = 1')
+
+# Plot the x = y line
+min_value = min(min(merged_RJ['magV     ']), min(merged_RJ['V_mag']))
+max_value = max(max(merged_RJ['magV     ']), max(merged_RJ['V_mag']))
+plt.plot([min_value, max_value], [min_value, max_value], color='gray', linestyle='--', )
+
+# Add legend
+legend = plt.legend()
+for text in legend.get_texts():
+    text.set_color('green')
+
+# Show the plot
+plt.tight_layout()
+plt.show()

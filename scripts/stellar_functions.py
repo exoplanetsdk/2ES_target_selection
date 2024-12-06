@@ -75,13 +75,7 @@ def calculate_hz_detection_limit_simplify(K, stellar_mass, orbital_radius):
     """
     Calculate the planet mass given RV amplitude, stellar mass, and orbital radius.
 
-    Parameters:
-    K (float): Radial velocity amplitude in m/s.
-    stellar_mass (float): Stellar mass in kilograms.
-    orbital_radius (float): Orbital radius in meters.
-
-    Returns:
-    float: Planet mass in kilograms.
+    Assumptions: M_star >> M_planet
     """
     # Gravitational constant in SI units (m^3 kg^-1 s^-2)
     stellar_mass_kg = stellar_mass * M_sun
