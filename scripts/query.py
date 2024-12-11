@@ -3,6 +3,7 @@ from astroquery.gaia import Gaia
 from openpyxl import load_workbook
 import pandas as pd
 import time
+import logging
 
 
 def adjust_column_widths(excel_file):
@@ -54,6 +55,10 @@ def execute_gaia_query(query, str_columns=None, output_file=None, retries=3, del
     pandas.DataFrame or None
         Query results as a DataFrame, or None if the query fails.
     """
+    
+    # Suppress the specific info message from astroquery
+    logging.getLogger('astroquery.utils.tap.core').setLevel(logging.WARNING)
+
     attempt = 0
     while attempt < retries:
         try:
@@ -72,7 +77,7 @@ def execute_gaia_query(query, str_columns=None, output_file=None, retries=3, del
                 df.to_excel(output_file, index=False)
                 adjust_column_widths(output_file)
 
-            print(f"Number of results: {len(df)}")
+            # print(f"Number of results: {len(df)}")
             return df
 
         except requests.exceptions.HTTPError as e:
