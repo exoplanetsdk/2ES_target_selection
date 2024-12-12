@@ -57,7 +57,7 @@ def execute_gaia_query(query, str_columns=None, output_file=None, retries=3, del
     """
     
     # Suppress the specific info message from astroquery
-    logging.getLogger('astroquery.utils.tap.core').setLevel(logging.WARNING)
+    logging.getLogger('astroquery').setLevel(logging.ERROR)
 
     attempt = 0
     while attempt < retries:

@@ -382,3 +382,153 @@ for text in legend.get_texts():
 # Show the plot
 plt.tight_layout()
 plt.show()
+
+
+
+# -------------------------------------------------------------
+# Batch query for Gaia DR2 in parallel
+import pandas as pd
+from astroquery.gaia import Gaia
+import time
+from concurrent.futures import ThreadPoolExecutor
+
+# Function to create a query for nearby stars
+def create_neighbor_query(source_id, ra, dec, neighbor_g_mag_limit, search_radius, data_release):
+    query = f"""
+    SELECT 
+        source_id, ra, dec, phot_g_mean_mag
+    FROM 
+        {data_release}.gaia_source
+    WHERE 
+        1=CONTAINS(
+            POINT('ICRS', {ra}, {dec}),
+            CIRCLE('ICRS', ra, dec, {search_radius})
+        )
+        AND phot_g_mean_mag < {neighbor_g_mag_limit}
+        AND source_id != {source_id}
+    """
+    return query
+
+# Function to process each row
+def process_row(row):
+    if not pd.isna(row['source_id_dr3']):
+        query = create_neighbor_query(
+            source_id=row['source_id_dr3'],
+            ra=row['RA'],
+            dec=row['DEC'],
+            neighbor_g_mag_limit=row['Phot G Mean Mag']+3,
+            search_radius=SEARCH_RADIUS,
+            data_release='gaiadr3'
+        )
+    else:
+        query = create_neighbor_query(
+            source_id=row['source_id_dr2'],
+            ra=row['RA'],
+            dec=row['DEC'],
+            neighbor_g_mag_limit=row['Phot G Mean Mag']+3,
+            search_radius=SEARCH_RADIUS,
+            data_release='gaiadr2'
+        )
+    
+    # Execute the query
+    neighbors_df = execute_gaia_query(query)
+    
+    # Check if bright neighbors exist
+    if neighbors_df is not None and not neighbors_df.empty:
+        return (row, True)
+    else:
+        return (row, False)
+
+# DataFrames: merged_df (input sources)
+rows_with_bright_neighbors = []
+rows_without_bright_neighbors = []
+
+# Use ThreadPoolExecutor to process rows in parallel
+with ThreadPoolExecutor() as executor:
+    results = executor.map(process_row, [row for idx, row in merged_df.iterrows()])
+    for row, has_bright_neighbors in results:
+        if has_bright_neighbors:
+            rows_with_bright_neighbors.append(row)
+        else:
+            rows_without_bright_neighbors.append(row)
+
+# Create DataFrames for rows with and without bright neighbors
+bright_neighbors_df = pd.DataFrame(rows_with_bright_neighbors)
+rows_without_bright_neighbors_df = pd.DataFrame(rows_without_bright_neighbors)
+
+# Output the results
+print(f"Rows with bright neighbors: {len(bright_neighbors_df)}")
+print(f"Rows without bright neighbors: {len(rows_without_bright_neighbors_df)}")
+
+
+# -------------------------------------------------------------
+# Batch query for Gaia DR2 in serial
+# ------------------------------------------------------------- 
+
+import pandas as pd
+from astroquery.gaia import Gaia
+import time
+
+# Function to create a query for nearby stars
+def create_neighbor_query(source_id, ra, dec, neighbor_g_mag_limit, search_radius, data_release):
+    query = f"""
+    SELECT 
+        source_id, ra, dec, phot_g_mean_mag
+    FROM 
+        {data_release}.gaia_source
+    WHERE 
+        1=CONTAINS(
+            POINT('ICRS', {ra}, {dec}),
+            CIRCLE('ICRS', ra, dec, {search_radius})
+        )
+        AND phot_g_mean_mag < {neighbor_g_mag_limit}
+        AND source_id != {source_id}
+    """
+    return query
+
+# DataFrames: merged_df (input sources)
+rows_with_bright_neighbors = []
+rows_without_bright_neighbors = []
+
+# Iterate through each row in merged_df
+# for i, (idx, row) in enumerate(merged_df.iloc[0:10].iterrows()):
+for i, (idx, row) in enumerate(merged_df.iterrows()):
+    print(i, row['source_id_dr2'], row['source_id_dr3'])
+    
+    if not pd.isna(row['source_id_dr3']):
+        query = create_neighbor_query(  
+            source_id=row['source_id_dr3'],
+            ra=row['RA'],
+            dec=row['DEC'],
+            neighbor_g_mag_limit=row['Phot G Mean Mag']+3,
+            search_radius=SEARCH_RADIUS,
+            data_release='gaiadr3'
+        )
+    else:
+        query = create_neighbor_query(
+            source_id=row['source_id_dr2'],
+            ra=row['RA'],
+            dec=row['DEC'],
+            neighbor_g_mag_limit=row['Phot G Mean Mag']+3,
+            search_radius=SEARCH_RADIUS,
+            data_release='gaiadr2'
+        )
+    
+    # Execute the query
+    neighbors_df = execute_gaia_query(query)
+    
+    # Check if bright neighbors exist
+    if neighbors_df is not None and not neighbors_df.empty:
+        # Add the row to the bright neighbors list
+        rows_with_bright_neighbors.append(row)
+    else:
+        # Add the row to the no bright neighbors list
+        rows_without_bright_neighbors.append(row)
+
+# Create DataFrames for rows with and without bright neighbors
+bright_neighbors_df = pd.DataFrame(rows_with_bright_neighbors)
+rows_without_bright_neighbors_df = pd.DataFrame(rows_without_bright_neighbors)
+
+# Output the results
+print(f"Rows with bright neighbors: {len(bright_neighbors_df)}")
+print(f"Rows without bright neighbors: {len(rows_without_bright_neighbors_df)}")
