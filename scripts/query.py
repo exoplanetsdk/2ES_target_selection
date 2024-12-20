@@ -9,7 +9,7 @@ import logging
 def adjust_column_widths(excel_file):
     """
     Adjusts the column widths of an Excel workbook based on the maximum length of data in each column,
-    and saves the updated workbook.
+    freezes the first row, and saves the updated workbook.
 
     Parameters:
     - excel_file: str, the path to the Excel file to be processed.
@@ -28,6 +28,9 @@ def adjust_column_widths(excel_file):
             except Exception:
                 continue
         worksheet.column_dimensions[column_letter].width = max_length + 2
+
+    # Freeze the first row
+    worksheet.freeze_panes = worksheet['A2']
 
     # Save the workbook
     workbook.save(excel_file)
@@ -77,7 +80,6 @@ def execute_gaia_query(query, str_columns=None, output_file=None, retries=3, del
                 df.to_excel(output_file, index=False)
                 adjust_column_widths(output_file)
 
-            # print(f"Number of results: {len(df)}")
             return df
 
         except requests.exceptions.HTTPError as e:
