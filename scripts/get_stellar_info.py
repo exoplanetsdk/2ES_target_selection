@@ -9,7 +9,10 @@ import logging
 import pandas as pd
 
 # Read the CSV file as a DataFrame
-classification_df = pd.read_csv("../data/MathiasZechmeister/classification.csv")
+# classification_df = pd.read_csv("../data/MathiasZechmeister/classification.csv")
+file_path = "../data/EEM_dwarf_UBVIJHK_colors_Teff.txt"
+classification_df = pd.read_csv(file_path, delim_whitespace=True, skiprows=22, nrows=118, header=0, na_values='...')
+
 
 # Configure logging to write to a file
 logging.basicConfig(
@@ -197,6 +200,10 @@ def get_stellar_properties_from_gaia(dataframe):
     # Make a copy of the DataFrame to modify
     dataframe_copy = dataframe.copy()
 
+    for column in ['Stellar Parameter Source', 'SIMBAD Spectral Type', 'Readable Spectral Type']:
+        if column not in dataframe_copy.columns:
+            dataframe_copy[column] = None
+
     for index, row in dataframe_copy.iterrows():
         gaia_dr3_id = row['source_id_dr3']
         gaia_dr2_id = row['source_id_dr2']
@@ -210,12 +217,16 @@ def get_stellar_properties_from_gaia(dataframe):
         }
 
         if not any(missing_properties.values()):
+            dataframe_copy.at[index, 'Stellar Parameter Source'] = 'GAIA'
             continue
 
         if pd.notna(gaia_dr3_id):
             stellar_type_original, stellar_type = get_stellar_type_dr3(gaia_dr3_id)
         else:
             stellar_type_original, stellar_type = get_stellar_type_dr2(gaia_dr2_id)
+
+        dataframe_copy.at[index, 'SIMBAD Spectral Type'] = stellar_type_original
+        dataframe_copy.at[index, 'Readable Spectral Type'] = stellar_type
 
         print(index, row['source_id'], stellar_type_original, stellar_type)
         logging.info(f"{index, row['source_id'], stellar_type_original, stellar_type}")
@@ -244,12 +255,14 @@ def get_stellar_properties_from_gaia(dataframe):
                     next_type = base_part[0] + next_part
 
             elif 'IV-V' in stellar_type:
-                base_type = stellar_type.replace('IV-V', 'IV')
+                base_type = stellar_type.replace('IV-V', 'V')
+                # base_type = stellar_type.replace('IV-V', 'IV')
                 next_type = stellar_type.replace('IV-V', 'V')
 
-            classification_row_base = classification_df[classification_df['Stellar Type'] == base_type]
-            classification_row_next = classification_df[classification_df['Stellar Type'] == next_type]
+            classification_row_base = classification_df[classification_df['#SpT'] == base_type]
+            classification_row_next = classification_df[classification_df['#SpT'] == next_type]
 
+            dataframe_copy.at[index, 'Readable Spectral Type'] = str(base_type) + ' and ' + str(next_type)
             print(base_type, next_type)
             logging.info(f"Base Type: {base_type}, Next Type: {next_type}")
 
@@ -259,13 +272,13 @@ def get_stellar_properties_from_gaia(dataframe):
                 continue
 
             properties = {
-                'Mass [M_Sun]': (classification_row_base['Mass Mstar/Msun'].values[0] + classification_row_next['Mass Mstar/Msun'].values[0]) / 2,
-                'Luminosity [L_Sun]': (classification_row_base['Luminosity Lstar/Lsun'].values[0] + classification_row_next['Luminosity Lstar/Lsun'].values[0]) / 2,
-                'Radius [R_Sun]': (classification_row_base['Radius Rstar/Rsun'].values[0] + classification_row_next['Radius Rstar/Rsun'].values[0]) / 2,
-                'T_eff [K]': (classification_row_base['Temp K'].values[0] + classification_row_next['Temp K'].values[0]) / 2
+                'Mass [M_Sun]': (classification_row_base['Msun'].values[0] + classification_row_next['Msun'].values[0]) / 2,
+                'Luminosity [L_Sun]': (10**classification_row_base['logL'].values[0] + 10**classification_row_next['logL'].values[0]) / 2,
+                'Radius [R_Sun]': (classification_row_base['R_Rsun'].values[0] + classification_row_next['R_Rsun'].values[0]) / 2,
+                'T_eff [K]': (classification_row_base['Teff'].values[0] + classification_row_next['Teff'].values[0]) / 2,
             }
         else:
-            classification_row = classification_df[classification_df['Stellar Type'] == stellar_type]
+            classification_row = classification_df[classification_df['#SpT'] == stellar_type]
 
             if classification_row.empty:
                 print(f"-- No data found for stellar type (2) {stellar_type}.")
@@ -273,14 +286,15 @@ def get_stellar_properties_from_gaia(dataframe):
                 continue
 
             properties = {
-                'Mass [M_Sun]': classification_row['Mass Mstar/Msun'].values[0],
-                'Luminosity [L_Sun]': classification_row['Luminosity Lstar/Lsun'].values[0],
-                'Radius [R_Sun]': classification_row['Radius Rstar/Rsun'].values[0],
-                'T_eff [K]': classification_row['Temp K'].values[0]
+                'Mass [M_Sun]': classification_row['Msun'].values[0],
+                'Luminosity [L_Sun]': 10**classification_row['logL'].values[0],
+                'Radius [R_Sun]': classification_row['R_Rsun'].values[0],
+                'T_eff [K]': classification_row['Teff'].values[0],
             }
 
         # Retrieve missing properties from Simbad if necessary
         if any(missing_properties.values()):
+            dataframe_copy.at[index, 'Stellar Parameter Source'] = 'SIMBAD + empirical'
             for attempt in range(3):
                 try:
                     simbad_result = Simbad.query_object(row['source_id'])

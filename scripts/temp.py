@@ -532,3 +532,123 @@ rows_without_bright_neighbors_df = pd.DataFrame(rows_without_bright_neighbors)
 # Output the results
 print(f"Rows with bright neighbors: {len(bright_neighbors_df)}")
 print(f"Rows without bright neighbors: {len(rows_without_bright_neighbors_df)}")
+
+
+
+
+def get_stellar_properties_from_gaia(dataframe):
+    # Make a copy of the DataFrame to modify
+    dataframe_copy = dataframe.copy()
+
+    for index, row in dataframe_copy.iterrows():
+        gaia_dr3_id = row['source_id_dr3']
+        gaia_dr2_id = row['source_id_dr2']
+
+        # Check for missing properties
+        missing_properties = {
+            'T_eff [K]': pd.isna(row['T_eff [K]']),
+            'Mass [M_Sun]': pd.isna(row['Mass [M_Sun]']),
+            'Luminosity [L_Sun]': pd.isna(row['Luminosity [L_Sun]']),
+            'Radius [R_Sun]': pd.isna(row['Radius [R_Sun]'])
+        }
+
+        if not any(missing_properties.values()):
+            continue
+
+        if pd.notna(gaia_dr3_id):
+            stellar_type_original, stellar_type = get_stellar_type_dr3(gaia_dr3_id)
+        else:
+            stellar_type_original, stellar_type = get_stellar_type_dr2(gaia_dr2_id)
+
+        print(index, row['source_id'], stellar_type_original, stellar_type)
+        logging.info(f"{index, row['source_id'], stellar_type_original, stellar_type}")
+
+        if stellar_type is None:
+            continue
+
+        # Handle spectral types with decimals, slashes, or 'IV-V' by averaging
+        if '.5' in stellar_type or '/' in stellar_type or 'IV-V' in stellar_type:
+            if '.5' in stellar_type:
+                base_numeric = stellar_type.split('.')[0][-1]
+                base_letter = stellar_type.split('.')[0][:-1]
+                next_numeric = str(int(base_numeric) + 1)
+
+                base_type = base_letter + base_numeric + stellar_type[-1]
+                next_type = base_letter + next_numeric + stellar_type[-1]
+
+            elif '/' in stellar_type:
+                base_part, next_part = stellar_type.split('/')
+
+                if next_part[0].isalpha():  # K5/M0V
+                    base_type = base_part + next_part[2:]
+                    next_type = next_part
+                elif next_part[0].isdigit():  # K1/2V
+                    base_type = base_part + next_part[1:]
+                    next_type = base_part[0] + next_part
+
+            elif 'IV-V' in stellar_type:
+                base_type = stellar_type.replace('IV-V', 'IV')
+                next_type = stellar_type.replace('IV-V', 'V')
+
+            classification_row_base = classification_df[classification_df['Stellar Type'] == base_type]
+            classification_row_next = classification_df[classification_df['Stellar Type'] == next_type]
+
+            print(base_type, next_type)
+            logging.info(f"Base Type: {base_type}, Next Type: {next_type}")
+
+            if classification_row_base.empty or classification_row_next.empty:
+                print(f"-- No data found for stellar type {stellar_type}.")
+                logging.warning(f"No data found for stellar type {stellar_type}.")
+                continue
+
+            properties = {
+                'Mass [M_Sun]': (classification_row_base['Mass Mstar/Msun'].values[0] + classification_row_next['Mass Mstar/Msun'].values[0]) / 2,
+                'Luminosity [L_Sun]': (classification_row_base['Luminosity Lstar/Lsun'].values[0] + classification_row_next['Luminosity Lstar/Lsun'].values[0]) / 2,
+                'Radius [R_Sun]': (classification_row_base['Radius Rstar/Rsun'].values[0] + classification_row_next['Radius Rstar/Rsun'].values[0]) / 2,
+                'T_eff [K]': (classification_row_base['Temp K'].values[0] + classification_row_next['Temp K'].values[0]) / 2
+            }
+        else:
+            classification_row = classification_df[classification_df['Stellar Type'] == stellar_type]
+
+            if classification_row.empty:
+                print(f"-- No data found for stellar type (2) {stellar_type}.")
+                logging.warning(f"No data found for stellar type (2) {stellar_type}.")
+                continue
+
+            properties = {
+                'Mass [M_Sun]': classification_row['Mass Mstar/Msun'].values[0],
+                'Luminosity [L_Sun]': classification_row['Luminosity Lstar/Lsun'].values[0],
+                'Radius [R_Sun]': classification_row['Radius Rstar/Rsun'].values[0],
+                'T_eff [K]': classification_row['Temp K'].values[0]
+            }
+
+        # Retrieve missing properties from Simbad if necessary
+        if any(missing_properties.values()):
+            for attempt in range(3):
+                try:
+                    simbad_result = Simbad.query_object(row['source_id'])
+                    if simbad_result is not None:
+                        if missing_properties['T_eff [K]']:
+                            properties['T_eff [K]'] = simbad_result['Teff'].data[0]
+                        if missing_properties['Mass [M_Sun]']:
+                            properties['Mass [M_Sun]'] = simbad_result['mass'].data[0]
+                        if missing_properties['Luminosity [L_Sun]']:
+                            properties['Luminosity [L_Sun]'] = simbad_result['luminosity'].data[0]
+                        if missing_properties['Radius [R_Sun]']:
+                            properties['Radius [R_Sun]'] = simbad_result['radius'].data[0]
+                    break
+                except Exception as e:
+                    print(f"Attempt {attempt + 1} to query Simbad failed: {e}")
+                    if attempt < 2:
+                        time.sleep(5)
+                    else:
+                        print(f"Failed to retrieve data from Simbad for {row['source_id']} after 3 attempts.")
+                        logging.error(f"Failed to retrieve data from Simbad for {row['source_id']} after 3 attempts.")
+                        continue
+
+        # Update the DataFrame copy with the retrieved properties
+        for key, value in properties.items():
+            if pd.isna(row[key]):
+                dataframe_copy.at[index, key] = value
+
+    return dataframe_copy
