@@ -38,18 +38,18 @@ def calculate_habitable_zone(T_eff, L_ratio):
     S_eff_sun, a, b, c, d = [0.3179, 5.4513E-5, 1.5313E-9, -2.7786E-12, -4.8997E-16]
     '''
 
-    # Coefficients for "Runaway Greenhouse" and "Maximum Greenhouse"
+    # Coefficients for "Moist Greenhouse" and "Maximum Greenhouse"
     coefficients = {
         "Moist Greenhouse": [1.0140, 8.1774E-5, 1.7063E-9, -4.3241E-12, -6.6462E-16],
         "Maximum Greenhouse": [0.3438, 5.8942E-5, 1.6558E-9, -3.0045E-12, -5.2983E-16]
     }
 
     # Calculate inner and outer distances
-    distance_inner = np.sqrt(L_ratio / calculate_s_eff(*coefficients["Runaway Greenhouse"], T_star))
+    distance_inner = np.sqrt(L_ratio / calculate_s_eff(*coefficients["Moist Greenhouse"], T_star))
     distance_outer = np.sqrt(L_ratio / calculate_s_eff(*coefficients["Maximum Greenhouse"], T_star))
 
     return 0.5 * (distance_inner + distance_outer)
-    # return distance_inner
+
 
 # Constants
 G = 6.67430e-11  # Gravitational constant in m^3 kg^-1 s^-2
@@ -82,8 +82,6 @@ def calculate_hz_detection_limit(K, stellar_mass, orbital_radius):
         return planet_mass_kg / M_earth
     except:
         return np.nan
-    
-
 
 def calculate_hz_detection_limit_simplify(K, stellar_mass, orbital_radius):
     """

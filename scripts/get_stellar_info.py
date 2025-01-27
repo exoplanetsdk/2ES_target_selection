@@ -57,18 +57,23 @@ def clean_hd_number(hd_string):
     # Split by comma and take the first part, then remove "HD" and whitespace
     return hd_string.split(',')[0].replace("HD", "").strip()
 
+
+with open('../data/Catalogue_V_117A_table1.txt', 'r') as file:
+    STELLAR_CATALOG = file.readlines()
+
 def extract_mass(hd_number):
-    file_path = '../data/Catalogue_V_117A_table1.txt'
-    with open(file_path, 'r') as file:
-        for line in file:
-            # Extract the HD number from the line
-            line_hd_number = line[7:18].strip()
-            # Check if the line contains the desired HD number
-            if line_hd_number == f"HD {hd_number}":
-                # Extract mass information
-                mass = line[130:134].strip()
-                # Return the mass as a float if available
-                return float(mass) if mass else None
+    """
+    Extract mass for a given HD number using the pre-loaded catalog.
+    """
+    for line in STELLAR_CATALOG:
+        # Extract the HD number from the line
+        line_hd_number = line[7:18].strip()
+        # Check if the line contains the desired HD number
+        if line_hd_number == f"HD {hd_number}":
+            # Extract mass information
+            mass = line[130:134].strip()
+            # Return the mass as a float if available
+            return float(mass) if mass else None
 
 def get_star_properties(hd_number):
     """
@@ -200,7 +205,7 @@ def get_stellar_properties_from_gaia(dataframe):
     # Make a copy of the DataFrame to modify
     dataframe_copy = dataframe.copy()
 
-    for column in ['Stellar Parameter Source', 'SIMBAD Spectral Type', 'Readable Spectral Type']:
+    for column in ['Stellar Parameter Source', 'SIMBAD Spectral Type', 'Readable Spectral Type (experimental)']:
         if column not in dataframe_copy.columns:
             dataframe_copy[column] = None
 
@@ -216,22 +221,22 @@ def get_stellar_properties_from_gaia(dataframe):
             'Radius [R_Sun]': pd.isna(row['Radius [R_Sun]'])
         }
 
-        if not any(missing_properties.values()):
-            dataframe_copy.at[index, 'Stellar Parameter Source'] = 'GAIA'
-            continue
-
         if pd.notna(gaia_dr3_id):
             stellar_type_original, stellar_type = get_stellar_type_dr3(gaia_dr3_id)
         else:
             stellar_type_original, stellar_type = get_stellar_type_dr2(gaia_dr2_id)
 
         dataframe_copy.at[index, 'SIMBAD Spectral Type'] = stellar_type_original
-        dataframe_copy.at[index, 'Readable Spectral Type'] = stellar_type
+        dataframe_copy.at[index, 'Readable Spectral Type (experimental)'] = stellar_type
 
         print(index, row['source_id'], stellar_type_original, stellar_type)
-        logging.info(f"{index, row['source_id'], stellar_type_original, stellar_type}")
+        # logging.info(f"{index, row['source_id'], stellar_type_original, stellar_type}")
 
         if stellar_type is None:
+            continue
+
+        if not any(missing_properties.values()):
+            dataframe_copy.at[index, 'Stellar Parameter Source'] = 'GAIA'
             continue
 
         # Handle spectral types with decimals, slashes, or 'IV-V' by averaging
@@ -262,13 +267,13 @@ def get_stellar_properties_from_gaia(dataframe):
             classification_row_base = classification_df[classification_df['#SpT'] == base_type]
             classification_row_next = classification_df[classification_df['#SpT'] == next_type]
 
-            dataframe_copy.at[index, 'Readable Spectral Type'] = str(base_type) + ' and ' + str(next_type)
+            dataframe_copy.at[index, 'Readable Spectral Type (experimental)'] = str(base_type) + ' and ' + str(next_type)
             print(base_type, next_type)
-            logging.info(f"Base Type: {base_type}, Next Type: {next_type}")
+            # logging.info(f"Base Type: {base_type}, Next Type: {next_type}")
 
             if classification_row_base.empty or classification_row_next.empty:
                 print(f"-- No data found for stellar type {stellar_type}.")
-                logging.warning(f"No data found for stellar type {stellar_type}.")
+                # logging.warning(f"No data found for stellar type {stellar_type}.")
                 continue
 
             properties = {
@@ -282,7 +287,7 @@ def get_stellar_properties_from_gaia(dataframe):
 
             if classification_row.empty:
                 print(f"-- No data found for stellar type (2) {stellar_type}.")
-                logging.warning(f"No data found for stellar type (2) {stellar_type}.")
+                # logging.warning(f"No data found for stellar type (2) {stellar_type}.")
                 continue
 
             properties = {
@@ -314,7 +319,7 @@ def get_stellar_properties_from_gaia(dataframe):
                         time.sleep(5)
                     else:
                         print(f"Failed to retrieve data from Simbad for {row['source_id']} after 3 attempts.")
-                        logging.error(f"Failed to retrieve data from Simbad for {row['source_id']} after 3 attempts.")
+                        # logging.error(f"Failed to retrieve data from Simbad for {row['source_id']} after 3 attempts.")
                         continue
 
         # Update the DataFrame copy with the retrieved properties
@@ -323,3 +328,4 @@ def get_stellar_properties_from_gaia(dataframe):
                 dataframe_copy.at[index, key] = value
 
     return dataframe_copy
+

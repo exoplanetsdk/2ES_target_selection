@@ -1,7 +1,6 @@
 import requests
 from astroquery.gaia import Gaia
 from openpyxl import load_workbook
-import pandas as pd
 import time
 import logging
 
