@@ -4,7 +4,7 @@ from scipy import optimize
 def calculate_habitable_zone(T_eff, L_ratio):
     """
     Calculate the habitable zone boundary based on Kopparapu et al. (2013) Equations 2 & 3,
-    using the "Runaway Greenhouse" and "Maximum Greenhouse" limits.
+    using the "Moist Greenhouse" and "Maximum Greenhouse" limits.
     
     Parameters:
     T_eff (float): Effective temperature of the star in Kelvin

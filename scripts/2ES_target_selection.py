@@ -49,10 +49,10 @@ from get_stellar_info import *
 #-------------------------------------------------------------
 # Merge DR2 and DR3 results 
 #-------------------------------------------------------------
-merged_dr2_crossmatch = pd.merge(df_dr2, df_crossmatch, left_on='source_id', right_on='dr2_source_id', how='left')
-merged_results = pd.merge(merged_dr2_crossmatch, df_dr3, left_on='dr3_source_id', right_on='source_id', suffixes=('_dr2', '_dr3'), how='outer')
-merged_results.to_excel(directory+'merged_results.xlsx', index=False)
-adjust_column_widths(directory+'merged_results.xlsx')
+# merged_dr2_crossmatch = pd.merge(df_dr2, df_crossmatch, left_on='source_id', right_on='dr2_source_id', how='left')
+# merged_results = pd.merge(merged_dr2_crossmatch, df_dr3, left_on='dr3_source_id', right_on='source_id', suffixes=('_dr2', '_dr3'), how='outer')
+# merged_results.to_excel(directory+'merged_results.xlsx', index=False)
+# adjust_column_widths(directory+'merged_results.xlsx')
 
 
 # In[4]:
@@ -69,7 +69,7 @@ adjust_column_widths(directory+'merged_results.xlsx')
 
 # Save repeated entries to Excel
 # repeated_entries.to_excel(directory + 'repeated_entries.xlsx', index=False)
-adjust_column_widths(directory + 'repeated_entries.xlsx')
+# adjust_column_widths(directory + 'repeated_entries.xlsx')
 
 # # ***** Step 2: Clean repeated entries *****
 # def check_dr3_availability(row):
@@ -117,27 +117,27 @@ adjust_column_widths(directory + 'repeated_entries.xlsx')
 # clean_merged_results = clean_merged_results.reset_index(drop=True)
 
 # Print some information about the results
-print(f"Original shape of merged_results: {merged_results.shape}")
-print(f"Shape after removing duplicates: {clean_merged_results.shape}")
-print(f"Number of rows removed: {merged_results.shape[0] - clean_merged_results.shape[0]}")
+# print(f"Original shape of merged_results: {merged_results.shape}")
+# print(f"Shape after removing duplicates: {clean_merged_results.shape}")
+# print(f"Number of rows removed: {merged_results.shape[0] - clean_merged_results.shape[0]}")
 
 # Save clean_merged_results to Excel
-clean_merged_results.to_excel(directory + 'clean_merged_results.xlsx', index=False)
-adjust_column_widths(directory + 'clean_merged_results.xlsx')
+# clean_merged_results.to_excel(directory + 'clean_merged_results.xlsx', index=False)
+# adjust_column_widths(directory + 'clean_merged_results.xlsx')
 
 # Save rows_to_remove to Excel
-rows_to_remove.to_excel(directory + 'removed_rows.xlsx', index=False)
-adjust_column_widths(directory + 'removed_rows.xlsx')
+# rows_to_remove.to_excel(directory + 'removed_rows.xlsx', index=False)
+# adjust_column_widths(directory + 'removed_rows.xlsx')
 
 # Check if there are still any duplicates
-remaining_duplicates = clean_merged_results[clean_merged_results.duplicated('dr2_source_id', keep=False)]
-print(f"\nNumber of remaining duplicate dr2_source_id: {len(remaining_duplicates['dr2_source_id'].unique())}")
+# remaining_duplicates = clean_merged_results[clean_merged_results.duplicated('dr2_source_id', keep=False)]
+# print(f"\nNumber of remaining duplicate dr2_source_id: {len(remaining_duplicates['dr2_source_id'].unique())}")
 
-if not remaining_duplicates.empty:
-    print("\nExample of remaining duplicates:")
-    print(remaining_duplicates.groupby('dr2_source_id').first().head())
-else:
-    print("\nNo remaining duplicates found.")
+# if not remaining_duplicates.empty:
+#     print("\nExample of remaining duplicates:")
+#     print(remaining_duplicates.groupby('dr2_source_id').first().head())
+# else:
+#     print("\nNo remaining duplicates found.")
 
 # ***** Step 3: Consolidate the data *****
 # Create a new DataFrame to store the final consolidated data
@@ -171,544 +171,541 @@ df = clean_merged_results.copy()
 # df['source_id'] = df['source_id_dr3'].fillna(df['source_id_dr2'])
 
 # Update the final columns list to include the new source_id column
-final_columns = ['source_id', 'source_id_dr2', 'source_id_dr3', 'ra', 'dec', 'phot_g_mean_mag', 'phot_bp_mean_mag', 'phot_rp_mean_mag', 
-                'bp_rp', 'parallax', 'T_eff [K]', 'mass_flame', 'lum_flame', 'radius_flame', 'logg_gaia', 'spectraltype_esphs']
+# final_columns = ['source_id', 'source_id_dr2', 'source_id_dr3', 'ra', 'dec', 'phot_g_mean_mag', 'phot_bp_mean_mag', 'phot_rp_mean_mag', 
+#                 'bp_rp', 'parallax', 'T_eff [K]', 'mass_flame', 'lum_flame', 'radius_flame', 'logg_gaia', 'spectraltype_esphs']
 
-# Create the final dataframe
-df_consolidated = df[final_columns]
+# # Create the final dataframe
+# df_consolidated = df[final_columns]
 
+# # Create a new DataFrame instead of modifying the existing one
+# new_columns = ['source_id', 'HD Number', 'GJ Number', 'HIP Number', 'Object Type']
+# df_new = pd.DataFrame(columns=new_columns)
 
-if 1:
+# # Populate the new DataFrame
+# df_new['source_id'] = df_consolidated['source_id_dr3'].fillna(df_consolidated['source_id_dr2'])
 
-    # Create a new DataFrame instead of modifying the existing one
-    new_columns = ['source_id', 'HD Number', 'GJ Number', 'HIP Number', 'Object Type']
-    df_new = pd.DataFrame(columns=new_columns)
-
-    # Populate the new DataFrame
-    df_new['source_id'] = df_consolidated['source_id_dr3'].fillna(df_consolidated['source_id_dr2'])
-
-    for index, row in df_new.iterrows():
-        simbad_info = get_simbad_info_with_retry(row['source_id'])
-        if simbad_info:
-            df_new.loc[index, 'HD Number'] = simbad_info['HD Number']
-            df_new.loc[index, 'GJ Number'] = simbad_info['GJ Number']
-            df_new.loc[index, 'HIP Number'] = simbad_info['HIP Number']
-            df_new.loc[index, 'Object Type'] = simbad_info['Object Type']
+# for index, row in df_new.iterrows():
+#     simbad_info = get_simbad_info_with_retry(row['source_id'])
+#     if simbad_info:
+#         df_new.loc[index, 'HD Number'] = simbad_info['HD Number']
+#         df_new.loc[index, 'GJ Number'] = simbad_info['GJ Number']
+#         df_new.loc[index, 'HIP Number'] = simbad_info['HIP Number']
+#         df_new.loc[index, 'Object Type'] = simbad_info['Object Type']
 
 
-    # Combine the new DataFrame with the original one
-    df_consolidated = pd.concat([df_consolidated, df_new[['HD Number', 'GJ Number', 'HIP Number', 'Object Type']]], axis=1)
+# # Combine the new DataFrame with the original one
+# df_consolidated = pd.concat([df_consolidated, df_new[['HD Number', 'GJ Number', 'HIP Number', 'Object Type']]], axis=1)
 
-    # Update the final columns list to include the new columns
-    final_columns.extend(['HD Number', 'GJ Number', 'HIP Number', 'Object Type'])
+# # Update the final columns list to include the new columns
+# final_columns.extend(['HD Number', 'GJ Number', 'HIP Number', 'Object Type'])
 
-    # Create the final dataframe with the updated column list
-    df_consolidated = df_consolidated[final_columns]
+# # Create the final dataframe with the updated column list
+# df_consolidated = df_consolidated[final_columns]
 
-    # Rename the columns
-    df_consolidated = df_consolidated.rename(columns={
-        'mass_flame': 'Mass [M_Sun]',
-        'lum_flame': 'Luminosity [L_Sun]',
-        'radius_flame': 'Radius [R_Sun]',
-        'phot_g_mean_mag': 'Phot G Mean Mag',
-        'phot_bp_mean_mag': 'Phot BP Mean Mag',
-        'phot_rp_mean_mag': 'Phot RP Mean Mag',
-        'bp_rp': 'BP-RP',
-        'parallax': 'Parallax',
-        'ra': 'RA',
-        'dec': 'DEC',
-        'spectraltype_esphs': 'Gaia Spectral type'
-    })
+# # Rename the columns
+# df_consolidated = df_consolidated.rename(columns={
+#     'mass_flame': 'Mass [M_Sun]',
+#     'lum_flame': 'Luminosity [L_Sun]',
+#     'radius_flame': 'Radius [R_Sun]',
+#     'phot_g_mean_mag': 'Phot G Mean Mag',
+#     'phot_bp_mean_mag': 'Phot BP Mean Mag',
+#     'phot_rp_mean_mag': 'Phot RP Mean Mag',
+#     'bp_rp': 'BP-RP',
+#     'parallax': 'Parallax',
+#     'ra': 'RA',
+#     'dec': 'DEC',
+#     'spectraltype_esphs': 'Gaia Spectral type'
+# })
 
-    # Convert each column to numeric, coercing errors
-    columns_to_convert = ['T_eff [K]', 'Mass [M_Sun]', 'Luminosity [L_Sun]', 'Radius [R_Sun]']
+# # Convert each column to numeric, coercing errors
+# columns_to_convert = ['T_eff [K]', 'Mass [M_Sun]', 'Luminosity [L_Sun]', 'Radius [R_Sun]']
 
-    for column in columns_to_convert:
-        df_consolidated[column] = pd.to_numeric(df_consolidated[column], errors='coerce')
+# for column in columns_to_convert:
+#     df_consolidated[column] = pd.to_numeric(df_consolidated[column], errors='coerce')
 
-    # Save the result to a new Excel file
-    df_consolidated.to_excel(directory + 'consolidated_results.xlsx', index=False)
-    adjust_column_widths(directory + 'consolidated_results.xlsx')
+# Save the result to a new Excel file
+# df_consolidated.to_excel(directory + 'consolidated_results.xlsx', index=False)
+# adjust_column_widths(directory + 'consolidated_results.xlsx')
 
-    # Display some statistics
-    print(f"Total number of stars: {len(df_consolidated)}")
-    print(f"Number of stars with DR3 source_id: {df_consolidated['source_id_dr3'].notna().sum()}")
-    print(f"Number of stars with only DR2 source_id: {df_consolidated['source_id_dr3'].isna().sum()}")
-    print(f"Number of stars with HD Number: {df_consolidated['HD Number'].notna().sum()}")
-    print(f"Number of stars with GJ Number: {df_consolidated['GJ Number'].notna().sum()}")
-    print(f"Number of stars with HIP Number: {df_consolidated['HIP Number'].notna().sum()}")
+# # Display some statistics
+# print(f"Total number of stars: {len(df_consolidated)}")
+# print(f"Number of stars with DR3 source_id: {df_consolidated['source_id_dr3'].notna().sum()}")
+# print(f"Number of stars with only DR2 source_id: {df_consolidated['source_id_dr3'].isna().sum()}")
+# print(f"Number of stars with HD Number: {df_consolidated['HD Number'].notna().sum()}")
+# print(f"Number of stars with GJ Number: {df_consolidated['GJ Number'].notna().sum()}")
+# print(f"Number of stars with HIP Number: {df_consolidated['HIP Number'].notna().sum()}")
 
 
 # In[5]:
 
 
-from audio import *
+# from audio import *
 
-if 1:
-    # Display the stop button
-    display(stop_button)
-    # Automatically start the audio process
-    start_audio_process()
-
-
-# #### HIP -- add temperature and luminosity if missing
-
-# In[12]:
+# if 1:
+#     # Display the stop button
+#     display(stop_button)
+#     # Automatically start the audio process
+#     start_audio_process()
 
 
-len(df_consolidated)
+# # #### HIP -- add temperature and luminosity if missing
+
+# # In[12]:
 
 
-# In[7]:
+# len(df_consolidated)
 
 
-# Define the column specifications based on the byte positions
-colspecs = [
-    (39, 45),  # Num    
-    (10, 15),  # Teff
-    (16, 28),  # Lum
-]
-# Define the column names
-column_names = [
-    "HIP Number",
-    "T_eff [K]",
-    "Luminosity [L_Sun]"
-]
-
-# Read the data into a DataFrame
-df_CELESTA = pd.read_fwf("../data/Catalogue_CELESTA.txt", colspecs=colspecs, names=column_names, skiprows=28)
-
-# Display the first few rows of the DataFrame
-df_CELESTA.head()
+# # In[7]:
 
 
-# In[8]:
+# # Define the column specifications based on the byte positions
+# colspecs = [
+#     (39, 45),  # Num    
+#     (10, 15),  # Teff
+#     (16, 28),  # Lum
+# ]
+# # Define the column names
+# column_names = [
+#     "HIP Number",
+#     "T_eff [K]",
+#     "Luminosity [L_Sun]"
+# ]
+
+# # Read the data into a DataFrame
+# df_CELESTA = pd.read_fwf("../data/Catalogue_CELESTA.txt", colspecs=colspecs, names=column_names, skiprows=28)
+
+# # Display the first few rows of the DataFrame
+# df_CELESTA.head()
 
 
-# Step 1: Extract numeric HIP numbers from df_consolidated
-df_consolidated['HIP Number'] = df_consolidated['HIP Number'].str.extract(r'HIP\s*(\d+)')
-df_CELESTA['HIP Number'] = df_CELESTA['HIP Number'].astype(str)
-
-# Step 2: Merge the dataframes on the HIP Number
-merged_df = pd.merge(df_consolidated, df_CELESTA[['HIP Number', 'T_eff [K]', 'Luminosity [L_Sun]']],
-                     on='HIP Number', suffixes=('', '_CELESTA'), how='left')
-
-# Step 3: Fill missing T_eff [K] values
-merged_df['T_eff [K]'] = merged_df['T_eff [K]'].fillna(merged_df['T_eff [K]_CELESTA'])
-
-# Step 4: Fill missing Luminosity [L_Sun] values
-merged_df['Luminosity [L_Sun]'] = merged_df['Luminosity [L_Sun]'].fillna(merged_df['Luminosity [L_Sun]_CELESTA'])
-
-# Step 5: Drop the extra columns from df_CELESTA
-df_consolidated_HIP = merged_df.drop(columns=['T_eff [K]_CELESTA', 'Luminosity [L_Sun]_CELESTA'])
+# # In[8]:
 
 
-df_consolidated_HIP.to_excel(directory + 'consolidated_HIP_results.xlsx', index=False)
-adjust_column_widths(directory + 'consolidated_HIP_results.xlsx')
+# # Step 1: Extract numeric HIP numbers from df_consolidated
+# df_consolidated['HIP Number'] = df_consolidated['HIP Number'].str.extract(r'HIP\s*(\d+)')
+# df_CELESTA['HIP Number'] = df_CELESTA['HIP Number'].astype(str)
 
-df_consolidated_HIP.head()
+# # Step 2: Merge the dataframes on the HIP Number
+# merged_df = pd.merge(df_consolidated, df_CELESTA[['HIP Number', 'T_eff [K]', 'Luminosity [L_Sun]']],
+#                      on='HIP Number', suffixes=('', '_CELESTA'), how='left')
 
+# # Step 3: Fill missing T_eff [K] values
+# merged_df['T_eff [K]'] = merged_df['T_eff [K]'].fillna(merged_df['T_eff [K]_CELESTA'])
 
+# # Step 4: Fill missing Luminosity [L_Sun] values
+# merged_df['Luminosity [L_Sun]'] = merged_df['Luminosity [L_Sun]'].fillna(merged_df['Luminosity [L_Sun]_CELESTA'])
 
-# #### HD
-
-# In[9]:
-
-
-# Example usage
-temperature, luminosity = get_star_properties("10700")
-print("Temperature [K]:", temperature if temperature else "N/A")
-print("Estimated Luminosity [L_sun]:", luminosity if luminosity else "N/A")
-
-
-# In[17]:
+# # Step 5: Drop the extra columns from df_CELESTA
+# df_consolidated_HIP = merged_df.drop(columns=['T_eff [K]_CELESTA', 'Luminosity [L_Sun]_CELESTA'])
 
 
-# Load the stellar catalog file and store it in memory
+# df_consolidated_HIP.to_excel(directory + 'consolidated_HIP_results.xlsx', index=False)
+# adjust_column_widths(directory + 'consolidated_HIP_results.xlsx')
 
-with open('../data/Catalogue_V_117A_table1.txt', 'r') as file:
-    STELLAR_CATALOG = file.readlines()
-
-def extract_mass(hd_number):
-    """
-    Extract mass for a given HD number using the pre-loaded catalog.
-    """
-    for line in STELLAR_CATALOG:
-        # Extract the HD number from the line
-        line_hd_number = line[7:18].strip()
-        # Check if the line contains the desired HD number
-        if line_hd_number == f"HD {hd_number}":
-            # Extract mass information
-            mass = line[130:134].strip()
-            # Return the mass as a float if available
-            return float(mass) if mass else None
+# df_consolidated_HIP.head()
 
 
-# In[22]:
+
+# # #### HD
+
+# # In[9]:
 
 
-df_consolidated_HD = df_consolidated_HIP.copy()
+# # Example usage
+# temperature, luminosity = get_star_properties("10700")
+# print("Temperature [K]:", temperature if temperature else "N/A")
+# print("Estimated Luminosity [L_sun]:", luminosity if luminosity else "N/A")
+
+
+# # In[17]:
+
+
+# # Load the stellar catalog file and store it in memory
+
+# with open('../data/Catalogue_V_117A_table1.txt', 'r') as file:
+#     STELLAR_CATALOG = file.readlines()
+
+# def extract_mass(hd_number):
+#     """
+#     Extract mass for a given HD number using the pre-loaded catalog.
+#     """
+#     for line in STELLAR_CATALOG:
+#         # Extract the HD number from the line
+#         line_hd_number = line[7:18].strip()
+#         # Check if the line contains the desired HD number
+#         if line_hd_number == f"HD {hd_number}":
+#             # Extract mass information
+#             mass = line[130:134].strip()
+#             # Return the mass as a float if available
+#             return float(mass) if mass else None
+
+
+# # In[22]:
+
+
+# df_consolidated_HD = df_consolidated_HIP.copy()
             
-from tqdm import tqdm
+# from tqdm import tqdm
 
-# Iterate over the DataFrame and fill missing values with a progress bar
-for index, row in tqdm(df_consolidated_HD.iterrows(), 
-                    total=df_consolidated_HD.shape[0], 
-                    desc="Filling missing T_eff, Luminosity and Mass"):
-    # Check for missing temperature or luminosity
-    if pd.isna(row["T_eff [K]"]) or pd.isna(row["Luminosity [L_Sun]"]) or pd.isna(row["Mass [M_Sun]"]):
-        # Extract and clean HD number
-        hd_number = clean_hd_number(row["HD Number"])
+# # Iterate over the DataFrame and fill missing values with a progress bar
+# for index, row in tqdm(df_consolidated_HD.iterrows(), 
+#                     total=df_consolidated_HD.shape[0], 
+#                     desc="Filling missing T_eff, Luminosity and Mass"):
+#     # Check for missing temperature or luminosity
+#     if pd.isna(row["T_eff [K]"]) or pd.isna(row["Luminosity [L_Sun]"]) or pd.isna(row["Mass [M_Sun]"]):
+#         # Extract and clean HD number
+#         hd_number = clean_hd_number(row["HD Number"])
         
-        if hd_number:  # If a valid HD number was extracted
-            # Retrieve properties
-            temperature, luminosity = get_star_properties_with_retries(hd_number)
-            mass = extract_mass(hd_number)
+#         if hd_number:  # If a valid HD number was extracted
+#             # Retrieve properties
+#             temperature, luminosity = get_star_properties_with_retries(hd_number)
+#             mass = extract_mass(hd_number)
             
-            # Fill missing values
-            if pd.isna(row["T_eff [K]"]) and temperature is not None:
-                df_consolidated_HD.at[index, "T_eff [K]"] = temperature
-            if pd.isna(row["Luminosity [L_Sun]"]) and luminosity is not None:
-                df_consolidated_HD.at[index, "Luminosity [L_Sun]"] = luminosity
-            if pd.isna(row["Mass [M_Sun]"]) and mass is not None:
-                df_consolidated_HD.at[index, "Mass [M_Sun]"] = mass
+#             # Fill missing values
+#             if pd.isna(row["T_eff [K]"]) and temperature is not None:
+#                 df_consolidated_HD.at[index, "T_eff [K]"] = temperature
+#             if pd.isna(row["Luminosity [L_Sun]"]) and luminosity is not None:
+#                 df_consolidated_HD.at[index, "Luminosity [L_Sun]"] = luminosity
+#             if pd.isna(row["Mass [M_Sun]"]) and mass is not None:
+#                 df_consolidated_HD.at[index, "Mass [M_Sun]"] = mass
 
-df_consolidated_HD.to_excel(directory + 'consolidated_HD_results.xlsx', index=False)
+# df_consolidated_HD.to_excel(directory + 'consolidated_HD_results.xlsx', index=False)
 
-adjust_column_widths(directory + 'consolidated_HD_results.xlsx')
+# adjust_column_widths(directory + 'consolidated_HD_results.xlsx')
 
-df_consolidated_HD
-
-
-# In[24]:
+# df_consolidated_HD
 
 
-if 0: # parallel 
-    from multiprocessing import Pool
-    from functools import partial
+# # In[24]:
 
-    def process_row(row, df):
-        """Process a single row and return the updated values"""
-        if pd.isna(row["T_eff [K]"]) or pd.isna(row["Luminosity [L_Sun]"]) or pd.isna(row["Mass [M_Sun]"]):
-            hd_number = clean_hd_number(row["HD Number"])
+
+# if 0: # parallel 
+#     from multiprocessing import Pool
+#     from functools import partial
+
+#     def process_row(row, df):
+#         """Process a single row and return the updated values"""
+#         if pd.isna(row["T_eff [K]"]) or pd.isna(row["Luminosity [L_Sun]"]) or pd.isna(row["Mass [M_Sun]"]):
+#             hd_number = clean_hd_number(row["HD Number"])
             
-            if hd_number:
-                temperature, luminosity = get_star_properties_with_retries(hd_number)
-                mass = extract_mass(hd_number)
+#             if hd_number:
+#                 temperature, luminosity = get_star_properties_with_retries(hd_number)
+#                 mass = extract_mass(hd_number)
                 
-                # Return updated values
-                return {
-                    'index': row.name,
-                    'T_eff [K]': temperature if pd.isna(row["T_eff [K]"]) else row["T_eff [K]"],
-                    'Luminosity [L_Sun]': luminosity if pd.isna(row["Luminosity [L_Sun]"]) else row["Luminosity [L_Sun]"],
-                    'Mass [M_Sun]': mass if pd.isna(row["Mass [M_Sun]"]) else row["Mass [M_Sun]"]
-                }
+#                 # Return updated values
+#                 return {
+#                     'index': row.name,
+#                     'T_eff [K]': temperature if pd.isna(row["T_eff [K]"]) else row["T_eff [K]"],
+#                     'Luminosity [L_Sun]': luminosity if pd.isna(row["Luminosity [L_Sun]"]) else row["Luminosity [L_Sun]"],
+#                     'Mass [M_Sun]': mass if pd.isna(row["Mass [M_Sun]"]) else row["Mass [M_Sun]"]
+#                 }
         
-        # Return original values if no updates needed
-        return {
-            'index': row.name,
-            'T_eff [K]': row["T_eff [K]"],
-            'Luminosity [L_Sun]': row["Luminosity [L_Sun]"],
-            'Mass [M_Sun]': row["Mass [M_Sun]"]
-        }
+#         # Return original values if no updates needed
+#         return {
+#             'index': row.name,
+#             'T_eff [K]': row["T_eff [K]"],
+#             'Luminosity [L_Sun]': row["Luminosity [L_Sun]"],
+#             'Mass [M_Sun]': row["Mass [M_Sun]"]
+#         }
 
-    def parallel_process_dataframe(df):
-        df_consolidated_HD = df.copy()
+#     def parallel_process_dataframe(df):
+#         df_consolidated_HD = df.copy()
         
-        # Create a pool of workers
-        with Pool() as pool:
-            # Process rows in parallel with progress bar
-            results = list(tqdm(
-                pool.imap(partial(process_row, df=df_consolidated_HD), 
-                [row for _, row in df_consolidated_HD.iterrows()]),
-                total=len(df_consolidated_HD),
-                desc="Processing rows in parallel"
-            ))
+#         # Create a pool of workers
+#         with Pool() as pool:
+#             # Process rows in parallel with progress bar
+#             results = list(tqdm(
+#                 pool.imap(partial(process_row, df=df_consolidated_HD), 
+#                 [row for _, row in df_consolidated_HD.iterrows()]),
+#                 total=len(df_consolidated_HD),
+#                 desc="Processing rows in parallel"
+#             ))
         
-        # Update DataFrame with results
-        for result in results:
-            idx = result['index']
-            df_consolidated_HD.at[idx, 'T_eff [K]'] = result['T_eff [K]']
-            df_consolidated_HD.at[idx, 'Luminosity [L_Sun]'] = result['Luminosity [L_Sun]']
-            df_consolidated_HD.at[idx, 'Mass [M_Sun]'] = result['Mass [M_Sun]']
+#         # Update DataFrame with results
+#         for result in results:
+#             idx = result['index']
+#             df_consolidated_HD.at[idx, 'T_eff [K]'] = result['T_eff [K]']
+#             df_consolidated_HD.at[idx, 'Luminosity [L_Sun]'] = result['Luminosity [L_Sun]']
+#             df_consolidated_HD.at[idx, 'Mass [M_Sun]'] = result['Mass [M_Sun]']
         
-        return df_consolidated_HD
+#         return df_consolidated_HD
 
-    # Use the parallel processing function
-    df_consolidated_HD = parallel_process_dataframe(df_consolidated_HIP)
+#     # Use the parallel processing function
+#     df_consolidated_HD = parallel_process_dataframe(df_consolidated_HIP)
 
-    # Save results
-    df_consolidated_HD.to_excel(directory + 'consolidated_HD_results.xlsx', index=False)
-    adjust_column_widths(directory + 'consolidated_HD_results.xlsx')
-
-
-# #### Simbad
-
-# In[25]:
+#     # Save results
+#     df_consolidated_HD.to_excel(directory + 'consolidated_HD_results.xlsx', index=False)
+#     adjust_column_widths(directory + 'consolidated_HD_results.xlsx')
 
 
-len(df_consolidated_HD)
+# # #### Simbad
+
+# # In[25]:
 
 
-# In[26]:
+# len(df_consolidated_HD)
 
 
-# Example usage
-if 1:
-    gaia_dr3_id = "4072260704719970944"
-    original, processed = get_stellar_type_dr3(gaia_dr3_id)
-    print(f"Original: {original}, Processed: {processed}")
-
-# Example usage for DR2
-if 0:
-    # gaia_dr2_id = "1234567890123456789"
-    gaia_dr2_id = "25488745411919360"
-    original, processed = get_stellar_type_dr2(gaia_dr2_id)
-    print(f"Original: {original}, Processed: {processed}")
-# 
+# # In[26]:
 
 
-# In[29]:
+# # Example usage
+# if 1:
+#     gaia_dr3_id = "4072260704719970944"
+#     original, processed = get_stellar_type_dr3(gaia_dr3_id)
+#     print(f"Original: {original}, Processed: {processed}")
+
+# # Example usage for DR2
+# if 0:
+#     # gaia_dr2_id = "1234567890123456789"
+#     gaia_dr2_id = "25488745411919360"
+#     original, processed = get_stellar_type_dr2(gaia_dr2_id)
+#     print(f"Original: {original}, Processed: {processed}")
+# # 
 
 
-if 0:
-    df_consolidated_HD = pd.read_excel(directory + 'consolidated_HD_results.xlsx', dtype={'source_id': str, 'source_id_dr2': str, 'source_id_dr3': str, 'HIP Number': str})
-    df_consolidated_HD
+# # In[29]:
 
 
-# In[30]:
+# if 0:
+#     df_consolidated_HD = pd.read_excel(directory + 'consolidated_HD_results.xlsx', dtype={'source_id': str, 'source_id_dr2': str, 'source_id_dr3': str, 'HIP Number': str})
+#     df_consolidated_HD
 
 
-list(df_consolidated_HD.columns)
+# # In[30]:
 
 
-# In[51]:
+# list(df_consolidated_HD.columns)
 
 
-# Update the DataFrame with stellar properties 
-df_consolidated_simbad = get_stellar_properties_from_gaia(df_consolidated_HD)
-
-# Save to Excel
-filename = directory + 'consolidated_Simbad_results.xlsx'
-df_consolidated_simbad.to_excel(filename, index=False)
-adjust_column_widths(filename)
+# # In[51]:
 
 
-# In[54]:
+# # Update the DataFrame with stellar properties 
+# df_consolidated_simbad = get_stellar_properties_from_gaia(df_consolidated_HD)
+
+# # Save to Excel
+# filename = directory + 'consolidated_Simbad_results.xlsx'
+# df_consolidated_simbad.to_excel(filename, index=False)
+# adjust_column_widths(filename)
 
 
-if 0:
-    df_consolidated_simbad = pd.read_excel(directory + 'consolidated_Simbad_results.xlsx', dtype={'source_id': str, 'source_id_dr2': str, 'source_id_dr3': str, 'HIP Number': str})
-    df_consolidated_simbad
+# # In[54]:
 
 
-# In[55]:
+# if 0:
+#     df_consolidated_simbad = pd.read_excel(directory + 'consolidated_Simbad_results.xlsx', dtype={'source_id': str, 'source_id_dr2': str, 'source_id_dr3': str, 'HIP Number': str})
+#     df_consolidated_simbad
 
 
-len(df_consolidated_simbad) 
+# # In[55]:
+
+
+# len(df_consolidated_simbad) 
 
 
 # In[56]:
 
 
-df_consolidated = df_consolidated_simbad.copy()
+# df_consolidated = df_consolidated_simbad.copy()
 
-df_consolidated['Density [Solar unit]'] = None
-df_consolidated.loc[df_consolidated['Mass [M_Sun]'].notna() & df_consolidated['Radius [R_Sun]'].notna(), 'Density [Solar unit]'] = df_consolidated['Mass [M_Sun]'] / (df_consolidated['Radius [R_Sun]'] ** 3)
+# df_consolidated['Density [Solar unit]'] = None
+# df_consolidated.loc[df_consolidated['Mass [M_Sun]'].notna() & df_consolidated['Radius [R_Sun]'].notna(), 'Density [Solar unit]'] = df_consolidated['Mass [M_Sun]'] / (df_consolidated['Radius [R_Sun]'] ** 3)
 
-# Reorder columns to place 'Density [Solar unit]' after 'Radius [R_Sun]'
-cols = df_consolidated.columns.tolist()
-density_index = cols.index('Density [Solar unit]')
-radius_index = cols.index('Radius [R_Sun]')
-cols.insert(radius_index + 1, cols.pop(density_index))
-df_consolidated = df_consolidated[cols]
+# # Reorder columns to place 'Density [Solar unit]' after 'Radius [R_Sun]'
+# cols = df_consolidated.columns.tolist()
+# density_index = cols.index('Density [Solar unit]')
+# radius_index = cols.index('Radius [R_Sun]')
+# cols.insert(radius_index + 1, cols.pop(density_index))
+# df_consolidated = df_consolidated[cols]
 
 
 # In[57]:
 
 
-plt.figure(figsize=(10, 6))
+# plt.figure(figsize=(10, 6))
 
-colors = np.where(df_consolidated['Density [Solar unit]'] < 0.1, 'red', 'blue')
+# colors = np.where(df_consolidated['Density [Solar unit]'] < 0.1, 'red', 'blue')
 
-plt.scatter(df_consolidated['logg_gaia'], df_consolidated['Density [Solar unit]'], alpha=0.6, edgecolors='w', s=20, c=colors)
-plt.xlabel('logg_gaia', fontsize=14)
-plt.ylabel('Density [Solar unit]', fontsize=14)
-plt.ylim(-0.1, 6)
-plt.xlim(2, 5)
-plt.grid(True, linestyle='--', alpha=0.7)
-plt.show()
-
-
-# In[58]:
+# plt.scatter(df_consolidated['logg_gaia'], df_consolidated['Density [Solar unit]'], alpha=0.6, edgecolors='w', s=20, c=colors)
+# plt.xlabel('logg_gaia', fontsize=14)
+# plt.ylabel('Density [Solar unit]', fontsize=14)
+# plt.ylim(-0.1, 6)
+# plt.xlim(2, 5)
+# plt.grid(True, linestyle='--', alpha=0.7)
+# plt.show()
 
 
-plt.figure(figsize=(10, 6))
+# # In[58]:
 
-colors = np.where(df_consolidated['Density [Solar unit]'] < 0.1, 'red', 'blue')
 
-plt.scatter(df_consolidated['logg_gaia'], df_consolidated['Density [Solar unit]'], alpha=0.6, edgecolors='w', s=20, c=colors)
-plt.xlabel('logg_gaia', fontsize=14)
-plt.ylabel('Density [Solar unit]', fontsize=14)
-plt.ylim(-0.01, 0.3)
-plt.xlim(2, 4.5)
-plt.grid(True, linestyle='--', alpha=0.7)
-plt.show()
+# plt.figure(figsize=(10, 6))
+
+# colors = np.where(df_consolidated['Density [Solar unit]'] < 0.1, 'red', 'blue')
+
+# plt.scatter(df_consolidated['logg_gaia'], df_consolidated['Density [Solar unit]'], alpha=0.6, edgecolors='w', s=20, c=colors)
+# plt.xlabel('logg_gaia', fontsize=14)
+# plt.ylabel('Density [Solar unit]', fontsize=14)
+# plt.ylim(-0.01, 0.3)
+# plt.xlim(2, 4.5)
+# plt.grid(True, linestyle='--', alpha=0.7)
+# plt.show()
 
 
 # In[65]:
 
 
-#-------------------------------------------------------------
-# Extract data with mass and luminosity information available
-#-------------------------------------------------------------
-df_filtered = df_consolidated.copy()
+# #-------------------------------------------------------------
+# # Extract data with mass and luminosity information available
+# #-------------------------------------------------------------
+# df_filtered = df_consolidated.copy()
 
-# Filter out stars with missing mass or luminosity information
-df_filtered = df_filtered[(df_filtered['Luminosity [L_Sun]'].notna()) & (df_filtered['T_eff [K]'].notna())]
+# # Filter out stars with missing mass or luminosity information
+# df_filtered = df_filtered[(df_filtered['Luminosity [L_Sun]'].notna()) & (df_filtered['T_eff [K]'].notna())]
 
-print('Number of stars with both T_eff and Luminosity available:', len(df_filtered))
+# print('Number of stars with both T_eff and Luminosity available:', len(df_filtered))
 
-# Check for non-empty rows in the specified columns
-non_empty_rows = df_consolidated[
-    df_consolidated['Luminosity [L_Sun]'].notna() &
-    df_consolidated['Radius [R_Sun]'].notna() &
-    df_consolidated['T_eff [K]'].notna() &
-    df_consolidated['Mass [M_Sun]'].notna()
-]
+# # Check for non-empty rows in the specified columns
+# non_empty_rows = df_consolidated[
+#     df_consolidated['Luminosity [L_Sun]'].notna() &
+#     df_consolidated['Radius [R_Sun]'].notna() &
+#     df_consolidated['T_eff [K]'].notna() &
+#     df_consolidated['Mass [M_Sun]'].notna()
+# ]
 
-# Count the number of such rows
-num_non_empty_rows = len(non_empty_rows)
+# # Count the number of such rows
+# num_non_empty_rows = len(non_empty_rows)
 
-print(f"Number of stars with all of 'Luminosity [L_Sun]', 'T_eff [K]', 'Mass [M_Sun]' and 'Radius [R_Sun]' available: {num_non_empty_rows}")
+# print(f"Number of stars with all of 'Luminosity [L_Sun]', 'T_eff [K]', 'Mass [M_Sun]' and 'Radius [R_Sun]' available: {num_non_empty_rows}")
 
-# Filter out stars with temperature < 3500K or > 7000K
-df_filtered = df_filtered[
-    (df_filtered['T_eff [K]'] >= 3800) & 
-    (df_filtered['T_eff [K]'] <= 7000)
-]
-# Filter out stars with luminosity < 0.01 or > 4 L_Sun
-df_filtered = df_filtered[
-    (df_filtered['Luminosity [L_Sun]'] < 5.2) & # 5--> 5.2, to include HD23754 (F5IV-V)
-    (df_filtered['Luminosity [L_Sun]'] > 0.05)
-]
-# df_filtered = df_filtered[df_filtered['Radius [R_Sun]'] < 2] #--> redundant 
+# # Filter out stars with temperature < 3500K or > 7000K
+# df_filtered = df_filtered[
+#     (df_filtered['T_eff [K]'] >= 3800) & 
+#     (df_filtered['T_eff [K]'] <= 7000)
+# ]
+# # Filter out stars with luminosity < 0.01 or > 4 L_Sun
+# df_filtered = df_filtered[
+#     (df_filtered['Luminosity [L_Sun]'] < 5.2) & # 5--> 5.2, to include HD23754 (F5IV-V)
+#     (df_filtered['Luminosity [L_Sun]'] > 0.05)
+# ]
+# # df_filtered = df_filtered[df_filtered['Radius [R_Sun]'] < 2] #--> redundant 
 
-# Filter out stars with density < 0.5 or > 5 solor unit
-if 1:
-    df_filtered = df_filtered[
-        ((df_filtered['Density [Solar unit]'] >= 0.1) & 
-            (df_filtered['Density [Solar unit]'] < 5)) |
-        df_filtered['Radius [R_Sun]'].isna()
-    ]
+# # Filter out stars with density < 0.5 or > 5 solor unit
+# if 1:
+#     df_filtered = df_filtered[
+#         ((df_filtered['Density [Solar unit]'] >= 0.1) & 
+#             (df_filtered['Density [Solar unit]'] < 5)) |
+#         df_filtered['Radius [R_Sun]'].isna()
+#     ]
 
-# Filter out stars with logg < 3.9 (i.e. sub-giants / giants)    
-df_filtered['logg_gaia'] = pd.to_numeric(df_filtered['logg_gaia'], errors='coerce')
-df_filtered = df_filtered[
-    (df_filtered['logg_gaia'] > 3.8) | 
-    (df_filtered['logg_gaia'].isna())
-]
+# # Filter out stars with logg < 3.9 (i.e. sub-giants / giants)    
+# df_filtered['logg_gaia'] = pd.to_numeric(df_filtered['logg_gaia'], errors='coerce')
+# df_filtered = df_filtered[
+#     (df_filtered['logg_gaia'] > 3.8) | 
+#     (df_filtered['logg_gaia'].isna())
+# ]
 
-# Save the filtered consolidated data to a new Excel file
-df_filtered.to_excel(directory + 'consolidated_results_kept.xlsx', index=False)
-adjust_column_widths(directory + 'consolidated_results_kept.xlsx')
-display(df_filtered)
-
-
-# In[66]:
+# # Save the filtered consolidated data to a new Excel file
+# df_filtered.to_excel(directory + 'consolidated_results_kept.xlsx', index=False)
+# adjust_column_widths(directory + 'consolidated_results_kept.xlsx')
+# display(df_filtered)
 
 
-# Find entries that were removed during filtering
-df_removed = df_consolidated[~df_consolidated['source_id'].isin(df_filtered['source_id'])]
+# # In[66]:
 
-# Save the removed entries to Excel
-output_path = directory + 'consolidated_results_removed.xlsx'
-df_removed.to_excel(output_path, index=False)
-adjust_column_widths(output_path)
 
-# Print some statistics
-print(f"Total entries in df_consolidated: {len(df_consolidated)}")
-print(f"Entries kept in df_filtered: {len(df_filtered)}")
-print(f"Entries removed and saved to file: {len(df_removed)}")
+# # Find entries that were removed during filtering
+# df_removed = df_consolidated[~df_consolidated['source_id'].isin(df_filtered['source_id'])]
+
+# # Save the removed entries to Excel
+# output_path = directory + 'consolidated_results_removed.xlsx'
+# df_removed.to_excel(output_path, index=False)
+# adjust_column_widths(output_path)
+
+# # Print some statistics
+# print(f"Total entries in df_consolidated: {len(df_consolidated)}")
+# print(f"Entries kept in df_filtered: {len(df_filtered)}")
+# print(f"Entries removed and saved to file: {len(df_removed)}")
 
 
 # In[67]:
 
 
-combined_df = df_filtered.copy()
+# combined_df = df_filtered.copy()
 
 
-# In[68]:
+# # In[68]:
 
 
-len(combined_df)
+# len(combined_df)
 
 
-# In[69]:
+# # In[69]:
 
 
-color = combined_df['Phot BP Mean Mag'] - combined_df['Phot RP Mean Mag']
+# color = combined_df['Phot BP Mean Mag'] - combined_df['Phot RP Mean Mag']
 
 
-# Create a high-resolution plot
-plt.figure(figsize=(6, 4), dpi=150)  # Set the dpi to 300 for high resolution
-plt.hist(color, bins=50, color='skyblue', edgecolor='black')
-plt.xlabel('Color (B - R)')
-plt.ylabel('Frequency')
-plt.title('Color (B - R) Histogram')
-plt.savefig('../figures/color_histogram.png', dpi=300)  # Save the plot as a PNG file
-plt.show()
+# # Create a high-resolution plot
+# plt.figure(figsize=(6, 4), dpi=150)  # Set the dpi to 300 for high resolution
+# plt.hist(color, bins=50, color='skyblue', edgecolor='black')
+# plt.xlabel('Color (B - R)')
+# plt.ylabel('Frequency')
+# plt.title('Color (B - R) Histogram')
+# plt.savefig('../figures/color_histogram.png', dpi=300)  # Save the plot as a PNG file
+# plt.show()
 
 
-# In[70]:
+# # In[70]:
 
 
-# Assuming 'color' is a column in combined_df or an array of the same length as the DataFrame
-# For example, if 'color' is the difference between 'Phot BP Mean Mag' and 'Phot RP Mean Mag'
-color = combined_df['Phot BP Mean Mag'] - combined_df['Phot RP Mean Mag']
+# # Assuming 'color' is a column in combined_df or an array of the same length as the DataFrame
+# # For example, if 'color' is the difference between 'Phot BP Mean Mag' and 'Phot RP Mean Mag'
+# color = combined_df['Phot BP Mean Mag'] - combined_df['Phot RP Mean Mag']
 
-# Calculate the conversion factor for colors between 1 and 4
-conv = 0.20220 + 0.02489 * color
+# # Calculate the conversion factor for colors between 1 and 4
+# conv = 0.20220 + 0.02489 * color
 
-# Use np.where to apply the conversion conditionally
-V_mag = np.where((color >= 1) & (color <= 4),
-                 combined_df['Phot BP Mean Mag'] - conv,
-                 combined_df['Phot G Mean Mag'])
+# # Use np.where to apply the conversion conditionally
+# V_mag = np.where((color >= 1) & (color <= 4),
+#                  combined_df['Phot BP Mean Mag'] - conv,
+#                  combined_df['Phot G Mean Mag'])
 
-# Create a high-resolution plot
-plt.figure(figsize=(6, 4), dpi=150)  # Set the dpi to 300 for high resolution
+# # Create a high-resolution plot
+# plt.figure(figsize=(6, 4), dpi=150)  # Set the dpi to 300 for high resolution
 
-# Plot the diagram using the color array for point colors
-plt.scatter(combined_df['Phot G Mean Mag'], V_mag, c=color, cmap='viridis', edgecolor='k', s=50, alpha=0.5)
-plt.xlabel('G Magnitude')
-plt.ylabel('V Magnitude')
-# plt.title('Color-Magnitude Diagram')
-plt.colorbar(label='Color $(G_{BP} - G_{RP})$')
-plt.grid()
-plt.savefig('../figures/color_magnitude_diagram.png', dpi=300)
-plt.show()
+# # Plot the diagram using the color array for point colors
+# plt.scatter(combined_df['Phot G Mean Mag'], V_mag, c=color, cmap='viridis', edgecolor='k', s=50, alpha=0.5)
+# plt.xlabel('G Magnitude')
+# plt.ylabel('V Magnitude')
+# # plt.title('Color-Magnitude Diagram')
+# plt.colorbar(label='Color $(G_{BP} - G_{RP})$')
+# plt.grid()
+# plt.savefig('../figures/color_magnitude_diagram.png', dpi=300)
+# plt.show()
 
 
 # In[74]:
 
 
-# List of columns to convert to numeric
-columns_to_convert = ['T_eff [K]', 'Mass [M_Sun]', 'Luminosity [L_Sun]', 'Radius [R_Sun]']
+# # List of columns to convert to numeric
+# columns_to_convert = ['T_eff [K]', 'Mass [M_Sun]', 'Luminosity [L_Sun]', 'Radius [R_Sun]']
 
-# Convert specified columns to numeric, coercing errors to NaN
-for column in columns_to_convert:
-    combined_df[column] = pd.to_numeric(combined_df[column], errors='coerce')
+# # Convert specified columns to numeric, coercing errors to NaN
+# for column in columns_to_convert:
+#     combined_df[column] = pd.to_numeric(combined_df[column], errors='coerce')
 
-# Display the first few rows to verify the conversion
-display(combined_df.head())
+# # Display the first few rows to verify the conversion
+# display(combined_df.head())
 
 
 # In[81]:
 
 
-# Insert the 'V_mag' column right after the 'DEC' column
-if 'V_mag' not in combined_df.columns:
-    combined_df.insert(combined_df.columns.get_loc('DEC') + 1, 'V_mag', V_mag)
+# # Insert the 'V_mag' column right after the 'DEC' column
+# if 'V_mag' not in combined_df.columns:
+#     combined_df.insert(combined_df.columns.get_loc('DEC') + 1, 'V_mag', V_mag)
 
 if 'T_eff [K]' in combined_df.columns:
 

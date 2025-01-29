@@ -3,6 +3,7 @@ from astroquery.gaia import Gaia
 from openpyxl import load_workbook
 import time
 import logging
+import pandas as pd
 
 def execute_gaia_query(query, str_columns=None, output_file=None, retries=3, delay=5):
     """
@@ -95,3 +96,6 @@ def adjust_column_widths(excel_file):
 
     # Save the workbook
     workbook.save(excel_file)
+
+#--------------------------------------------------------------------------------------------------
+
