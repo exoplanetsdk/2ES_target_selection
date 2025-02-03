@@ -1,6 +1,6 @@
 import pandas as pd
 from config import RESULTS_DIRECTORY
-
+from utils import adjust_column_widths
 
 def filter_stellar_data(df, config):
     """
@@ -100,5 +100,5 @@ def filter_stellar_data(df, config):
 
     display(stats_dict)
     
-    return df_filtered, df_removed, stats_dict
+    return df_filtered
 

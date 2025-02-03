@@ -47,9 +47,12 @@ def main():
     df_consolidated = processor.process_catalogs(consolidate_results)
 
     # Plot density vs logg
-    plot_density_vs_logg(df_consolidated, output_path=f'{FIGURES_DIRECTORY}density_vs_logg.png', show_plot=False)
+    plot_density_vs_logg(df_consolidated, 
+                         output_path=f'{FIGURES_DIRECTORY}density_vs_logg.png', 
+                         show_plot=False
+                         )
 
-    df_filtered, _, _ = filter_stellar_data(df_consolidated, STELLAR_FILTERS)
+    df_filtered = filter_stellar_data(df_consolidated, STELLAR_FILTERS)
 
     plot_color_histogram(
         df_filtered,
@@ -63,42 +66,148 @@ def main():
         show_plot=False
     )
 
-    combined_df = calculate_and_insert_habitable_zone(
-        combined_df,
-        RESULTS_DIRECTORY,
-        output_filename='combined_query.xlsx'
+    df_with_hz = calculate_and_insert_habitable_zone(combined_df)
+    df_with_rv = calculate_and_insert_rv_precision(df_with_hz)
+    merged_df = calculate_and_insert_hz_detection_limit(df_with_rv)
+
+    df_with_bright_neighbors, df_without_bright_neighbors = analyze_bright_neighbors(
+        merged_df=merged_df,
+        search_radius=SEARCH_RADIUS,
+        execute_gaia_query_func=execute_gaia_query
     )
 
+    merged_df = df_without_bright_neighbors.copy()
 
+    #---------------------------------------------------------------------------------------------------    
+    # Plotting
+    #---------------------------------------------------------------------------------------------------    
 
+    # Plot RA vs DEC
+    plot_scatter(
+        x='RA',
+        y='DEC',
+        data=merged_df,
+        xlabel='Right Ascension (RA)',
+        ylabel='Declination (DEC)',
+        xlim=(0, 360),
+        filename=f'{FIGURES_DIRECTORY}ra_dec.png',
+        alpha=0.6,
+        invert_xaxis=True,
+        show_plot=False
+    )
 
-    import importlib
-    import config
-    importlib.reload(config)
-    from filtering import filter_stellar_data
-
-
-    # Generate plots and save results
-    plot_hr_diagram(final_results)
-    plot_stellar_properties(final_results, detection_limit=1.5)
+    # Plot HR diagram
+    plt.figure(figsize=(10, 8), dpi=150)
+    plt.scatter(
+        merged_df['T_eff [K]'], 
+        merged_df['Luminosity [L_Sun]'], 
+        c=merged_df['T_eff [K]'],  # Color by temperature
+        cmap='autumn',  # Use autumn colormap for red to yellow transition
+        alpha=0.99, 
+        edgecolors='w',  # Use white for edges
+        linewidths=0.05,  # Set edge width
+        s=merged_df['Radius [R_Sun]'] * 20  # Scale the radius for visibility
+    )
+    plt.colorbar(label='Effective Temperature (K)')  # Add color bar
+    plt.xscale('log')
+    plt.yscale('log')
+    plt.xlim(min(merged_df['T_eff [K]'])-50, max(merged_df['T_eff [K]'])+50)  # Set the same x range
+    plt.ylim(min(merged_df['Luminosity [L_Sun]']), max(merged_df['Luminosity [L_Sun]'])+0.5)  # Set the same y range
+    plt.gca().invert_xaxis()  # Invert x-axis for temperature
+    plt.xlabel('Effective Temperature (K)')
+    plt.ylabel('Luminosity (L/L_sun)')
+    plt.title('Hertzsprung-Russell Diagram')
+    plt.grid(True, which="both", ls="--", linewidth=0.5)
+    plt.savefig(f'{FIGURES_DIRECTORY}HR_diagram.png')
+    plt.close()
     
-    # Save final results
-    final_results.to_excel(f"{RESULTS_DIRECTORY}final_results.xlsx", index=False)
+    # Plot HR diagram with detection limit
+    for detection_limit in DETECTION_LIMITS:
+        if detection_limit is None:
+            plot_hr_diagram_with_detection_limit(merged_df, use_filtered_data=False)
+        else:
+            plot_hr_diagram_with_detection_limit(merged_df, use_filtered_data=True, detection_limit=detection_limit)
+
+    filtered_dfs = analyze_stellar_data(
+        df=merged_df,
+        hz_limits=DETECTION_LIMITS,
+        show_plot=False
+    )
+
+    #---------------------------------------------------------------------------------------------------    
+    # Comparison with Ralf's results
+    #---------------------------------------------------------------------------------------------------    
+    merged_RJ, df_Ralf = merge_and_format_stellar_data(
+        df_main=merged_df,
+        ralf_file_path=f'{DATA_DIRECTORY}2ES_targetlist_astrid_export_2024Dec_comments.xlsx'
+    )
+
+    merged_RJ['HZ Rmid'] = (merged_RJ['HZ Rin'] + merged_RJ['HZ Rout']) / 2
+    plot_scatter_with_options(merged_RJ, 'magV     ', 'V_mag', min_value = 3, max_value = 10)
+    plot_scatter_with_options(merged_RJ, 'mass ', 'Mass [M_Sun]', min_value = 0.5, max_value = 1.5)
+    plot_scatter_with_options(merged_RJ, 'HZ Rmid', 'HZ_limit [AU]', min_value = 0.1, max_value = 2, label=True)
+    plot_scatter_with_options(merged_RJ, 'logg', 'logg_gaia', min_value = 1.9, max_value = 5, label=True)
+    plot_scatter_with_options(merged_RJ, 'RV_Prec(390-870) 30m', 'RV precision [m/s]', min_value = 0, max_value = 1.6, label=True)
+    plot_scatter_with_options(merged_RJ, 'mdl(hz) 30min', 'HZ Detection Limit [M_Earth]', min_value = 0, max_value = 3, label=True)
+
+    i = 7
+    colors = plt.cm.viridis(np.linspace(0, 1, 8))
+
+    # Use the function to create the plot
+    plot_scatter(
+        x='T_eff [K]',
+        y='RV precision [m/s]',
+        data=merged_df,
+        xlabel='Stellar Temperature (K)',
+        ylabel='RV precision [m/s]',
+        xlim=(min(min(merged_df['T_eff [K]']), min(df_Ralf['Teff '])) - 100, max(max(merged_df['T_eff [K]']), max(df_Ralf['Teff '])) + 100),
+        ylim=(0, 2),
+        filename=f'{FIGURES_DIRECTORY}RV_precision_vs_temperature.png',
+        color=colors[i-1],  # Assuming 'colors' is defined and 'i' is an integer index
+        x2 = 'Teff ', 
+        y2 = 'RV_Prec(390-870) 30m',
+        data2 = df_Ralf,
+        color2 = 'red'
+    )
+
+    plot_scatter(
+        x='T_eff [K]',
+        y='HZ Detection Limit [M_Earth]',
+        data=merged_df,
+        xlabel='Stellar Temperature (K)',
+        ylabel='HZ Detection Limit (M_Earth)',
+        xlim=(min(merged_df['T_eff [K]']) - 200, 6000 + 500),
+        ylim=(0, 10),
+        filename=f'{FIGURES_DIRECTORY}HZ_detection_limit_vs_temperature_full.png',
+        color=colors[i],  # Replace with actual color if using a list
+        x2 = 'Teff ', 
+        y2 = 'mdl(hz) 30min',
+        data2 = df_Ralf,
+        color2 = 'red'
+    )
+
+    plot_scatter(
+        x='T_eff [K]',
+        y='HZ Detection Limit [M_Earth]',
+        data=merged_df,
+        xlabel='Stellar Temperature (K)',
+        ylabel='HZ Detection Limit (M_Earth)',
+        xlim=(min(merged_df['T_eff [K]']) - 200, 6000 + 100),
+        ylim=(0, 1.5),
+        filename=f'{FIGURES_DIRECTORY}HZ_detection_limit_vs_temperature_zoomed.png',
+        color=colors[i],  # Replace with actual color if using a list
+        x2 = 'Teff ', 
+        y2 = 'mdl(hz) 30min',
+        data2 = df_Ralf,
+        color2 = 'red'
+    )
+
+    print("\nRalf's results:")
+    print("Number of stars:", len(merged_RJ))
+    for detection_limit in DETECTION_LIMITS:
+        if detection_limit is not None:
+            print(f"Number of stars with HZ Detection Limit [M_Earth] < {detection_limit}:", len(merged_RJ[merged_RJ['mdl(hz) 30min'] < detection_limit]))
 
 if __name__ == "__main__":
     main()
-
-
-
-
-
-
-
-# In main.py, add:
-
-
-def main():
-    # ... (previous code) ...
-    
-    # Initialize catalog processor
 

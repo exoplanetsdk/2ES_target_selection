@@ -8,7 +8,7 @@ TARGET_G_MAG_LIMIT = 12
 MIN_DEC = -85
 MAX_DEC = 30
 MIN_PARALLAX = 20
-SEARCH_RADIUS = 2 / 3600.0  # 2 arcseconds in degrees
+SEARCH_RADIUS = 2 / 3600.0  # 2 arcseconds
 
 # Stellar filtering parameters
 STELLAR_FILTERS = {
@@ -20,3 +20,5 @@ STELLAR_FILTERS = {
     'density_max':  5,          # Maximum density in solar units
     'logg_min':     3.8         # Minimum log g value (for filtering out sub-giants/giants)
 }
+
+DETECTION_LIMITS = [None, 4, 2, 1.5] # M_Earth

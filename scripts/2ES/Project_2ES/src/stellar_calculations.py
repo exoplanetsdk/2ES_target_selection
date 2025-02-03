@@ -1,6 +1,8 @@
 import numpy as np
 from scipy import optimize
 
+#------------------------------------------------------------------------------------------------
+
 def calculate_habitable_zone(T_eff, L_ratio):
     """
     Calculate the habitable zone boundary based on Kopparapu et al. (2013) Equations 2 & 3,
@@ -50,6 +52,7 @@ def calculate_habitable_zone(T_eff, L_ratio):
 
     return 0.5 * (distance_inner + distance_outer)
 
+#------------------------------------------------------------------------------------------------
 
 # Constants
 G = 6.67430e-11  # Gravitational constant in m^3 kg^-1 s^-2
@@ -82,6 +85,8 @@ def calculate_hz_detection_limit(K, stellar_mass, orbital_radius):
         return planet_mass_kg / M_earth
     except:
         return np.nan
+        
+#------------------------------------------------------------------------------------------------
 
 def calculate_hz_detection_limit_simplify(K, stellar_mass, orbital_radius):
     """

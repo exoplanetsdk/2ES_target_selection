@@ -3,6 +3,7 @@ import seaborn as sns
 from config import *
 import pandas as pd
 import numpy as np
+from utils import adjust_column_widths
 
 def plot_density_vs_logg(df, logg_col='logg_gaia', density_col='Density [Solar unit]', 
                         density_threshold=0.1, plot_ranges=None, output_path=None, show_plot=False):
@@ -98,6 +99,8 @@ def plot_color_histogram(df, output_path=None, figsize=(6, 4), dpi=150, show_plo
     if show_plot:
         plt.show()
 
+#---------------------------------------------------------------------------------------------------
+
 def plot_color_magnitude_diagram(df, output_path=None, figsize=(6, 4), dpi=150, show_plot=False):
     """
     Create a color-magnitude diagram comparing G and V magnitudes.
@@ -151,3 +154,411 @@ def plot_color_magnitude_diagram(df, output_path=None, figsize=(6, 4), dpi=150, 
         plt.show()
 
     return df
+
+#---------------------------------------------------------------------------------------------------
+
+def plot_scatter(x, y, data, xlabel, ylabel, xlim=None, ylim=None, filename=None, color=None, alpha=0.7, 
+                 size=60, invert_xaxis=False, x2=None, y2=None, data2=None, color2=None, alpha2=0.7, 
+                 size2=60, show_plot=False):
+    """Creates and saves a scatter plot with the given parameters, with an option to add a second group of data."""
+    plt.figure(figsize=(6, 4), dpi=150)
+    
+    # Plot the first group of data
+    if color is not None:
+        sns.scatterplot(x=x, y=y, data=data, color=color, alpha=alpha, s=size)
+    else:
+        sns.scatterplot(x=x, y=y, data=data, alpha=alpha, s=size)
+
+    # Plot the second group of data if provided
+    if x2 is not None and y2 is not None and data2 is not None:
+        if color2 is not None:
+            sns.scatterplot(x=x2, y=y2, data=data2, color=color2, alpha=alpha2, s=size2, marker='+', linewidth=2)
+        else:
+            sns.scatterplot(x=x2, y=y2, data=data2, alpha=alpha2, s=size2, marker='+', linewidth=2)
+
+    # Customize the plot
+    plt.xlabel(xlabel, fontsize=14)
+    plt.ylabel(ylabel, fontsize=14)
+    if xlim:
+        plt.xlim(xlim)
+    if ylim:
+        plt.ylim(ylim)
+
+    # Add a grid for better readability
+    plt.grid(True, linestyle='--', alpha=0.7)
+
+    # Invert x-axis if specified
+    if invert_xaxis:
+        plt.gca().invert_xaxis()
+
+    # Customize tick labels
+    plt.tick_params(axis='both', which='major')
+
+    # Adjust layout and display the plot
+    plt.tight_layout()
+    if filename:
+        plt.savefig(filename, dpi=300)
+    if show_plot:
+        plt.show()
+
+#---------------------------------------------------------------------------------------------------
+
+def plot_stellar_properties_vs_temperature(df, detection_limit, show_plot=False):
+    """
+    Plots various stellar properties as a function of effective temperature.
+
+    Parameters:
+    merged_df (DataFrame): DataFrame containing stellar data with columns for effective temperature and other properties.
+    """
+    fig, axs = plt.subplots(2, 4, figsize=(12, 6), dpi=300)
+
+    # Flatten the axs array for easier iteration
+    axs = axs.flatten()
+
+    # List of columns to plot, including the new Density column
+    columns = [
+        'V_mag', 'Mass [M_Sun]', 'Luminosity [L_Sun]', 'Radius [R_Sun]', 
+        'Density [Solar unit]', 'HZ_limit [AU]', 'RV precision [m/s]', 'HZ Detection Limit [M_Earth]'
+    ]
+
+    # Define a color palette
+    colors = plt.cm.viridis(np.linspace(0, 1, len(columns)))
+
+    # Plot each column
+    for i, col in enumerate(columns):
+        axs[i].scatter(df['T_eff [K]'], df[col], alpha=0.2, color=colors[i], s=10)
+        axs[i].set_xlabel('$T_{eff}$ (K)', fontsize=12)
+        axs[i].set_ylabel(col, fontsize=12)
+        axs[i].grid(True, linestyle='--', alpha=0.6)
+
+    # Add a main title
+    fig.suptitle('Stellar Properties as a Function of Temperature (' + str(len(df)) + ' < ' + str(detection_limit) + ' M_Earth)', fontsize=14)
+
+    # Adjust the layout and display the plot
+    plt.tight_layout(rect=[0, 0.03, 1, 0.95])
+    plt.savefig(f'{FIGURES_DIRECTORY}stellar_properties_vs_temperature_{detection_limit}.png')
+    plt.show() if show_plot else plt.close()
+
+#---------------------------------------------------------------------------------------------------
+
+def plot_hr_diagram_with_detection_limit(df, use_filtered_data=True, detection_limit=1.5, dpi=150, show_plot=False):
+    """
+    Create a Hertzsprung-Russell diagram with stars color-coded by their habitable zone detection limit.
+    
+    Args:
+        df (pd.DataFrame): DataFrame containing stellar data
+        use_filtered_data (bool, optional): Whether to filter data based on detection limit. Defaults to True
+        detection_limit (float, optional): Upper limit for HZ detection limit filtering. Defaults to 1.5
+        dpi (int, optional): DPI for the output figure. Defaults to 150
+        
+    Returns:
+        None
+    """
+    # Determine which data to plot based on filtering option
+    if use_filtered_data:
+        data_to_plot = df[df['HZ Detection Limit [M_Earth]'] <= detection_limit]
+        color_data = data_to_plot['HZ Detection Limit [M_Earth]']
+        colorbar_label = f'HZ Detection Limit [M_Earth]'
+        filename = f'{FIGURES_DIRECTORY}HR_diagram_HZ_detection_limit_filtered_{detection_limit}.png'
+        print(f'Number of stars with HZ Detection Limit <= {detection_limit}: {len(data_to_plot)}')
+        plot_stellar_properties_vs_temperature(data_to_plot, detection_limit, show_plot=show_plot)
+    else:
+        data_to_plot = df
+        color_data = np.minimum(df['HZ Detection Limit [M_Earth]'], 4)
+        colorbar_label = 'HZ Detection Limit [M_Earth]'
+        filename = f'{FIGURES_DIRECTORY}HR_diagram_HZ_detection_limit.png'
+
+    # Create the plot
+    plt.figure(figsize=(10, 8), dpi=dpi)
+
+    # Scatter plot with color-coded circles
+    sc = plt.scatter(
+        data_to_plot['T_eff [K]'], 
+        data_to_plot['Luminosity [L_Sun]'], 
+        c=color_data,
+        cmap='viridis',
+        alpha=0.99, 
+        edgecolors='grey',
+        linewidths=0.05,
+        s=data_to_plot['Radius [R_Sun]'] * 20
+    )
+
+    # Add and configure colorbar
+    cbar = plt.colorbar(sc, label=colorbar_label)
+    sc.set_clim(0, 4)
+
+    # Configure axes
+    plt.xscale('log')
+    plt.yscale('log')
+    plt.xlim(min(df['T_eff [K]'])-50, max(df['T_eff [K]'])+50)
+    plt.ylim(min(df['Luminosity [L_Sun]']), max(df['Luminosity [L_Sun]'])+0.5)
+    plt.gca().invert_xaxis()
+
+    # Add labels and title
+    plt.xlabel('Effective Temperature (K)')
+    plt.ylabel('Luminosity (L/L_sun)')
+    if use_filtered_data:
+        plt.title('Hertzsprung-Russell Diagram (' + str(len(data_to_plot)) + ' < ' + str(detection_limit) + ' M_Earth)')
+    else:
+        plt.title('Hertzsprung-Russell Diagram')
+    
+    # Add grid
+    plt.grid(True, which="both", ls="--", linewidth=0.5)
+
+    # Save and display the plot
+    plt.savefig(filename)
+    plt.show() if show_plot else plt.close()
+
+#---------------------------------------------------------------------------------------------------
+
+def analyze_stellar_data(df, hz_limits=None, date_str=None, show_plot=False):
+    """
+    Analyze stellar data and create histograms for different HZ Detection Limits.
+    Also saves filtered DataFrames to Excel files.
+    
+    Args:
+        df (pd.DataFrame): Input DataFrame containing stellar data
+        hz_limits (list, optional): List of HZ Detection Limits to analyze. Defaults to [None, 4, 1.5]
+        date_str (str, optional): Date string for file naming. Defaults to current date
+        
+    Returns:
+        dict: Dictionary containing filtered DataFrames for each HZ limit
+    """
+
+    from datetime import datetime
+    
+    # Set default values
+    if hz_limits is None:
+        hz_limits = [None, 4, 1.5]
+    if date_str is None:
+        date_str = datetime.now().strftime('%Y.%m.%d')
+
+    # Set the theme for the plot
+    sns.set_theme(style="whitegrid")
+
+    # Calculate distance if not already present
+    if 'Distance [pc]' not in df.columns:
+        df['Distance [pc]'] = 1000 / df['Parallax']
+
+    # Define columns to plot
+    columns_to_plot = [
+        'V_mag', 'Phot G Mean Mag', 'Phot BP Mean Mag', 'Distance [pc]',
+        'T_eff [K]', 'Luminosity [L_Sun]', 'Mass [M_Sun]', 'Radius [R_Sun]', 
+        'Density [Solar unit]', 'HZ_limit [AU]', 'RV precision [m/s]', 'HZ Detection Limit [M_Earth]'
+    ]
+
+    # Define group colors
+    group_colors = {
+        'Brightest': 'red',
+        'Bright': 'orange',
+        'Dim': 'green',
+        'Dimmer': 'blue',
+        'Dimmest': 'black'
+    }
+
+    def plot_histograms(data, title, filename, show_plot=show_plot):
+        # Divide V_mag into 5 groups
+        v_mag_bins = np.linspace(data['V_mag'].min(), data['V_mag'].max(), 6)
+        data['V_mag_group'] = pd.cut(data['V_mag'], bins=v_mag_bins, labels=group_colors.keys())
+
+        # Create plot
+        fig, axes = plt.subplots(3, 4, figsize=(12, 8), dpi=150)
+        fig.suptitle(f'{title} (sample = {len(data)})', fontsize=16)
+
+        # Flatten axes array
+        axes = axes.flatten()
+
+        # Create histograms
+        for i, column in enumerate(columns_to_plot):
+            if column in data.columns:
+                sns.histplot(
+                    data=data, 
+                    x=column, 
+                    ax=axes[i], 
+                    hue='V_mag_group', 
+                    palette=group_colors, 
+                    multiple='stack', 
+                    legend=False
+                )
+                axes[i].set_xlabel(column)
+                axes[i].set_ylabel('Count')
+            else:
+                axes[i].set_visible(False)
+
+        # Adjust layout
+        plt.tight_layout()
+        plt.subplots_adjust(top=0.93, hspace=0.5, wspace=0.4, left=0.05, right=0.99)
+        plt.savefig(filename)
+        plt.show() if show_plot else plt.close()
+
+    # Store filtered DataFrames
+    filtered_dfs = {}
+
+    # Process each HZ limit
+    for hz_limit in hz_limits:
+        if hz_limit is None:
+            # Process all data
+            filtered_df = df.copy()
+            title = 'All Data'
+            suffix = ''
+        else:
+            # Filter data based on HZ Detection Limit
+            filtered_df = df[df['HZ Detection Limit [M_Earth]'] < hz_limit].copy()
+            title = f'HZ Detection Limit [M_Earth] < {hz_limit}'
+            suffix = f'_M_earth_{str(hz_limit).replace(".", "_")}'
+
+        # Store filtered DataFrame
+        filtered_dfs[hz_limit] = filtered_df
+
+        # Create plots
+        plot_histograms(
+            filtered_df, 
+            title, 
+            f'{FIGURES_DIRECTORY}star_properties_histograms{suffix}.png'
+        )
+
+        # Save to Excel
+        output_path = f'{RESULTS_DIRECTORY}Gaia_homogeneous_target_selection{suffix}_{date_str}.xlsx'
+        filtered_df.sort_values(
+            by='HZ Detection Limit [M_Earth]'
+        ).to_excel(output_path, index=False)
+
+        adjust_column_widths(output_path)
+
+    return filtered_dfs
+
+#---------------------------------------------------------------------------------------------------
+
+def merge_and_format_stellar_data(df_main, ralf_file_path):
+    
+    """
+    Merge stellar data with Ralf's target list and format the output Excel file.
+    
+    Args:
+        df_main (pd.DataFrame): Main DataFrame containing stellar data
+        ralf_file_path (str): Path to Ralf's Excel file        
+    Returns:
+        pd.DataFrame: Merged and formatted DataFrame
+    """
+
+    from datetime import datetime
+    
+    # Read Ralf's data
+    df_Ralf = pd.read_excel(ralf_file_path, engine='openpyxl', header=1)
+    df_Ralf = df_Ralf[df_Ralf['prio'] != 3]
+    
+    # Create a copy of the main DataFrame to avoid modifying the original
+    merged_df = df_main.copy()
+    
+    # Process HD Numbers
+    merged_df[['HD Number 1', 'HD Number 2']] = merged_df['HD Number'].str.split(', ', expand=True, n=1)
+    merged_df['HD Number 1'] = merged_df['HD Number 1'].str.replace(r'HD\s+', 'HD', regex=True)
+    merged_df['HD Number 2'] = merged_df['HD Number 2'].fillna('').str.replace(r'HD\s+', 'HD', regex=True)
+    
+    # Process HIP Numbers
+    merged_df['HIP Number'] = merged_df['HIP Number'].apply(
+        lambda x: f'HIP{x}' if pd.notna(x) and x != '' and not str(x).startswith('HIP') else x
+    )
+    
+    # Process GJ Numbers
+    merged_df[['GJ Number 1', 'GJ Number 2']] = merged_df['GJ Number'].str.split(', ', expand=True, n=1)
+    merged_df['GJ Number 1'] = merged_df['GJ Number 1'].str.replace(r'\s+', '', regex=True)
+    merged_df['GJ Number 2'] = merged_df['GJ Number 2'].fillna('').str.replace(r'\s+', '', regex=True)
+    
+    # Merge DataFrames
+    merge_keys = ['HD Number 1', 'HD Number 2', 'HIP Number', 'GJ Number 1', 'GJ Number 2']
+    merged_RJ = pd.concat([
+        df_Ralf.merge(merged_df, left_on='star_ID  ', right_on=key, how='left') 
+        for key in merge_keys
+    ])
+    
+    # Clean up merged DataFrame
+    merged_RJ.sort_values(by='source_id', ascending=False, inplace=True)
+    merged_RJ.drop_duplicates(subset='star_ID  ', keep='first', inplace=True)
+    merged_RJ.reset_index(drop=True, inplace=True)
+    
+    # Sort by priority and HD Number
+    merged_RJ.sort_values(by=['prio', 'HD Number'], ascending=[True, True], inplace=True)
+
+    date_str = datetime.now().strftime('%Y.%m.%d')
+    output_path = f'{RESULTS_DIRECTORY}merged_RJ_{date_str}.xlsx'
+    
+    # Define color formatting function
+    def apply_color_formatting(workbook, worksheet):
+        dark_green_format = workbook.add_format({'font_color': '#006400'})
+        orange_format = workbook.add_format({'font_color': '#FFA500'})
+        yellow_format = workbook.add_format({'bg_color': '#FFFF00'})
+        
+        for row_num, (prio_value, source_id) in enumerate(
+            zip(merged_RJ['prio'], merged_RJ['source_id']), start=1
+        ):
+            if pd.isna(source_id):
+                worksheet.set_row(row_num, None, yellow_format)
+            elif prio_value == 0:
+                worksheet.set_row(row_num, None, dark_green_format)
+            elif prio_value == 1:
+                worksheet.set_row(row_num, None, orange_format)
+    
+    # Save with formatting
+    try:
+        with pd.ExcelWriter(output_path, engine='xlsxwriter') as writer:
+            merged_RJ.to_excel(writer, index=False)
+            workbook = writer.book
+            worksheet = writer.sheets['Sheet1']
+            apply_color_formatting(workbook, worksheet)
+    except ModuleNotFoundError:
+        print("xlsxwriter module not found. Please install it using 'pip install xlsxwriter'")
+        
+    adjust_column_widths(output_path)
+    
+    return merged_RJ, df_Ralf
+
+#---------------------------------------------------------------------------------------------------
+
+
+def plot_scatter_with_options(df, col_x, col_y, min_value=None, max_value=None, label=False, show_plot=False):
+    # Create a scatter plot with color mapping
+    plt.figure(figsize=(8, 6), dpi=150)
+    scatter = plt.scatter(
+        df[col_x], 
+        df[col_y], 
+        c=df['T_eff [K]'], 
+        cmap='autumn', 
+        edgecolor='k', 
+        alpha=0.7
+    )
+
+    # Add titles and labels
+    # plt.title('Selection Crossmatch', fontsize=14)
+    plt.xlabel(f'{col_x} (Ralf)', fontsize=12)
+    plt.ylabel(f'{col_y} (Jinglin)', fontsize=12)
+
+    # Add a color bar
+    cbar = plt.colorbar(scatter)
+    cbar.set_label('T_eff [K]', fontsize=12)
+
+    # Add grid for better readability
+    plt.grid(True, linestyle='--', alpha=0.7)
+
+    # Plot the x = y line
+    if min_value is None:
+        min_value = min(min(df[col_x]), min(df[col_y]))
+    if max_value is None:
+        max_value = max(max(df[col_x]), max(df[col_y]))
+    plt.plot([min_value, max_value], [min_value, max_value], color='gray', linestyle='--')
+    plt.xlim(min_value, max_value)
+    plt.ylim(min_value, max_value)
+
+    if label:
+        # Add labels to each point
+        x_range = max_value - min_value
+        x_offset = x_range * 0.01
+        for i, name in enumerate(df['star_ID  ']):
+            if (df[col_x][i] > min_value) and (df[col_x][i] < max_value) and (df[col_y][i] > min_value) and (df[col_y][i] < max_value):
+                plt.text(df[col_x][i] - x_offset, df[col_y][i], name, fontsize=5, ha='right')    
+
+    plt.tight_layout()
+    plt.savefig(f'{FIGURES_DIRECTORY}crossmatch_' + col_y.strip().replace(" ", "_").replace("[", "").replace("]", "").replace("/", "") + '.png')
+    plt.show() if show_plot else plt.close()
+
+

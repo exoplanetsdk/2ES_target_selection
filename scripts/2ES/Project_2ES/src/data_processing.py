@@ -1,10 +1,17 @@
 import pandas as pd
-import numpy as np
 from config import *
 from utils import adjust_column_widths
 from stellar_properties import get_simbad_info_with_retry
-from stellar_calculations import calculate_habitable_zone
+from stellar_calculations import *
+import os 
+from rv_prec import calculate_rv_precision
+from concurrent.futures import ThreadPoolExecutor
+from tqdm import tqdm
+import time
+
+#------------------------------------------------------------------------------------------------
 def process_gaia_data(df_dr2, df_dr3, df_crossmatch):
+    print("Merging Gaia DR2 and DR3 data with crossmatch information")
     # Merge DR2 and DR3 results
     merged_dr2_crossmatch = pd.merge(df_dr2, df_crossmatch, 
                                     left_on='source_id', 
@@ -26,6 +33,7 @@ def process_gaia_data(df_dr2, df_dr3, df_crossmatch):
 #------------------------------------------------------------------------------------------------
 
 def check_dr3_availability(row):
+    print("Checking availability of DR3 data for a given row")
     '''
     Function to check if any DR3 data is available for a given row.
     '''
@@ -35,6 +43,7 @@ def check_dr3_availability(row):
 #------------------------------------------------------------------------------------------------
 
 def process_repeated_group(group):
+    print("Processing a group of repeated entries with the same dr2_source_id")
     '''
     Function to process a group of repeated entries with the same dr2_source_id.
     '''
@@ -62,6 +71,7 @@ def process_repeated_group(group):
 #------------------------------------------------------------------------------------------------
 
 def clean_merged_results(merged_results):
+    print("Cleaning merged results by removing duplicate dr2_source_id entries")
     # Step 1: Identify repeated dr2_source_id entries
     non_empty_dr2 = merged_results[merged_results['dr2_source_id'].notna() & (merged_results['dr2_source_id'] != '')]
     repeated_dr2_ids = non_empty_dr2[non_empty_dr2.duplicated('dr2_source_id', keep=False)]['dr2_source_id'].unique()
@@ -106,6 +116,7 @@ def clean_merged_results(merged_results):
 #------------------------------------------------------------------------------------------------
 
 def consolidate_data(df):
+    print("Consolidating data from DR2 and DR3 sources")
     def choose_value(row, col_name):
         dr3_col = f'{col_name}_dr3'
         dr2_col = f'{col_name}_dr2'
@@ -207,6 +218,7 @@ def consolidate_data(df):
 
 def calculate_and_insert_stellar_density(df, mass_col='Mass [M_Sun]', radius_col='Radius [R_Sun]', 
                                        density_col='Density [Solar unit]'):
+    print("Calculating and inserting stellar density")
     """
     Calculate stellar density in solar units and insert it after the radius column.
     
@@ -239,17 +251,15 @@ def calculate_and_insert_stellar_density(df, mass_col='Mass [M_Sun]', radius_col
 
 #------------------------------------------------------------------------------------------------
 
-def calculate_and_insert_habitable_zone(df, directory, output_filename='combined_query.xlsx'):
+def calculate_and_insert_habitable_zone(df):
+    print("Calculating and inserting habitable zone limits")
     """
     Process stellar data by calculating habitable zone limits, sorting by temperature,
     and saving to Excel with formatted columns.
     
     Args:
         df (pd.DataFrame): DataFrame containing stellar data
-        directory (str): Directory path where the Excel file will be saved
-        output_filename (str, optional): Name of the output Excel file. 
-            Defaults to 'combined_query.xlsx'
-            
+
     Returns:
         pd.DataFrame: Processed DataFrame with added HZ limits and sorted by temperature
     """
@@ -278,7 +288,52 @@ def calculate_and_insert_habitable_zone(df, directory, output_filename='combined
         processed_df = processed_df.sort_values('T_eff [K]')    
 
     # Save the result to a new Excel file
-    output_path = RESULTS_DIRECTORY + 'consolidated_results.xlsx'
+    output_path = os.path.join(RESULTS_DIRECTORY, 'consolidated_results.xlsx')
+    processed_df.to_excel(output_path, index=False)
+    adjust_column_widths(output_path)
+    print(f"Results saved to {output_path}")
+
+    return processed_df
+
+#------------------------------------------------------------------------------------------------
+
+def calculate_and_insert_rv_precision(df):
+    print("Calculating and inserting RV precision for each star")
+    """
+    Calculate RV precision for each star in the DataFrame and insert the results.
+    Excludes White Dwarfs from the final output and saves to Excel.
+    
+    Args:
+        df (pd.DataFrame): DataFrame containing stellar data with T_eff and V_mag columns
+        
+    Returns:
+        pd.DataFrame: Processed DataFrame with added RV precision and filtered objects
+    """
+    # Create a copy to avoid modifying the original
+    processed_df = df.copy()
+    
+    # Calculate RV precision for each star
+    rv_precisions = []
+    for i in range(len(processed_df)):
+        result, rv_precision = calculate_rv_precision(
+            Temp=processed_df.iloc[i]['T_eff [K]'],
+            Vmag=processed_df.iloc[i]['V_mag']
+        )
+        rv_precisions.append(rv_precision)
+
+    # Insert RV precision values after HZ_limit column
+    if 'HZ_limit [AU]' in processed_df.columns:
+        hz_limit_index = processed_df.columns.get_loc('HZ_limit [AU]')
+        processed_df.insert(hz_limit_index + 1, 'RV precision [m/s]', rv_precisions)
+    else:
+        # If HZ_limit column doesn't exist, add to the end
+        processed_df['RV precision [m/s]'] = rv_precisions
+
+    # Filter out White Dwarfs
+    processed_df = processed_df[processed_df['Object Type'] != 'WhiteDwarf']
+
+    # Save the result to a new Excel file
+    output_path = RESULTS_DIRECTORY + 'combined_query_with_RV_precision.xlsx'
     processed_df.to_excel(output_path, index=False)
     adjust_column_widths(output_path)
     print(f"Results saved to {output_path}")
@@ -286,33 +341,74 @@ def calculate_and_insert_habitable_zone(df, directory, output_filename='combined
     return processed_df
 
 
+#------------------------------------------------------------------------------------------------
 
+def calculate_and_insert_hz_detection_limit(df):
+    print("Calculating and inserting habitable zone detection limits")
+    """
+    Calculate and insert the habitable zone detection limit for each star in the DataFrame.
+    
+    Args:
+        df (pd.DataFrame): DataFrame containing stellar data with RV precision, Mass, and HZ_limit columns
+        
+    Returns:
+        pd.DataFrame: Processed DataFrame with added HZ detection limit
+    """
+    # Create a copy to avoid modifying the original
+    processed_df = df.copy()
+    
+    # Calculate HZ detection limit for each star
+    processed_df['HZ Detection Limit [M_Earth]'] = processed_df.apply(
+        lambda row: calculate_hz_detection_limit(
+            row['RV precision [m/s]'],
+            row['Mass [M_Sun]'],
+            row['HZ_limit [AU]']
+        ),
+        axis=1
+    )
 
+    # Print statistics about the new column
+    print("\nHZ Detection Limit Statistics:")
+    print(processed_df['HZ Detection Limit [M_Earth]'].describe())
 
+    # Count and print the number of NaN values
+    nan_count = processed_df['HZ Detection Limit [M_Earth]'].isna().sum()
+    print(f"\nNumber of NaN values: {nan_count}")
 
+    # Reorder columns to place the new column next to RV precision
+    cols = processed_df.columns.tolist()
+    rv_precision_index = cols.index('RV precision [m/s]')
+    cols.insert(rv_precision_index + 1, cols.pop(cols.index('HZ Detection Limit [M_Earth]')))
+    processed_df = processed_df[cols]
 
+    # Save the updated DataFrame
+    output_path = RESULTS_DIRECTORY + 'combined_query_with_mass_detection_limit.xlsx'
+    processed_df.to_excel(output_path, index=False)
+    adjust_column_widths(output_path)
+    
+    print(f"\nUpdated DataFrame saved to '{output_path}'.")
 
+    return processed_df
 
+#------------------------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-def process_background_stars(merged_df):
-    from concurrent.futures import ThreadPoolExecutor
-    from tqdm import tqdm
-
+def analyze_bright_neighbors(merged_df, search_radius, execute_gaia_query_func, max_retries=3, delay=5):
+    print("Analyzing stars to identify those with bright neighboring stars")
+    """
+    Analyze stars in the input DataFrame to identify those with bright neighboring stars.
+    
+    Args:
+        merged_df (pd.DataFrame): Input DataFrame containing stellar data
+        search_radius (float): Search radius in degrees for finding neighbors
+        execute_gaia_query_func (callable): Function to execute Gaia queries
+        max_retries (int, optional): Maximum number of retry attempts for failed queries. Defaults to 3
+        delay (int, optional): Delay in seconds between retry attempts. Defaults to 5
+        
+    Returns:
+        tuple: (DataFrame with bright neighbors, DataFrame without bright neighbors)
+    """
     def create_neighbor_query(source_id, ra, dec, neighbor_g_mag_limit, search_radius, data_release):
+        """Create a Gaia query to find neighboring stars."""
         query = f"""
         SELECT 
             source_id, ra, dec, phot_g_mean_mag
@@ -326,9 +422,10 @@ def process_background_stars(merged_df):
             AND phot_g_mean_mag < {neighbor_g_mag_limit}
             AND source_id != {source_id}
         """
-        return query    
-    
-    def process_row_with_retry(row, max_retries=3, delay=5):
+        return query
+
+    def process_row_with_retry(row):
+        """Process a single row with retry logic for failed queries."""
         attempt = 0
         while attempt < max_retries:
             try:
@@ -338,7 +435,7 @@ def process_background_stars(merged_df):
                         ra=row['RA'],
                         dec=row['DEC'],
                         neighbor_g_mag_limit=row['Phot G Mean Mag']+3,
-                        search_radius=SEARCH_RADIUS,
+                        search_radius=search_radius,
                         data_release='gaiadr3'
                     )
                 else:
@@ -347,12 +444,12 @@ def process_background_stars(merged_df):
                         ra=row['RA'],
                         dec=row['DEC'],
                         neighbor_g_mag_limit=row['Phot G Mean Mag']+3,
-                        search_radius=SEARCH_RADIUS,
+                        search_radius=search_radius,
                         data_release='gaiadr2'
                     )
                 
                 # Execute the query
-                neighbors_df = execute_gaia_query(query)
+                neighbors_df = execute_gaia_query_func(query)
                 
                 # Check if bright neighbors exist
                 if neighbors_df is not None and not neighbors_df.empty:
@@ -369,19 +466,39 @@ def process_background_stars(merged_df):
                     print("Max retries reached. Skipping this row.")
                     return (row, False)
 
+    # Initialize lists to store results
     rows_with_bright_neighbors = []
     rows_without_bright_neighbors = []
 
+    # Process rows in parallel with progress tracking
     with ThreadPoolExecutor() as executor:
-        results = list(tqdm(executor.map(process_row_with_retry, 
-                                       [row for idx, row in merged_df.iterrows()]), 
-                          total=len(merged_df), 
-                          desc="Processing rows"))
+        results = list(tqdm(
+            executor.map(process_row_with_retry, [row for idx, row in merged_df.iterrows()]),
+            total=len(merged_df),
+            desc="Detecting bright neighbors"
+        ))
         
+        # Sort results into appropriate lists
         for row, has_bright_neighbors in results:
             if has_bright_neighbors:
                 rows_with_bright_neighbors.append(row)
             else:
                 rows_without_bright_neighbors.append(row)
 
-    return pd.DataFrame(rows_with_bright_neighbors), pd.DataFrame(rows_without_bright_neighbors)
+    # Create DataFrames from results
+    df_with_bright_neighbors = pd.DataFrame(rows_with_bright_neighbors)
+    df_without_bright_neighbors = pd.DataFrame(rows_without_bright_neighbors)
+
+    print(f"Stars with bright neighbors: {len(df_with_bright_neighbors)}")
+    print(f"Stars without bright neighbors: {len(df_without_bright_neighbors)}")
+    
+    # Save the result to a new Excel file
+    output_path = RESULTS_DIRECTORY + 'stars_with_bright_neighbors.xlsx'
+    df_with_bright_neighbors.to_excel(output_path, index=False)
+    adjust_column_widths(output_path)
+
+    output_path = RESULTS_DIRECTORY + 'stars_without_bright_neighbors.xlsx'
+    df_without_bright_neighbors.to_excel(output_path, index=False)
+    adjust_column_widths(output_path)    
+
+    return df_with_bright_neighbors, df_without_bright_neighbors
