@@ -76,19 +76,20 @@ STELLAR_FILTERS = {
 
 1. **Data Collection**
    - Query Gaia DR2/DR3 catalogs
-   - Cross-match between catalogs
    - Retrieve additional identifiers (HD, GJ, HIP)
+   - Obtain stellar types from SIMBAD
 
 2. **Data Processing**
-   - Clean and merge catalog data
-   - Calculate stellar parameters
-   - Validate physical properties
+   - Clean and merge DR2/DR3 catalog data
+   - Retrieve stellar parameters from DR2/DR3
+   - Retrieve additional stellar parameters from other catalogs
+   - Derive stellar parameters empirically if not available
    - Detect bright neighboring stars
 
 3. **Analysis**
    - Calculate habitable zones
    - Determine RV precision estimates
-   - Compute detection limits
+   - Compute mass detection limits
    - Generate visualization plots
 
 4. **Output Generation**
@@ -114,10 +115,10 @@ python main.py
 
 The pipeline generates several key outputs in the `results/` directory:
 
-- `consolidated_results.xlsx`: Complete stellar parameters
-- `consolidated_HIP_results.xlsx`: HIP catalog cross-matches
-- `stars_with_bright_neighbors.xlsx`: Stars with nearby bright companions
-- `combined_query_with_mass_detection_limit.xlsx`: Final target list with detection limits
+- `consolidated_Simbad_results.xlsx`: Complete stellar parameters
+- `stars_without_bright_neighbors.xlsx`: Stars after removing nearby bright companions
+- `Gaia_homogeneous_target_selection_M_earth_1_5.xlsx`: Target list with detection limit less than 1.5 M_earth
+- `merged_RJ.xlsx`: Crossmatch with Ralf's results
 
 ## Visualization
 
@@ -130,6 +131,5 @@ Generated plots in `figures/` include:
 ## Notes
 
 - Prioritizes Gaia DR3 data over DR2 when available
-- Implements multiple validation steps for stellar parameters
 - Includes bright neighbor detection within 2 arcseconds
 - Calculates planet detection limits in habitable zones
