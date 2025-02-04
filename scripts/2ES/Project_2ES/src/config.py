@@ -21,4 +21,6 @@ STELLAR_FILTERS = {
     'logg_min':     3.8         # Minimum log g value (for filtering out sub-giants/giants)
 }
 
+RALF_FILE_PATH = f'{DATA_DIRECTORY}2ES_targetlist_astrid_export_2024Dec_comments.xlsx'
+
 DETECTION_LIMITS = [None, 4, 2, 1.5] # M_Earth

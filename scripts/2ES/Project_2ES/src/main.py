@@ -7,6 +7,7 @@ from utils import *
 from catalog_integration import CatalogProcessor
 from filtering import filter_stellar_data
 
+
 def main():
     # Initialize Gaia
     Gaia.MAIN_GAIA_TABLE = "gaiadr3.gaia_source"
@@ -139,7 +140,7 @@ def main():
     #---------------------------------------------------------------------------------------------------    
     merged_RJ, df_Ralf = merge_and_format_stellar_data(
         df_main=merged_df,
-        ralf_file_path=f'{DATA_DIRECTORY}2ES_targetlist_astrid_export_2024Dec_comments.xlsx'
+        ralf_file_path=RALF_FILE_PATH
     )
 
     merged_RJ['HZ Rmid'] = (merged_RJ['HZ Rin'] + merged_RJ['HZ Rout']) / 2
@@ -150,57 +151,7 @@ def main():
     plot_scatter_with_options(merged_RJ, 'RV_Prec(390-870) 30m', 'RV precision [m/s]', min_value = 0, max_value = 1.6, label=True)
     plot_scatter_with_options(merged_RJ, 'mdl(hz) 30min', 'HZ Detection Limit [M_Earth]', min_value = 0, max_value = 3, label=True)
 
-    i = 7
-    colors = plt.cm.viridis(np.linspace(0, 1, 8))
-
-    # Use the function to create the plot
-    plot_scatter(
-        x='T_eff [K]',
-        y='RV precision [m/s]',
-        data=merged_df,
-        xlabel='Stellar Temperature (K)',
-        ylabel='RV precision [m/s]',
-        xlim=(min(min(merged_df['T_eff [K]']), min(df_Ralf['Teff '])) - 100, max(max(merged_df['T_eff [K]']), max(df_Ralf['Teff '])) + 100),
-        ylim=(0, 2),
-        filename=f'{FIGURES_DIRECTORY}RV_precision_vs_temperature.png',
-        color=colors[i-1],  # Assuming 'colors' is defined and 'i' is an integer index
-        x2 = 'Teff ', 
-        y2 = 'RV_Prec(390-870) 30m',
-        data2 = df_Ralf,
-        color2 = 'red'
-    )
-
-    plot_scatter(
-        x='T_eff [K]',
-        y='HZ Detection Limit [M_Earth]',
-        data=merged_df,
-        xlabel='Stellar Temperature (K)',
-        ylabel='HZ Detection Limit (M_Earth)',
-        xlim=(min(merged_df['T_eff [K]']) - 200, 6000 + 500),
-        ylim=(0, 10),
-        filename=f'{FIGURES_DIRECTORY}HZ_detection_limit_vs_temperature_full.png',
-        color=colors[i],  # Replace with actual color if using a list
-        x2 = 'Teff ', 
-        y2 = 'mdl(hz) 30min',
-        data2 = df_Ralf,
-        color2 = 'red'
-    )
-
-    plot_scatter(
-        x='T_eff [K]',
-        y='HZ Detection Limit [M_Earth]',
-        data=merged_df,
-        xlabel='Stellar Temperature (K)',
-        ylabel='HZ Detection Limit (M_Earth)',
-        xlim=(min(merged_df['T_eff [K]']) - 200, 6000 + 100),
-        ylim=(0, 1.5),
-        filename=f'{FIGURES_DIRECTORY}HZ_detection_limit_vs_temperature_zoomed.png',
-        color=colors[i],  # Replace with actual color if using a list
-        x2 = 'Teff ', 
-        y2 = 'mdl(hz) 30min',
-        data2 = df_Ralf,
-        color2 = 'red'
-    )
+    plot_RV_precision_HZ_detection_limit_vs_temperature(merged_df, df_Ralf)
 
     print("\nRalf's results:")
     print("Number of stars:", len(merged_RJ))

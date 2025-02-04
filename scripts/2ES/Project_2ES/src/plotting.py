@@ -429,92 +429,6 @@ def analyze_stellar_data(df, hz_limits=None, date_str=None, show_plot=False):
 
 #---------------------------------------------------------------------------------------------------
 
-def merge_and_format_stellar_data(df_main, ralf_file_path):
-    
-    """
-    Merge stellar data with Ralf's target list and format the output Excel file.
-    
-    Args:
-        df_main (pd.DataFrame): Main DataFrame containing stellar data
-        ralf_file_path (str): Path to Ralf's Excel file        
-    Returns:
-        pd.DataFrame: Merged and formatted DataFrame
-    """
-
-    from datetime import datetime
-    
-    # Read Ralf's data
-    df_Ralf = pd.read_excel(ralf_file_path, engine='openpyxl', header=1)
-    df_Ralf = df_Ralf[df_Ralf['prio'] != 3]
-    
-    # Create a copy of the main DataFrame to avoid modifying the original
-    merged_df = df_main.copy()
-    
-    # Process HD Numbers
-    merged_df[['HD Number 1', 'HD Number 2']] = merged_df['HD Number'].str.split(', ', expand=True, n=1)
-    merged_df['HD Number 1'] = merged_df['HD Number 1'].str.replace(r'HD\s+', 'HD', regex=True)
-    merged_df['HD Number 2'] = merged_df['HD Number 2'].fillna('').str.replace(r'HD\s+', 'HD', regex=True)
-    
-    # Process HIP Numbers
-    merged_df['HIP Number'] = merged_df['HIP Number'].apply(
-        lambda x: f'HIP{x}' if pd.notna(x) and x != '' and not str(x).startswith('HIP') else x
-    )
-    
-    # Process GJ Numbers
-    merged_df[['GJ Number 1', 'GJ Number 2']] = merged_df['GJ Number'].str.split(', ', expand=True, n=1)
-    merged_df['GJ Number 1'] = merged_df['GJ Number 1'].str.replace(r'\s+', '', regex=True)
-    merged_df['GJ Number 2'] = merged_df['GJ Number 2'].fillna('').str.replace(r'\s+', '', regex=True)
-    
-    # Merge DataFrames
-    merge_keys = ['HD Number 1', 'HD Number 2', 'HIP Number', 'GJ Number 1', 'GJ Number 2']
-    merged_RJ = pd.concat([
-        df_Ralf.merge(merged_df, left_on='star_ID  ', right_on=key, how='left') 
-        for key in merge_keys
-    ])
-    
-    # Clean up merged DataFrame
-    merged_RJ.sort_values(by='source_id', ascending=False, inplace=True)
-    merged_RJ.drop_duplicates(subset='star_ID  ', keep='first', inplace=True)
-    merged_RJ.reset_index(drop=True, inplace=True)
-    
-    # Sort by priority and HD Number
-    merged_RJ.sort_values(by=['prio', 'HD Number'], ascending=[True, True], inplace=True)
-
-    date_str = datetime.now().strftime('%Y.%m.%d')
-    output_path = f'{RESULTS_DIRECTORY}merged_RJ_{date_str}.xlsx'
-    
-    # Define color formatting function
-    def apply_color_formatting(workbook, worksheet):
-        dark_green_format = workbook.add_format({'font_color': '#006400'})
-        orange_format = workbook.add_format({'font_color': '#FFA500'})
-        yellow_format = workbook.add_format({'bg_color': '#FFFF00'})
-        
-        for row_num, (prio_value, source_id) in enumerate(
-            zip(merged_RJ['prio'], merged_RJ['source_id']), start=1
-        ):
-            if pd.isna(source_id):
-                worksheet.set_row(row_num, None, yellow_format)
-            elif prio_value == 0:
-                worksheet.set_row(row_num, None, dark_green_format)
-            elif prio_value == 1:
-                worksheet.set_row(row_num, None, orange_format)
-    
-    # Save with formatting
-    try:
-        with pd.ExcelWriter(output_path, engine='xlsxwriter') as writer:
-            merged_RJ.to_excel(writer, index=False)
-            workbook = writer.book
-            worksheet = writer.sheets['Sheet1']
-            apply_color_formatting(workbook, worksheet)
-    except ModuleNotFoundError:
-        print("xlsxwriter module not found. Please install it using 'pip install xlsxwriter'")
-        
-    adjust_column_widths(output_path)
-    
-    return merged_RJ, df_Ralf
-
-#---------------------------------------------------------------------------------------------------
-
 
 def plot_scatter_with_options(df, col_x, col_y, min_value=None, max_value=None, label=False, show_plot=False):
     # Create a scatter plot with color mapping
@@ -561,4 +475,74 @@ def plot_scatter_with_options(df, col_x, col_y, min_value=None, max_value=None, 
     plt.savefig(f'{FIGURES_DIRECTORY}crossmatch_' + col_y.strip().replace(" ", "_").replace("[", "").replace("]", "").replace("/", "") + '.png')
     plt.show() if show_plot else plt.close()
 
+#---------------------------------------------------------------------------------------------------
 
+def plot_RV_precision_HZ_detection_limit_vs_temperature(merged_df, df_Ralf):
+
+    i = 7
+    colors = plt.cm.viridis(np.linspace(0, 1, 8))
+
+    # Use the function to create the plot
+    plot_scatter(
+        x='T_eff [K]',
+        y='RV precision [m/s]',
+        data=merged_df,
+        xlabel='Stellar Temperature (K)',
+        ylabel='RV precision [m/s]',
+        xlim=(min(min(merged_df['T_eff [K]']), min(df_Ralf['Teff '])) - 100, max(max(merged_df['T_eff [K]']), max(df_Ralf['Teff '])) + 100),
+        ylim=(0, 2),
+        filename=f'{FIGURES_DIRECTORY}RV_precision_vs_temperature.png',
+        color=colors[i-1],  # Assuming 'colors' is defined and 'i' is an integer index
+        x2 = 'Teff ', 
+        y2 = 'RV_Prec(390-870) 30m',
+        data2 = df_Ralf,
+        color2 = 'red'
+    )
+
+    plot_scatter(
+        x='T_eff [K]',
+        y='HZ Detection Limit [M_Earth]',
+        data=merged_df,
+        xlabel='Stellar Temperature (K)',
+        ylabel='HZ Detection Limit (M_Earth)',
+        xlim=(min(merged_df['T_eff [K]']) - 200, 6000 + 500),
+        ylim=(0, 10),
+        filename=f'{FIGURES_DIRECTORY}HZ_detection_limit_vs_temperature_full.png',
+        color=colors[i],  # Replace with actual color if using a list
+        x2 = 'Teff ', 
+        y2 = 'mdl(hz) 30min',
+        data2 = df_Ralf,
+        color2 = 'red'
+    )
+
+    plot_scatter(
+        x='T_eff [K]',
+        y='HZ Detection Limit [M_Earth]',
+        data=merged_df,
+        xlabel='Stellar Temperature (K)',
+        ylabel='HZ Detection Limit (M_Earth)',
+        xlim=(min(merged_df['T_eff [K]']) - 200, 6000 + 100),
+        ylim=(0, 4),
+        filename=f'{FIGURES_DIRECTORY}HZ_detection_limit_vs_temperature_zoomed_4.png',
+        color=colors[i],  # Replace with actual color if using a list
+        x2 = 'Teff ', 
+        y2 = 'mdl(hz) 30min',
+        data2 = df_Ralf,
+        color2 = 'red'
+    )
+
+    plot_scatter(
+        x='T_eff [K]',
+        y='HZ Detection Limit [M_Earth]',
+        data=merged_df,
+        xlabel='Stellar Temperature (K)',
+        ylabel='HZ Detection Limit (M_Earth)',
+        xlim=(min(merged_df['T_eff [K]']) - 200, 6000 + 100),
+        ylim=(0, 1.5),
+        filename=f'{FIGURES_DIRECTORY}HZ_detection_limit_vs_temperature_zoomed_1_5.png',
+        color=colors[i],  # Replace with actual color if using a list
+        x2 = 'Teff ', 
+        y2 = 'mdl(hz) 30min',
+        data2 = df_Ralf,
+        color2 = 'red'
+    )

@@ -1417,57 +1417,57 @@ from tqdm import tqdm  # Import tqdm for progress tracking
 # In[107]:
 
 
-i = 7
-colors = plt.cm.viridis(np.linspace(0, 1, 8))
+# i = 7
+# colors = plt.cm.viridis(np.linspace(0, 1, 8))
 
-# Use the function to create the plot
-plot_scatter(
-    x='T_eff [K]',
-    y='RV precision [m/s]',
-    data=merged_df,
-    xlabel='Stellar Temperature (K)',
-    ylabel='RV precision [m/s]',
-    xlim=(min(min(merged_df['T_eff [K]']), min(df_Ralf['Teff '])) - 100, max(max(merged_df['T_eff [K]']), max(df_Ralf['Teff '])) + 100),
-    ylim=(0, 2),
-    filename='../figures/RV_precision_vs_temperature.png',
-    color=colors[i-1],  # Assuming 'colors' is defined and 'i' is an integer index
-    x2 = 'Teff ', 
-    y2 = 'RV_Prec(390-870) 30m',
-    data2 = df_Ralf,
-    color2 = 'red'
-)
+# # Use the function to create the plot
+# plot_scatter(
+#     x='T_eff [K]',
+#     y='RV precision [m/s]',
+#     data=merged_df,
+#     xlabel='Stellar Temperature (K)',
+#     ylabel='RV precision [m/s]',
+#     xlim=(min(min(merged_df['T_eff [K]']), min(df_Ralf['Teff '])) - 100, max(max(merged_df['T_eff [K]']), max(df_Ralf['Teff '])) + 100),
+#     ylim=(0, 2),
+#     filename='../figures/RV_precision_vs_temperature.png',
+#     color=colors[i-1],  # Assuming 'colors' is defined and 'i' is an integer index
+#     x2 = 'Teff ', 
+#     y2 = 'RV_Prec(390-870) 30m',
+#     data2 = df_Ralf,
+#     color2 = 'red'
+# )
 
-plot_scatter(
-    x='T_eff [K]',
-    y='HZ Detection Limit [M_Earth]',
-    data=merged_df,
-    xlabel='Stellar Temperature (K)',
-    ylabel='HZ Detection Limit (M_Earth)',
-    xlim=(min(merged_df['T_eff [K]']) - 200, 6000 + 500),
-    ylim=(0, 10),
-    filename='../figures/HZ_detection_limit_vs_temperature_full.png',
-    color=colors[i],  # Replace with actual color if using a list
-    x2 = 'Teff ', 
-    y2 = 'mdl(hz) 30min',
-    data2 = df_Ralf,
-    color2 = 'red'
-)
+# plot_scatter(
+#     x='T_eff [K]',
+#     y='HZ Detection Limit [M_Earth]',
+#     data=merged_df,
+#     xlabel='Stellar Temperature (K)',
+#     ylabel='HZ Detection Limit (M_Earth)',
+#     xlim=(min(merged_df['T_eff [K]']) - 200, 6000 + 500),
+#     ylim=(0, 10),
+#     filename='../figures/HZ_detection_limit_vs_temperature_full.png',
+#     color=colors[i],  # Replace with actual color if using a list
+#     x2 = 'Teff ', 
+#     y2 = 'mdl(hz) 30min',
+#     data2 = df_Ralf,
+#     color2 = 'red'
+# )
 
-plot_scatter(
-    x='T_eff [K]',
-    y='HZ Detection Limit [M_Earth]',
-    data=merged_df,
-    xlabel='Stellar Temperature (K)',
-    ylabel='HZ Detection Limit (M_Earth)',
-    xlim=(min(merged_df['T_eff [K]']) - 200, 6000 + 100),
-    ylim=(0, 1.5),
-    filename='../figures/HZ_detection_limit_vs_temperature_zoomed.png',
-    color=colors[i],  # Replace with actual color if using a list
-    x2 = 'Teff ', 
-    y2 = 'mdl(hz) 30min',
-    data2 = df_Ralf,
-    color2 = 'red'
-)
+# plot_scatter(
+#     x='T_eff [K]',
+#     y='HZ Detection Limit [M_Earth]',
+#     data=merged_df,
+#     xlabel='Stellar Temperature (K)',
+#     ylabel='HZ Detection Limit (M_Earth)',
+#     xlim=(min(merged_df['T_eff [K]']) - 200, 6000 + 100),
+#     ylim=(0, 1.5),
+#     filename='../figures/HZ_detection_limit_vs_temperature_zoomed.png',
+#     color=colors[i],  # Replace with actual color if using a list
+#     x2 = 'Teff ', 
+#     y2 = 'mdl(hz) 30min',
+#     data2 = df_Ralf,
+#     color2 = 'red'
+# )
 
 
 # In[108]:

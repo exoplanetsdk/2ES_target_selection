@@ -502,3 +502,91 @@ def analyze_bright_neighbors(merged_df, search_radius, execute_gaia_query_func, 
     adjust_column_widths(output_path)    
 
     return df_with_bright_neighbors, df_without_bright_neighbors
+
+#------------------------------------------------------------------------------------------------   
+
+def merge_and_format_stellar_data(df_main, ralf_file_path):
+    print("Crossmatching with Ralf's target list")
+    """
+    Merge stellar data with Ralf's target list and format the output Excel file.
+    
+    Args:
+        df_main (pd.DataFrame): Main DataFrame containing stellar data
+        ralf_file_path (str): Path to Ralf's Excel file        
+    Returns:
+        pd.DataFrame: Merged and formatted DataFrame
+    """
+
+    from datetime import datetime
+    
+    # Read Ralf's data
+    df_Ralf = pd.read_excel(ralf_file_path, engine='openpyxl', header=1)
+    df_Ralf = df_Ralf[df_Ralf['prio'] != 3]
+    
+    # Create a copy of the main DataFrame to avoid modifying the original
+    merged_df = df_main.copy()
+    
+    # Process HD Numbers
+    merged_df[['HD Number 1', 'HD Number 2']] = merged_df['HD Number'].str.split(', ', expand=True, n=1)
+    merged_df['HD Number 1'] = merged_df['HD Number 1'].str.replace(r'HD\s+', 'HD', regex=True)
+    merged_df['HD Number 2'] = merged_df['HD Number 2'].fillna('').str.replace(r'HD\s+', 'HD', regex=True)
+    
+    # Process HIP Numbers
+    merged_df['HIP Number'] = merged_df['HIP Number'].apply(
+        lambda x: f'HIP{x}' if pd.notna(x) and x != '' and not str(x).startswith('HIP') else x
+    )
+    
+    # Process GJ Numbers
+    merged_df[['GJ Number 1', 'GJ Number 2']] = merged_df['GJ Number'].str.split(', ', expand=True, n=1)
+    merged_df['GJ Number 1'] = merged_df['GJ Number 1'].str.replace(r'\s+', '', regex=True)
+    merged_df['GJ Number 2'] = merged_df['GJ Number 2'].fillna('').str.replace(r'\s+', '', regex=True)
+    
+    # Merge DataFrames
+    merge_keys = ['HD Number 1', 'HD Number 2', 'HIP Number', 'GJ Number 1', 'GJ Number 2']
+    merged_RJ = pd.concat([
+        df_Ralf.merge(merged_df, left_on='star_ID  ', right_on=key, how='left') 
+        for key in merge_keys
+    ])
+    
+    # Clean up merged DataFrame
+    merged_RJ.sort_values(by='source_id', ascending=False, inplace=True)
+    merged_RJ.drop_duplicates(subset='star_ID  ', keep='first', inplace=True)
+    merged_RJ.reset_index(drop=True, inplace=True)
+    
+    # Sort by priority and HD Number
+    merged_RJ.sort_values(by=['prio', 'HD Number'], ascending=[True, True], inplace=True)
+
+    date_str = datetime.now().strftime('%Y.%m.%d')
+    output_path = f'{RESULTS_DIRECTORY}merged_RJ_{date_str}.xlsx'
+    
+    # Define color formatting function
+    def apply_color_formatting(workbook, worksheet):
+        dark_green_format = workbook.add_format({'font_color': '#006400'})
+        orange_format = workbook.add_format({'font_color': '#FFA500'})
+        yellow_format = workbook.add_format({'bg_color': '#FFFF00'})
+        
+        for row_num, (prio_value, source_id) in enumerate(
+            zip(merged_RJ['prio'], merged_RJ['source_id']), start=1
+        ):
+            if pd.isna(source_id):
+                worksheet.set_row(row_num, None, yellow_format)
+            elif prio_value == 0:
+                worksheet.set_row(row_num, None, dark_green_format)
+            elif prio_value == 1:
+                worksheet.set_row(row_num, None, orange_format)
+    
+    # Save with formatting
+    try:
+        with pd.ExcelWriter(output_path, engine='xlsxwriter') as writer:
+            merged_RJ.to_excel(writer, index=False)
+            workbook = writer.book
+            worksheet = writer.sheets['Sheet1']
+            apply_color_formatting(workbook, worksheet)
+    except ModuleNotFoundError:
+        print("xlsxwriter module not found. Please install it using 'pip install xlsxwriter'")
+        
+    adjust_column_widths(output_path)
+    
+    return merged_RJ, df_Ralf
+
+#------------------------------------------------------------------------------------------------   
