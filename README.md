@@ -130,9 +130,8 @@ Generated plots in `figures/` include:
 
 ## Notes
 
-The RV precision calculations, previously available at http://www.astro.physik.uni-goettingen.de/research/rvprecision/, have been automated in the `rv_prec.py` script. This automation eliminates the need for the online calculator, significantly speeding up the pipeline and allowing it to scale efficiently for a large number of stars.
-![Radial Velocity precision calculator](Radial Velocity precision calculator.png)
-
+The RV precision calculations, previously available as the [Radial Velocity precision calculator (Reiners & Zechmeister, 2020)](http://www.astro.physik.uni-goettingen.de/research/rvprecision/), have been automated in the `rv_prec.py` script. This automation eliminates the need for the online calculator, significantly speeding up the pipeline and allowing it to scale efficiently for a large number of stars.
+![Radial Velocity precision calculator](figures/RV_tool.png)
 
 **Example Usage**
 
@@ -143,4 +142,4 @@ from rv_prec import calculate_rv_precision
 result, custom_rv_precision = calculate_rv_precision(5000, 10)
 custom_rv_precision
 ```
-and it returns 0.563624937587981. The telescope parameters are tailored for 2ES and are predefined in the `get_manual_values` function. 
+and it returns an RV precision of 0.563624937587981 m/s. The telescope parameters are tailored for 2ES and are predefined in the `get_manual_values` function. 
