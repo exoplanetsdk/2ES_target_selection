@@ -8,8 +8,7 @@ A Python pipeline for generating a homogeneous stellar target list for the 2ES s
 - Additional stellar parameters from other catalogs (CELESTA, Vizier V/117A)
 - Bright neighbor detection
 - **Automated RV precision calculations**
-- Habitable zone calculations
-- Mass detection limits calculations
+- Habitable zone and mass detection limits calculations
 - Cross-matching with other catalogs
 
 ## Requirements
@@ -56,7 +55,7 @@ project/
 Key parameters in `config.py`:
 ```python
 # Target selection criteria
-TARGET_G_MAG_LIMIT = 12    # Maximum G magnitude
+TARGET_G_MAG_LIMIT = 12   # Maximum G magnitude
 MIN_DEC = -85             # Minimum declination
 MAX_DEC = 30              # Maximum declination
 MIN_PARALLAX = 20         # Minimum parallax (mas)
@@ -131,4 +130,16 @@ Generated plots in `figures/` include:
 
 ## Notes
 
-- RV precision calculations: http://www.astro.physik.uni-goettingen.de/research/rvprecision/ has been automated in `rv_prec.py`
+The RV precision calculations, previously available at http://www.astro.physik.uni-goettingen.de/research/rvprecision/, have been automated in the `rv_prec.py` script. This automation eliminates the need for the online calculator, significantly speeding up the pipeline and allowing it to scale efficiently for a large number of stars.
+![Radial Velocity precision calculator](rv_precision_calculator)
+
+**Example Usage**
+
+To calculate the Radial Velocity (RV) precision for a star with a temperature of 5000 K and a V magnitude of 10 for 2ES, use the following code:
+
+```python
+from rv_prec import calculate_rv_precision
+result, custom_rv_precision = calculate_rv_precision(5000, 10)
+custom_rv_precision
+```
+and it returns 0.563624937587981. The telescope parameters are tailored for 2ES and are predefined in the `get_manual_values` function. 
