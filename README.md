@@ -131,7 +131,8 @@ Generated plots in `figures/` include:
 ## Notes
 
 The RV precision calculations, previously available at http://www.astro.physik.uni-goettingen.de/research/rvprecision/, have been automated in the `rv_prec.py` script. This automation eliminates the need for the online calculator, significantly speeding up the pipeline and allowing it to scale efficiently for a large number of stars.
-![Radial Velocity precision calculator](rv_precision_calculator)
+![Radial Velocity precision calculator](Radial Velocity precision calculator.png)
+
 
 **Example Usage**
 
