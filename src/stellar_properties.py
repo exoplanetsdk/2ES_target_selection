@@ -9,11 +9,11 @@ from astropy.units import UnitsWarning
 from requests.exceptions import ConnectionError
 
 # Configure logging
-logging.basicConfig(
-    filename='stellar_properties_log.txt',
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
-)
+# logging.basicConfig(
+#     filename='stellar_properties_log.txt',
+#     level=logging.INFO,
+#     format='%(asctime)s - %(levelname)s - %(message)s'
+# )
 
 # Suppress specific warning
 warnings.simplefilter('ignore', category=UnitsWarning)
@@ -155,7 +155,8 @@ def get_stellar_type_dr2(gaia_dr2_id, retries=3, delay=5):
             else:
                 return None, None
 
-def get_stellar_properties_from_gaia(dataframe):
+def get_empirical_stellar_parameters(dataframe):
+    print("Getting empirical stellar parameters")
     # Make a copy of the DataFrame to modify
     dataframe_copy = dataframe.copy()
 

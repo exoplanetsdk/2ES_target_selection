@@ -3,6 +3,7 @@ from config import RESULTS_DIRECTORY
 from utils import adjust_column_widths
 
 def filter_stellar_data(df, config):
+    print("Filtering stars based on stellar parameters")
     """
     Filter stellar data based on various physical parameters and thresholds.
     

@@ -2,12 +2,13 @@
 
 A Python pipeline for generating a homogeneous stellar target list for the 2ES spectrograph, primarily utilizing Gaia DR2 and DR3 catalogs.
 
-## Features
+## Highlights
 
 - Automated querying of Gaia DR2/DR3 catalogs
-- Additional stellar parameters from other catalogs
-- Automated bright neighbor detection
-- Habitable zone and RV precision calculations
+- Additional stellar parameters from other catalogs (CELESTA, Vizier V/117A)
+- Bright neighbor detection
+- **Automated RV precision calculations**
+- Habitable zone calculations
 - Mass detection limits calculations
 - Cross-matching with other catalogs
 
@@ -30,24 +31,24 @@ scipy>=1.7.0
 ```
 project/
 ├── data/                           # Input data directory
-│   ├── Catalogue_CELESTA.txt      # CELESTA catalog data
+│   ├── Catalogue_CELESTA.txt       # CELESTA catalog data
 │   ├── Catalogue_V_117A_table1.txt # Stellar catalog
-│   ├── dataVmag.csv              # RV precision reference data
+│   ├── dataVmag.csv                # RV precision reference data
 │   └── EEM_dwarf_UBVIJHK_colors_Teff.txt  # Stellar classification data
 ├── results/                        # Output directory
 ├── figures/                        # Generated plots
-└── src/                           # Source code
-    ├── main.py                    # Main execution script
-    ├── config.py                  # Configuration parameters
-    ├── catalog_integration.py     # Catalog processing
-    ├── data_processing.py         # Data cleaning and merging
-    ├── filtering.py              # Stellar filtering
-    ├── gaia_queries.py           # Gaia query definitions
-    ├── plotting.py               # Visualization functions
-    ├── rv_prec.py               # RV precision calculations
-    ├── stellar_calculations.py   # Stellar physics calculations
-    ├── stellar_properties.py     # Stellar property handling
-    └── utils.py                  # Utility functions
+└── src/                            # Source code
+    ├── main.py                     # Main execution script
+    ├── config.py                   # Configuration parameters
+    ├── catalog_integration.py      # Catalog processing
+    ├── data_processing.py          # Data cleaning and merging
+    ├── filtering.py                # Stellar filtering
+    ├── gaia_queries.py             # Gaia query definitions
+    ├── plotting.py                 # Visualization functions
+    ├── rv_prec.py                  # RV precision calculations
+    ├── stellar_calculations.py     # Stellar physics calculations
+    ├── stellar_properties.py       # Stellar property handling
+    └── utils.py                    # Utility functions
 ```
 
 ## Configuration
@@ -75,7 +76,7 @@ STELLAR_FILTERS = {
 ## Pipeline Steps
 
 1. **Data Collection**
-   - Query Gaia DR2/DR3 catalogs
+   - Query Gaia DR2/DR3 catalogs (prioritizes DR3 over DR2 when available)
    - Retrieve additional identifiers (HD, GJ, HIP)
    - Obtain stellar types from SIMBAD
 
@@ -87,9 +88,9 @@ STELLAR_FILTERS = {
    - Detect bright neighboring stars
 
 3. **Analysis**
-   - Calculate habitable zones
-   - Determine RV precision estimates
-   - Compute mass detection limits
+   - Calculate habitable zones --> orbital radius
+   - Determine RV precision estimates --> RV amplitude
+   - Compute mass detection limits in habitable zones
    - Generate visualization plots
 
 4. **Output Generation**
@@ -130,6 +131,4 @@ Generated plots in `figures/` include:
 
 ## Notes
 
-- Prioritizes Gaia DR3 data over DR2 when available
-- Includes bright neighbor detection within 2 arcseconds
-- Calculates planet detection limits in habitable zones
+- RV precision calculations: http://www.astro.physik.uni-goettingen.de/research/rvprecision/ has been automated in `rv_prec.py`

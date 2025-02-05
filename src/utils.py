@@ -48,7 +48,8 @@ def execute_gaia_query(query, str_columns=None, output_file=None, retries=3, del
             if output_file:
                 df.to_excel(output_file, index=False)
                 adjust_column_widths(output_file)
-
+                print(f"{len(df)} stars retrieved")
+                print(f"Query results saved to {output_file}")
             return df
 
         except requests.exceptions.HTTPError as e:
@@ -99,3 +100,7 @@ def adjust_column_widths(excel_file):
 
 #--------------------------------------------------------------------------------------------------
 
+def save_and_adjust_column_widths(df, output_file):
+    df.to_excel(output_file, index=False)
+    adjust_column_widths(output_file)
+    print(f"Results saved to {output_file}")

@@ -9,8 +9,6 @@ from filtering import filter_stellar_data
 
 
 def main():
-    # Initialize Gaia
-    Gaia.MAIN_GAIA_TABLE = "gaiadr3.gaia_source"
 
     # Execute DR2 query
     df_dr2 = execute_gaia_query(

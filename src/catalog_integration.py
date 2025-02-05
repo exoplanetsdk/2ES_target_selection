@@ -2,8 +2,10 @@ import pandas as pd
 import numpy as np
 from tqdm import tqdm
 from config import RESULTS_DIRECTORY
-from utils import adjust_column_widths
-from stellar_properties import get_star_properties_with_retries, get_stellar_properties_from_gaia     
+from utils import save_and_adjust_column_widths
+from stellar_properties import get_star_properties_with_retries, get_empirical_stellar_parameters    
+from concurrent.futures import ThreadPoolExecutor
+
 
 
 class CatalogProcessor:
@@ -35,7 +37,7 @@ class CatalogProcessor:
             self.STELLAR_CATALOG = file.readlines()
 
     def process_hip_data(self, df_consolidated):
-        """Process HIP catalog data"""
+        print("Filling missing T_eff and Luminosity from CELESTA catalog using HIP numbers")
         # Extract numeric HIP numbers
         df_consolidated['HIP Number'] = df_consolidated['HIP Number'].str.extract(r'HIP\s*(\d+)')
         self.df_CELESTA['HIP Number'] = self.df_CELESTA['HIP Number'].astype(str)
@@ -69,7 +71,7 @@ class CatalogProcessor:
     
 
     def process_hd_data(self, df_consolidated_HIP):
-        """Process HD catalog data"""
+        print("Filling missing T_eff, Luminosity and Mass from Vizier V/117A using HD numbers")
         df_consolidated_HD = df_consolidated_HIP.copy()
 
         def clean_hd_number(hd_string):
@@ -79,11 +81,8 @@ class CatalogProcessor:
             # Split by comma and take the first part, then remove "HD" and whitespace
             return hd_string.split(',')[0].replace("HD", "").strip()           
         
-        # Iterate over DataFrame and fill missing values
-        for index, row in tqdm(df_consolidated_HD.iterrows(), 
-                            total=df_consolidated_HD.shape[0], 
-                            desc="Filling missing T_eff, Luminosity and Mass"):
-            
+        # Define a function to process each row
+        def process_row(index, row):
             if pd.isna(row["T_eff [K]"]) or pd.isna(row["Luminosity [L_Sun]"]) or pd.isna(row["Mass [M_Sun]"]):
                 hd_number = clean_hd_number(row["HD Number"])
                 
@@ -97,6 +96,12 @@ class CatalogProcessor:
                         df_consolidated_HD.at[index, "Luminosity [L_Sun]"] = luminosity
                     if pd.isna(row["Mass [M_Sun]"]) and mass is not None:
                         df_consolidated_HD.at[index, "Mass [M_Sun]"] = mass
+
+        # Use ThreadPoolExecutor to process rows in parallel
+        with ThreadPoolExecutor() as executor:
+            list(tqdm(executor.map(lambda args: process_row(*args), df_consolidated_HD.iterrows()), 
+                      total=df_consolidated_HD.shape[0], 
+                      desc="Filling missing T_eff, Luminosity and Mass"))
         
         return df_consolidated_HD
 
@@ -118,18 +123,15 @@ class CatalogProcessor:
         """Main processing pipeline"""
         # Process HIP data
         df_consolidated_HIP = self.process_hip_data(df_consolidated)
-        df_consolidated_HIP.to_excel(f"{RESULTS_DIRECTORY}consolidated_HIP_results.xlsx", index=False)
-        adjust_column_widths(f"{RESULTS_DIRECTORY}consolidated_HIP_results.xlsx")
+        save_and_adjust_column_widths(df_consolidated_HIP, f"{RESULTS_DIRECTORY}consolidated_HIP_results.xlsx")
         
         # Process HD data
         df_consolidated_HD = self.process_hd_data(df_consolidated_HIP)
-        df_consolidated_HD.to_excel(f"{RESULTS_DIRECTORY}consolidated_HD_results.xlsx", index=False)
-        adjust_column_widths(f"{RESULTS_DIRECTORY}consolidated_HD_results.xlsx")
+        save_and_adjust_column_widths(df_consolidated_HD, f"{RESULTS_DIRECTORY}consolidated_HD_results.xlsx")
         
         # Process Simbad data
-        df_consolidated_simbad = get_stellar_properties_from_gaia(df_consolidated_HD)
-        df_consolidated_simbad.to_excel(f"{RESULTS_DIRECTORY}consolidated_Simbad_results.xlsx", index=False)
-        adjust_column_widths(f"{RESULTS_DIRECTORY}consolidated_Simbad_results.xlsx")
+        df_consolidated_simbad = get_empirical_stellar_parameters(df_consolidated_HD)
+        save_and_adjust_column_widths(df_consolidated_simbad, f"{RESULTS_DIRECTORY}consolidated_Simbad_results.xlsx")
         
         # Calculate density
         final_df = self.calculate_density(df_consolidated_simbad)

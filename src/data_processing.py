@@ -1,13 +1,13 @@
+import time
 import pandas as pd
+from tqdm import tqdm
+from concurrent.futures import ThreadPoolExecutor
+
 from config import *
-from utils import adjust_column_widths
+from utils import *
+from rv_prec import calculate_rv_precision
 from stellar_properties import get_simbad_info_with_retry
 from stellar_calculations import *
-import os 
-from rv_prec import calculate_rv_precision
-from concurrent.futures import ThreadPoolExecutor
-from tqdm import tqdm
-import time
 
 #------------------------------------------------------------------------------------------------
 def process_gaia_data(df_dr2, df_dr3, df_crossmatch):
@@ -24,8 +24,7 @@ def process_gaia_data(df_dr2, df_dr3, df_crossmatch):
                             suffixes=('_dr2', '_dr3'), 
                             how='outer')
     
-    merged_results.to_excel(RESULTS_DIRECTORY+'merged_results.xlsx', index=False)
-    adjust_column_widths(RESULTS_DIRECTORY+'merged_results.xlsx')
+    save_and_adjust_column_widths(merged_results, RESULTS_DIRECTORY+'merged_results.xlsx')
 
     return merged_results
 
@@ -33,7 +32,6 @@ def process_gaia_data(df_dr2, df_dr3, df_crossmatch):
 #------------------------------------------------------------------------------------------------
 
 def check_dr3_availability(row):
-    print("Checking availability of DR3 data for a given row")
     '''
     Function to check if any DR3 data is available for a given row.
     '''
@@ -43,7 +41,6 @@ def check_dr3_availability(row):
 #------------------------------------------------------------------------------------------------
 
 def process_repeated_group(group):
-    print("Processing a group of repeated entries with the same dr2_source_id")
     '''
     Function to process a group of repeated entries with the same dr2_source_id.
     '''
@@ -78,8 +75,7 @@ def clean_merged_results(merged_results):
     repeated_entries = merged_results[merged_results['dr2_source_id'].isin(repeated_dr2_ids)]
 
     # Save repeated entries to Excel
-    repeated_entries.to_excel(RESULTS_DIRECTORY + 'repeated_entries.xlsx', index=False)
-    adjust_column_widths(RESULTS_DIRECTORY + 'repeated_entries.xlsx')
+    save_and_adjust_column_widths(repeated_entries, RESULTS_DIRECTORY + 'repeated_entries.xlsx')
 
     # Process repeated entries and get indices of rows to remove
     rows_to_remove_indices = repeated_entries.groupby('dr2_source_id').apply(process_repeated_group).sum()
@@ -92,31 +88,29 @@ def clean_merged_results(merged_results):
 
     # Reset index of clean_merged_results
     clean_merged_results = clean_merged_results.reset_index(drop=True)
-    clean_merged_results.to_excel(RESULTS_DIRECTORY + 'clean_merged_results.xlsx', index=False)
-    adjust_column_widths(RESULTS_DIRECTORY + 'clean_merged_results.xlsx')
+    save_and_adjust_column_widths(clean_merged_results, RESULTS_DIRECTORY + 'clean_merged_results.xlsx')
 
-    rows_to_remove.to_excel(RESULTS_DIRECTORY + 'removed_rows.xlsx', index=False)
-    adjust_column_widths(RESULTS_DIRECTORY + 'removed_rows.xlsx')
+    save_and_adjust_column_widths(rows_to_remove, RESULTS_DIRECTORY + 'removed_rows.xlsx')
 
     print(f"Original shape of merged_results: {merged_results.shape}")
     print(f"Shape after removing duplicates: {clean_merged_results.shape}")
     print(f"Number of rows removed: {merged_results.shape[0] - clean_merged_results.shape[0]}")
 
-    remaining_duplicates = clean_merged_results[clean_merged_results.duplicated('dr2_source_id', keep=False)]
-    print(f"\nNumber of remaining duplicate dr2_source_id: {len(remaining_duplicates['dr2_source_id'].unique())}")
+    # remaining_duplicates = clean_merged_results[clean_merged_results.duplicated('dr2_source_id', keep=False)]
+    # print(f"\nNumber of remaining duplicate dr2_source_id: {len(remaining_duplicates['dr2_source_id'].unique())}")
 
-    if not remaining_duplicates.empty:
-        print("\nExample of remaining duplicates:")
-        print(remaining_duplicates.groupby('dr2_source_id').first().head())
-    else:
-        print("\nNo remaining duplicates found.")
+    # if not remaining_duplicates.empty:
+    #     print("\nExample of remaining duplicates:")
+    #     print(remaining_duplicates.groupby('dr2_source_id').first().head())
+    # else:
+    #     print("\nNo remaining duplicates found.")
     
     return clean_merged_results
 
 #------------------------------------------------------------------------------------------------
 
 def consolidate_data(df):
-    print("Consolidating data from DR2 and DR3 sources")
+    print("\nConsolidating data between DR2 and DR3")
     def choose_value(row, col_name):
         dr3_col = f'{col_name}_dr3'
         dr2_col = f'{col_name}_dr2'
@@ -127,6 +121,7 @@ def consolidate_data(df):
                         'parallax', 'logg_gaia', 'spectraltype_esphs']
 
     # Process each column
+    print(f"Merging the following columns between DR2 and DR3: {', '.join(columns_to_process)}")
     for col in columns_to_process:
         df[col] = df.apply(lambda row: choose_value(row, col), axis=1)
 
@@ -134,15 +129,18 @@ def consolidate_data(df):
         df = df[0]  # Take the first element if it's a tuple
 
     # Special handling for temperature
+    print("Processing temperature")
     df['T_eff [K]'] = df.apply(lambda row: row['teff_gspphot'] if pd.notnull(row['teff_gspphot']) 
                               else row['teff_val'], axis=1)
 
     # For other columns
     other_columns = ['mass_flame', 'lum_flame', 'radius_flame', 'spectraltype_esphs']
+    print(f"Processing the following columns: {', '.join(other_columns)}")
     for col in other_columns:
         df[col] = df.apply(lambda row: choose_value(row, col), axis=1)
 
     # Add bp_rp column from DR3 if available
+    print("Adding bp_rp column")
     df['bp_rp'] = df['bp_rp'].fillna(df['phot_bp_mean_mag'] - df['phot_rp_mean_mag'])
 
     # Add the new source_id column
@@ -161,14 +159,14 @@ def consolidate_data(df):
     # Populate the new DataFrame
     df_new['source_id'] = df_consolidated['source_id_dr3'].fillna(df_consolidated['source_id_dr2'])
 
-    for index, row in df_new.iterrows():
+    for index, row in tqdm(df_new.iterrows(), total=df_new.shape[0], 
+                           desc="Retrieving 'HD Number', 'GJ Number', 'HIP Number', and 'Object Type' from Simbad"):
         simbad_info = get_simbad_info_with_retry(row['source_id'])
         if simbad_info:
             df_new.loc[index, 'HD Number'] = simbad_info['HD Number']
             df_new.loc[index, 'GJ Number'] = simbad_info['GJ Number']
             df_new.loc[index, 'HIP Number'] = simbad_info['HIP Number']
             df_new.loc[index, 'Object Type'] = simbad_info['Object Type']
-
 
     # Combine the new DataFrame with the original one
     df_consolidated = pd.concat([df_consolidated, df_new[['HD Number', 'GJ Number', 'HIP Number', 'Object Type']]], axis=1)
@@ -180,6 +178,7 @@ def consolidate_data(df):
     df_consolidated = df_consolidated[final_columns]
 
     # Rename the columns
+    print("Renaming columns")
     df_consolidated = df_consolidated.rename(columns={
         'mass_flame': 'Mass [M_Sun]',
         'lum_flame': 'Luminosity [L_Sun]',
@@ -201,8 +200,7 @@ def consolidate_data(df):
         df_consolidated[column] = pd.to_numeric(df_consolidated[column], errors='coerce')
 
     # Save the result to a new Excel file
-    df_consolidated.to_excel(RESULTS_DIRECTORY + 'consolidated_results.xlsx', index=False)
-    adjust_column_widths(RESULTS_DIRECTORY + 'consolidated_results.xlsx')
+    save_and_adjust_column_widths(df_consolidated, RESULTS_DIRECTORY + 'consolidated_results.xlsx')
 
     # Display some statistics
     print(f"Total number of stars: {len(df_consolidated)}")
@@ -288,10 +286,8 @@ def calculate_and_insert_habitable_zone(df):
         processed_df = processed_df.sort_values('T_eff [K]')    
 
     # Save the result to a new Excel file
-    output_path = os.path.join(RESULTS_DIRECTORY, 'consolidated_results.xlsx')
-    processed_df.to_excel(output_path, index=False)
-    adjust_column_widths(output_path)
-    print(f"Results saved to {output_path}")
+
+    save_and_adjust_column_widths(processed_df, f"{RESULTS_DIRECTORY}consolidated_results.xlsx")
 
     return processed_df
 
@@ -333,10 +329,7 @@ def calculate_and_insert_rv_precision(df):
     processed_df = processed_df[processed_df['Object Type'] != 'WhiteDwarf']
 
     # Save the result to a new Excel file
-    output_path = RESULTS_DIRECTORY + 'combined_query_with_RV_precision.xlsx'
-    processed_df.to_excel(output_path, index=False)
-    adjust_column_widths(output_path)
-    print(f"Results saved to {output_path}")
+    save_and_adjust_column_widths(processed_df, f"{RESULTS_DIRECTORY}combined_query_with_RV_precision.xlsx")
 
     return processed_df
 
@@ -382,12 +375,8 @@ def calculate_and_insert_hz_detection_limit(df):
     processed_df = processed_df[cols]
 
     # Save the updated DataFrame
-    output_path = RESULTS_DIRECTORY + 'combined_query_with_mass_detection_limit.xlsx'
-    processed_df.to_excel(output_path, index=False)
-    adjust_column_widths(output_path)
+    save_and_adjust_column_widths(processed_df, f"{RESULTS_DIRECTORY}combined_query_with_mass_detection_limit.xlsx")
     
-    print(f"\nUpdated DataFrame saved to '{output_path}'.")
-
     return processed_df
 
 #------------------------------------------------------------------------------------------------
@@ -493,13 +482,8 @@ def analyze_bright_neighbors(merged_df, search_radius, execute_gaia_query_func, 
     print(f"Stars without bright neighbors: {len(df_without_bright_neighbors)}")
     
     # Save the result to a new Excel file
-    output_path = RESULTS_DIRECTORY + 'stars_with_bright_neighbors.xlsx'
-    df_with_bright_neighbors.to_excel(output_path, index=False)
-    adjust_column_widths(output_path)
-
-    output_path = RESULTS_DIRECTORY + 'stars_without_bright_neighbors.xlsx'
-    df_without_bright_neighbors.to_excel(output_path, index=False)
-    adjust_column_widths(output_path)    
+    save_and_adjust_column_widths(df_with_bright_neighbors, f"{RESULTS_DIRECTORY}stars_with_bright_neighbors.xlsx")
+    save_and_adjust_column_widths(df_without_bright_neighbors, f"{RESULTS_DIRECTORY}stars_without_bright_neighbors.xlsx")
 
     return df_with_bright_neighbors, df_without_bright_neighbors
 

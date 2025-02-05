@@ -3,6 +3,7 @@ from config import *
 from utils import execute_gaia_query
 
 def get_dr2_query():
+    print("Querying stars from Gaia DR2")
     return f"""
     SELECT 
         gs.source_id, 
@@ -33,6 +34,7 @@ def get_dr2_query():
     """
 
 def get_dr3_query():
+    print("Querying stars from Gaia DR3")
     return f"""
     SELECT 
         gs.source_id, 
@@ -64,6 +66,7 @@ def get_dr3_query():
     """
 
 def get_crossmatch_query(dr2_source_ids):
+    print("Crossmatching stellar IDs between Gaia DR2 and DR3")
     return f"""
     SELECT dr2_source_id, dr3_source_id
     FROM gaiadr3.dr2_neighbourhood
