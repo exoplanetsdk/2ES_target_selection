@@ -3,7 +3,7 @@ from config import RESULTS_DIRECTORY
 from utils import adjust_column_widths
 
 def filter_stellar_data(df, config):
-    print("Filtering stars based on stellar parameters")
+    print("\nFiltering stars based on stellar parameters")
     """
     Filter stellar data based on various physical parameters and thresholds.
     
@@ -99,7 +99,8 @@ def filter_stellar_data(df, config):
     df_removed.to_excel(removed_path, index=False)
     adjust_column_widths(removed_path)
 
-    display(stats_dict)
+    for key, value in stats_dict.items():
+        print(f"{key.replace('_', ' ').capitalize()}: {value}")
     
     return df_filtered
 

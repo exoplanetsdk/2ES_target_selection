@@ -31,21 +31,21 @@ scipy>=1.7.0
 project/
 ├── data/                           # Input data directory
 │   ├── Catalogue_CELESTA.txt       # CELESTA catalog data
-│   ├── Catalogue_V_117A_table1.txt # Stellar catalog
-│   ├── dataVmag.csv                # RV precision reference data
-│   └── EEM_dwarf_UBVIJHK_colors_Teff.txt  # Stellar classification data
+│   ├── Catalogue_V_117A_table1.txt # V_117A catalog
+│   ├── dataVmag.csv                # Empirical RV precision reference data
+│   └── EEM_dwarf_UBVIJHK_colors_Teff.txt  # Stellar color and effective temperature sequence
 ├── results/                        # Output directory
-├── figures/                        # Generated plots
+├── figures/                        # Plots directory
 └── src/                            # Source code
     ├── main.py                     # Main execution script
     ├── config.py                   # Configuration parameters
     ├── catalog_integration.py      # Catalog processing
     ├── data_processing.py          # Data cleaning and merging
     ├── filtering.py                # Stellar filtering
-    ├── gaia_queries.py             # Gaia query definitions
+    ├── gaia_queries.py             # Gaia queries
     ├── plotting.py                 # Visualization functions
     ├── rv_prec.py                  # RV precision calculations
-    ├── stellar_calculations.py     # Stellar physics calculations
+    ├── stellar_calculations.py     # Habitable zone and mass detection limits calculations
     ├── stellar_properties.py       # Stellar property handling
     └── utils.py                    # Utility functions
 ```

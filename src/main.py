@@ -1,3 +1,5 @@
+print('Initializing 2ES Target Selection Pipeline...')
+
 from config import *
 from gaia_queries import *
 from data_processing import *
@@ -6,7 +8,6 @@ from stellar_calculations import *
 from utils import *
 from catalog_integration import CatalogProcessor
 from filtering import filter_stellar_data
-
 
 def main():
 
@@ -35,21 +36,21 @@ def main():
     # Process and clean data
     merged_results = process_gaia_data(df_dr2, df_dr3, df_crossmatch)
     clean_results = clean_merged_results(merged_results)
-    consolidate_results = consolidate_data(clean_results)
-
+    consolidated_results = consolidate_data(clean_results)
 
     # Obtain stellar properties from catalogs
     processor = CatalogProcessor(
         celesta_path='../data/Catalogue_CELESTA.txt',
         stellar_catalog_path='../data/Catalogue_V_117A_table1.txt'
     )
-    df_consolidated = processor.process_catalogs(consolidate_results)
+    df_consolidated = processor.process_catalogs(consolidated_results)
 
     # Plot density vs logg
-    plot_density_vs_logg(df_consolidated, 
-                         output_path=f'{FIGURES_DIRECTORY}density_vs_logg.png', 
-                         show_plot=False
-                         )
+    plot_density_vs_logg(
+        df_consolidated, 
+        output_path=f'{FIGURES_DIRECTORY}density_vs_logg.png', 
+        show_plot=False
+    )
 
     df_filtered = filter_stellar_data(df_consolidated, STELLAR_FILTERS)
 
@@ -110,8 +111,8 @@ def main():
     plt.colorbar(label='Effective Temperature (K)')  # Add color bar
     plt.xscale('log')
     plt.yscale('log')
-    plt.xlim(min(merged_df['T_eff [K]'])-50, max(merged_df['T_eff [K]'])+50)  # Set the same x range
-    plt.ylim(min(merged_df['Luminosity [L_Sun]']), max(merged_df['Luminosity [L_Sun]'])+0.5)  # Set the same y range
+    plt.xlim(min(merged_df['T_eff [K]']) - 50, max(merged_df['T_eff [K]']) + 50)  # Set the same x range
+    plt.ylim(min(merged_df['Luminosity [L_Sun]']), max(merged_df['Luminosity [L_Sun]']) + 0.5)  # Set the same y range
     plt.gca().invert_xaxis()  # Invert x-axis for temperature
     plt.xlabel('Effective Temperature (K)')
     plt.ylabel('Luminosity (L/L_sun)')
@@ -122,10 +123,11 @@ def main():
     
     # Plot HR diagram with detection limit
     for detection_limit in DETECTION_LIMITS:
-        if detection_limit is None:
-            plot_hr_diagram_with_detection_limit(merged_df, use_filtered_data=False)
-        else:
-            plot_hr_diagram_with_detection_limit(merged_df, use_filtered_data=True, detection_limit=detection_limit)
+        plot_hr_diagram_with_detection_limit(
+            merged_df, 
+            use_filtered_data=detection_limit is not None, 
+            detection_limit=detection_limit
+        )
 
     filtered_dfs = analyze_stellar_data(
         df=merged_df,
@@ -142,12 +144,12 @@ def main():
     )
 
     merged_RJ['HZ Rmid'] = (merged_RJ['HZ Rin'] + merged_RJ['HZ Rout']) / 2
-    plot_scatter_with_options(merged_RJ, 'magV     ', 'V_mag', min_value = 3, max_value = 10)
-    plot_scatter_with_options(merged_RJ, 'mass ', 'Mass [M_Sun]', min_value = 0.5, max_value = 1.5)
-    plot_scatter_with_options(merged_RJ, 'HZ Rmid', 'HZ_limit [AU]', min_value = 0.1, max_value = 2, label=True)
-    plot_scatter_with_options(merged_RJ, 'logg', 'logg_gaia', min_value = 1.9, max_value = 5, label=True)
-    plot_scatter_with_options(merged_RJ, 'RV_Prec(390-870) 30m', 'RV precision [m/s]', min_value = 0, max_value = 1.6, label=True)
-    plot_scatter_with_options(merged_RJ, 'mdl(hz) 30min', 'HZ Detection Limit [M_Earth]', min_value = 0, max_value = 3, label=True)
+    plot_scatter_with_options(merged_RJ, 'magV     ', 'V_mag', min_value=3, max_value=10)
+    plot_scatter_with_options(merged_RJ, 'mass ', 'Mass [M_Sun]', min_value=0.5, max_value=1.5)
+    plot_scatter_with_options(merged_RJ, 'HZ Rmid', 'HZ_limit [AU]', min_value=0.1, max_value=2, label=True)
+    plot_scatter_with_options(merged_RJ, 'logg', 'logg_gaia', min_value=1.9, max_value=5, label=True)
+    plot_scatter_with_options(merged_RJ, 'RV_Prec(390-870) 30m', 'RV precision [m/s]', min_value=0, max_value=1.6, label=True)
+    plot_scatter_with_options(merged_RJ, 'mdl(hz) 30min', 'HZ Detection Limit [M_Earth]', min_value=0, max_value=3, label=True)
 
     plot_RV_precision_HZ_detection_limit_vs_temperature(merged_df, df_Ralf)
 

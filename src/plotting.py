@@ -7,6 +7,7 @@ from utils import adjust_column_widths
 
 def plot_density_vs_logg(df, logg_col='logg_gaia', density_col='Density [Solar unit]', 
                         density_threshold=0.1, plot_ranges=None, output_path=None, show_plot=False):
+    print('\nPlotting density vs logg')
     """
     Create two scatter plots of stellar density vs. log g with different zoom levels.
     
@@ -63,6 +64,7 @@ def plot_density_vs_logg(df, logg_col='logg_gaia', density_col='Density [Solar u
         
         if output_path:
             plt.savefig(output_path[:-4] + f'_{plot_type}.png', dpi=300, bbox_inches='tight')
+            print(f"Saved {output_path[:-4]}_{plot_type}.png")
         
         if show_plot:
             plt.show()
@@ -70,6 +72,7 @@ def plot_density_vs_logg(df, logg_col='logg_gaia', density_col='Density [Solar u
 #---------------------------------------------------------------------------------------------------
 
 def plot_color_histogram(df, output_path=None, figsize=(6, 4), dpi=150, show_plot=False):
+    print('\nPlotting color histogram')
     """
     Create a histogram of stellar color (BP - RP).
     
@@ -95,6 +98,7 @@ def plot_color_histogram(df, output_path=None, figsize=(6, 4), dpi=150, show_plo
     
     if output_path:
         plt.savefig(output_path, dpi=300, bbox_inches='tight')
+        print(f'Saved {output_path}')
     
     if show_plot:
         plt.show()
@@ -102,6 +106,7 @@ def plot_color_histogram(df, output_path=None, figsize=(6, 4), dpi=150, show_plo
 #---------------------------------------------------------------------------------------------------
 
 def plot_color_magnitude_diagram(df, output_path=None, figsize=(6, 4), dpi=150, show_plot=False):
+    print('\nPlotting color magnitude diagram')
     """
     Create a color-magnitude diagram comparing G and V magnitudes.
     
@@ -149,6 +154,7 @@ def plot_color_magnitude_diagram(df, output_path=None, figsize=(6, 4), dpi=150, 
     
     if output_path:
         plt.savefig(output_path, dpi=300, bbox_inches='tight')
+        print(f'Saved {output_path}')
     
     if show_plot:
         plt.show()
@@ -198,12 +204,14 @@ def plot_scatter(x, y, data, xlabel, ylabel, xlim=None, ylim=None, filename=None
     plt.tight_layout()
     if filename:
         plt.savefig(filename, dpi=300)
+        print(f'Saved {filename}')
     if show_plot:
         plt.show()
 
 #---------------------------------------------------------------------------------------------------
 
 def plot_stellar_properties_vs_temperature(df, detection_limit, show_plot=False):
+    print('\nPlotting stellar properties vs temperature')
     """
     Plots various stellar properties as a function of effective temperature.
 
@@ -237,11 +245,13 @@ def plot_stellar_properties_vs_temperature(df, detection_limit, show_plot=False)
     # Adjust the layout and display the plot
     plt.tight_layout(rect=[0, 0.03, 1, 0.95])
     plt.savefig(f'{FIGURES_DIRECTORY}stellar_properties_vs_temperature_{detection_limit}.png')
+    print(f'Saved {FIGURES_DIRECTORY}stellar_properties_vs_temperature_{detection_limit}.png')
     plt.show() if show_plot else plt.close()
 
 #---------------------------------------------------------------------------------------------------
 
 def plot_hr_diagram_with_detection_limit(df, use_filtered_data=True, detection_limit=1.5, dpi=150, show_plot=False):
+    print('\nPlotting HR diagram with detection limit')
     """
     Create a Hertzsprung-Russell diagram with stars color-coded by their habitable zone detection limit.
     
@@ -307,11 +317,13 @@ def plot_hr_diagram_with_detection_limit(df, use_filtered_data=True, detection_l
 
     # Save and display the plot
     plt.savefig(filename)
+    print(f'Saved {filename}')
     plt.show() if show_plot else plt.close()
 
 #---------------------------------------------------------------------------------------------------
 
 def analyze_stellar_data(df, hz_limits=None, date_str=None, show_plot=False):
+    print(f'\nAnalyzing stellar data and creating histograms for different HZ Detection Limits: {hz_limits}')
     """
     Analyze stellar data and create histograms for different HZ Detection Limits.
     Also saves filtered DataFrames to Excel files.
@@ -389,6 +401,7 @@ def analyze_stellar_data(df, hz_limits=None, date_str=None, show_plot=False):
         plt.tight_layout()
         plt.subplots_adjust(top=0.93, hspace=0.5, wspace=0.4, left=0.05, right=0.99)
         plt.savefig(filename)
+        print(f'Saved {filename}')
         plt.show() if show_plot else plt.close()
 
     # Store filtered DataFrames
@@ -473,12 +486,13 @@ def plot_scatter_with_options(df, col_x, col_y, min_value=None, max_value=None, 
 
     plt.tight_layout()
     plt.savefig(f'{FIGURES_DIRECTORY}crossmatch_' + col_y.strip().replace(" ", "_").replace("[", "").replace("]", "").replace("/", "") + '.png')
+    print(f'Saved {FIGURES_DIRECTORY}crossmatch_' + col_y.strip().replace(" ", "_").replace("[", "").replace("]", "").replace("/", "") + '.png')
     plt.show() if show_plot else plt.close()
 
 #---------------------------------------------------------------------------------------------------
 
 def plot_RV_precision_HZ_detection_limit_vs_temperature(merged_df, df_Ralf):
-
+    print('\nPlotting RV precision and HZ detection limit vs temperature')
     i = 7
     colors = plt.cm.viridis(np.linspace(0, 1, 8))
 

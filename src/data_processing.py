@@ -11,7 +11,7 @@ from stellar_calculations import *
 
 #------------------------------------------------------------------------------------------------
 def process_gaia_data(df_dr2, df_dr3, df_crossmatch):
-    print("Merging Gaia DR2 and DR3 data with crossmatch information")
+    print("\nMerging Gaia DR2 and DR3 data with crossmatch information")
     # Merge DR2 and DR3 results
     merged_dr2_crossmatch = pd.merge(df_dr2, df_crossmatch, 
                                     left_on='source_id', 
@@ -41,6 +41,7 @@ def check_dr3_availability(row):
 #------------------------------------------------------------------------------------------------
 
 def process_repeated_group(group):
+    print("\nProcessing repeated entries with the same dr2_source_id")
     '''
     Function to process a group of repeated entries with the same dr2_source_id.
     '''
@@ -68,7 +69,7 @@ def process_repeated_group(group):
 #------------------------------------------------------------------------------------------------
 
 def clean_merged_results(merged_results):
-    print("Cleaning merged results by removing duplicate dr2_source_id entries")
+    print("\nCleaning merged results by removing duplicate dr2_source_id entries")
     # Step 1: Identify repeated dr2_source_id entries
     non_empty_dr2 = merged_results[merged_results['dr2_source_id'].notna() & (merged_results['dr2_source_id'] != '')]
     repeated_dr2_ids = non_empty_dr2[non_empty_dr2.duplicated('dr2_source_id', keep=False)]['dr2_source_id'].unique()
@@ -216,7 +217,7 @@ def consolidate_data(df):
 
 def calculate_and_insert_stellar_density(df, mass_col='Mass [M_Sun]', radius_col='Radius [R_Sun]', 
                                        density_col='Density [Solar unit]'):
-    print("Calculating and inserting stellar density")
+    print("\nCalculating and inserting stellar density")
     """
     Calculate stellar density in solar units and insert it after the radius column.
     
@@ -250,7 +251,7 @@ def calculate_and_insert_stellar_density(df, mass_col='Mass [M_Sun]', radius_col
 #------------------------------------------------------------------------------------------------
 
 def calculate_and_insert_habitable_zone(df):
-    print("Calculating and inserting habitable zone limits")
+    print("\nCalculating and inserting habitable zone limits")
     """
     Process stellar data by calculating habitable zone limits, sorting by temperature,
     and saving to Excel with formatted columns.
@@ -294,7 +295,7 @@ def calculate_and_insert_habitable_zone(df):
 #------------------------------------------------------------------------------------------------
 
 def calculate_and_insert_rv_precision(df):
-    print("Calculating and inserting RV precision for each star")
+    print("\nCalculating and inserting RV precision for each star")
     """
     Calculate RV precision for each star in the DataFrame and insert the results.
     Excludes White Dwarfs from the final output and saves to Excel.
@@ -337,7 +338,7 @@ def calculate_and_insert_rv_precision(df):
 #------------------------------------------------------------------------------------------------
 
 def calculate_and_insert_hz_detection_limit(df):
-    print("Calculating and inserting habitable zone detection limits")
+    print("\nCalculating and inserting habitable zone detection limits")
     """
     Calculate and insert the habitable zone detection limit for each star in the DataFrame.
     
@@ -361,12 +362,12 @@ def calculate_and_insert_hz_detection_limit(df):
     )
 
     # Print statistics about the new column
-    print("\nHZ Detection Limit Statistics:")
-    print(processed_df['HZ Detection Limit [M_Earth]'].describe())
+    # print("\nHZ Detection Limit Statistics:")
+    # print(processed_df['HZ Detection Limit [M_Earth]'].describe())
 
     # Count and print the number of NaN values
     nan_count = processed_df['HZ Detection Limit [M_Earth]'].isna().sum()
-    print(f"\nNumber of NaN values: {nan_count}")
+    print(f"Number of NaN values: {nan_count}")
 
     # Reorder columns to place the new column next to RV precision
     cols = processed_df.columns.tolist()
@@ -464,7 +465,7 @@ def analyze_bright_neighbors(merged_df, search_radius, execute_gaia_query_func, 
         results = list(tqdm(
             executor.map(process_row_with_retry, [row for idx, row in merged_df.iterrows()]),
             total=len(merged_df),
-            desc="Detecting bright neighbors"
+            desc="Detecting bright neighbors in parallel"
         ))
         
         # Sort results into appropriate lists
