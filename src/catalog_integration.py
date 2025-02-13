@@ -101,7 +101,8 @@ class CatalogProcessor:
         with ThreadPoolExecutor() as executor:
             list(tqdm(executor.map(lambda args: process_row(*args), df_consolidated_HD.iterrows()), 
                       total=df_consolidated_HD.shape[0], 
-                      desc="Filling missing T_eff, Luminosity and Mass"))
+                      desc="Progress",
+                      ncols=100))
         
         return df_consolidated_HD
 

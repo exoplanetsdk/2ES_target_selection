@@ -7,6 +7,7 @@ from astroquery.simbad import Simbad
 from astroquery.vizier import Vizier
 from astropy.units import UnitsWarning
 from requests.exceptions import ConnectionError
+from tqdm import tqdm
 
 # Configure logging
 # logging.basicConfig(
@@ -90,7 +91,8 @@ def get_stellar_type_dr3(gaia_dr3_id, retries=3, delay=5):
             result_table = custom_simbad.query_object(f"Gaia DR3 {gaia_dr3_id}")
 
             if result_table is None:
-                print(f"No data found for Gaia DR3 ID {gaia_dr3_id}.")
+                # print(f"No data found for Gaia DR3 ID {gaia_dr3_id}.\r")
+                logging.warning(f"No data found for Gaia DR3 ID {gaia_dr3_id}.")
                 return None, None
 
             # Extract the spectral type
@@ -128,7 +130,8 @@ def get_stellar_type_dr2(gaia_dr2_id, retries=3, delay=5):
             result_table = custom_simbad.query_object(f"Gaia DR2 {gaia_dr2_id}")
 
             if result_table is None:
-                print(f"No data found for Gaia DR2 ID {gaia_dr2_id}.")
+                # print(f"No data found for Gaia DR2 ID {gaia_dr2_id}.\r")
+                logging.warning(f"No data found for Gaia DR2 ID {gaia_dr2_id}.")
                 return None, None
 
             # Extract the spectral type
@@ -157,6 +160,22 @@ def get_stellar_type_dr2(gaia_dr2_id, retries=3, delay=5):
 
 def get_empirical_stellar_parameters(dataframe):
     print("Getting empirical stellar parameters")
+
+    # Configure logging to use tqdm.write
+    class TqdmLoggingHandler(logging.Handler):
+        def emit(self, record):
+            try:
+                msg = self.format(record)
+                tqdm.write(msg)
+                self.flush()
+            except Exception:
+                self.handleError(record)
+
+    # Set up logging with the custom handler
+    logger = logging.getLogger()
+    logger.handlers = []
+    logger.addHandler(TqdmLoggingHandler())
+
     # Make a copy of the DataFrame to modify
     dataframe_copy = dataframe.copy()
 
@@ -164,7 +183,11 @@ def get_empirical_stellar_parameters(dataframe):
         if column not in dataframe_copy.columns:
             dataframe_copy[column] = None
 
-    for index, row in dataframe_copy.iterrows():
+    for index, row in tqdm(dataframe_copy.iterrows(), 
+                          total=dataframe_copy.shape[0], 
+                          desc="Processing stellar types",
+                          ncols=100):  # Fixed width progress bar
+                          
         gaia_dr3_id = row['source_id_dr3']
         gaia_dr2_id = row['source_id_dr2']
 
@@ -184,8 +207,9 @@ def get_empirical_stellar_parameters(dataframe):
         dataframe_copy.at[index, 'SIMBAD Spectral Type'] = stellar_type_original
         dataframe_copy.at[index, 'Readable Spectral Type (experimental)'] = stellar_type
 
-        print(index, row['source_id'], stellar_type_original, stellar_type)
-        # logging.info(f"{index, row['source_id'], stellar_type_original, stellar_type}")
+        # print(index, row['source_id'], stellar_type_original, stellar_type, end='\r')
+        logging.warning(f"{index}: {row['source_id']}, {stellar_type_original} --> {stellar_type}")
+
 
         if stellar_type is None:
             continue
@@ -223,12 +247,12 @@ def get_empirical_stellar_parameters(dataframe):
             classification_row_next = classification_df[classification_df['#SpT'] == next_type]
 
             dataframe_copy.at[index, 'Readable Spectral Type (experimental)'] = str(base_type) + ' and ' + str(next_type)
-            print(base_type, next_type)
-            # logging.info(f"Base Type: {base_type}, Next Type: {next_type}")
+            # print(base_type, next_type)
+            logging.warning(f"Base Type: {base_type}, Next Type: {next_type}")
 
             if classification_row_base.empty or classification_row_next.empty:
-                print(f"-- No data found for stellar type {stellar_type}.")
-                # logging.warning(f"No data found for stellar type {stellar_type}.")
+                # print(f"-- No data found for stellar type {stellar_type}.\r")
+                logging.warning(f"No data found for stellar type {stellar_type}.")
                 continue
 
             properties = {
@@ -241,8 +265,8 @@ def get_empirical_stellar_parameters(dataframe):
             classification_row = classification_df[classification_df['#SpT'] == stellar_type]
 
             if classification_row.empty:
-                print(f"-- No data found for stellar type (2) {stellar_type}.")
-                # logging.warning(f"No data found for stellar type (2) {stellar_type}.")
+                # print(f"-- No data found for stellar type (2) {stellar_type}.\r")
+                logging.warning(f"No data found for stellar type (2) {stellar_type}.")
                 continue
 
             properties = {
@@ -274,7 +298,7 @@ def get_empirical_stellar_parameters(dataframe):
                         time.sleep(5)
                     else:
                         print(f"Failed to retrieve data from Simbad for {row['source_id']} after 3 attempts.")
-                        # logging.error(f"Failed to retrieve data from Simbad for {row['source_id']} after 3 attempts.")
+                        logging.error(f"Failed to retrieve data from Simbad for {row['source_id']} after 3 attempts.")
                         continue
 
         # Update the DataFrame copy with the retrieved properties

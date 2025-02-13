@@ -1,4 +1,4 @@
-print('Initializing 2ES Target Selection Pipeline...')
+print('\nInitializing 2ES Target Selection Pipeline...')
 
 from config import *
 from gaia_queries import *

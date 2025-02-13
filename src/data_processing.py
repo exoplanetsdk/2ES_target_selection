@@ -41,7 +41,6 @@ def check_dr3_availability(row):
 #------------------------------------------------------------------------------------------------
 
 def process_repeated_group(group):
-    print("\nProcessing repeated entries with the same dr2_source_id")
     '''
     Function to process a group of repeated entries with the same dr2_source_id.
     '''
@@ -79,6 +78,7 @@ def clean_merged_results(merged_results):
     save_and_adjust_column_widths(repeated_entries, RESULTS_DIRECTORY + 'repeated_entries.xlsx')
 
     # Process repeated entries and get indices of rows to remove
+    print(f"Processing repeated entries with the same dr2_source_id")    
     rows_to_remove_indices = repeated_entries.groupby('dr2_source_id').apply(process_repeated_group).sum()
 
     # Get the rows to be removed
@@ -161,7 +161,8 @@ def consolidate_data(df):
     df_new['source_id'] = df_consolidated['source_id_dr3'].fillna(df_consolidated['source_id_dr2'])
 
     for index, row in tqdm(df_new.iterrows(), total=df_new.shape[0], 
-                           desc="Retrieving 'HD Number', 'GJ Number', 'HIP Number', and 'Object Type' from Simbad"):
+                           desc="Retrieving 'HD Number', 'GJ Number', 'HIP Number', and 'Object Type' from Simbad",
+                           ncols=100):
         simbad_info = get_simbad_info_with_retry(row['source_id'])
         if simbad_info:
             df_new.loc[index, 'HD Number'] = simbad_info['HD Number']
@@ -367,7 +368,7 @@ def calculate_and_insert_hz_detection_limit(df):
 
     # Count and print the number of NaN values
     nan_count = processed_df['HZ Detection Limit [M_Earth]'].isna().sum()
-    print(f"Number of NaN values: {nan_count}")
+    print(f"Number of NaN values in HZ Detection Limit [M_Earth]: {nan_count}")
 
     # Reorder columns to place the new column next to RV precision
     cols = processed_df.columns.tolist()
@@ -383,7 +384,7 @@ def calculate_and_insert_hz_detection_limit(df):
 #------------------------------------------------------------------------------------------------
 
 def analyze_bright_neighbors(merged_df, search_radius, execute_gaia_query_func, max_retries=3, delay=5):
-    print("Analyzing stars to identify those with bright neighboring stars")
+    print("\nAnalyzing stars to identify those with bright neighboring stars")
     """
     Analyze stars in the input DataFrame to identify those with bright neighboring stars.
     
@@ -465,7 +466,8 @@ def analyze_bright_neighbors(merged_df, search_radius, execute_gaia_query_func, 
         results = list(tqdm(
             executor.map(process_row_with_retry, [row for idx, row in merged_df.iterrows()]),
             total=len(merged_df),
-            desc="Detecting bright neighbors in parallel"
+            desc="Parallel processing: detecting bright neighbors",
+            ncols=100
         ))
         
         # Sort results into appropriate lists
@@ -491,7 +493,7 @@ def analyze_bright_neighbors(merged_df, search_radius, execute_gaia_query_func, 
 #------------------------------------------------------------------------------------------------   
 
 def merge_and_format_stellar_data(df_main, ralf_file_path):
-    print("Crossmatching with Ralf's target list")
+    print("\nCrossmatching with Ralf's target list")
     """
     Merge stellar data with Ralf's target list and format the output Excel file.
     
