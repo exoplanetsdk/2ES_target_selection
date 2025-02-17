@@ -78,7 +78,7 @@ def clean_merged_results(merged_results):
     save_and_adjust_column_widths(repeated_entries, RESULTS_DIRECTORY + 'repeated_entries.xlsx')
 
     # Process repeated entries and get indices of rows to remove
-    print(f"Processing repeated entries with the same dr2_source_id")    
+    print(f"\nProcessing repeated entries with the same dr2_source_id")    
     rows_to_remove_indices = repeated_entries.groupby('dr2_source_id').apply(process_repeated_group).sum()
 
     # Get the rows to be removed
@@ -161,8 +161,7 @@ def consolidate_data(df):
     df_new['source_id'] = df_consolidated['source_id_dr3'].fillna(df_consolidated['source_id_dr2'])
 
     for index, row in tqdm(df_new.iterrows(), total=df_new.shape[0], 
-                           desc="Retrieving 'HD Number', 'GJ Number', 'HIP Number', and 'Object Type' from Simbad",
-                           ncols=100):
+                           desc="Retrieving 'HD Number', 'GJ Number', 'HIP Number', and 'Object Type' from Simbad"):
         simbad_info = get_simbad_info_with_retry(row['source_id'])
         if simbad_info:
             df_new.loc[index, 'HD Number'] = simbad_info['HD Number']
@@ -466,7 +465,7 @@ def analyze_bright_neighbors(merged_df, search_radius, execute_gaia_query_func, 
         results = list(tqdm(
             executor.map(process_row_with_retry, [row for idx, row in merged_df.iterrows()]),
             total=len(merged_df),
-            desc="Parallel processing: detecting bright neighbors",
+            desc="Parallel processing for detecting bright neighbors",
             ncols=100
         ))
         

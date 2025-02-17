@@ -159,7 +159,7 @@ def get_stellar_type_dr2(gaia_dr2_id, retries=3, delay=5):
                 return None, None
 
 def get_empirical_stellar_parameters(dataframe):
-    print("Getting empirical stellar parameters")
+    print("\nGetting empirical stellar parameters")
 
     # Configure logging to use tqdm.write
     class TqdmLoggingHandler(logging.Handler):

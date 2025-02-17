@@ -37,7 +37,7 @@ class CatalogProcessor:
             self.STELLAR_CATALOG = file.readlines()
 
     def process_hip_data(self, df_consolidated):
-        print("Filling missing T_eff and Luminosity from CELESTA catalog using HIP numbers")
+        print("\nFilling missing T_eff and Luminosity from CELESTA catalog using HIP numbers")
         # Extract numeric HIP numbers
         df_consolidated['HIP Number'] = df_consolidated['HIP Number'].str.extract(r'HIP\s*(\d+)')
         self.df_CELESTA['HIP Number'] = self.df_CELESTA['HIP Number'].astype(str)
@@ -71,7 +71,7 @@ class CatalogProcessor:
     
 
     def process_hd_data(self, df_consolidated_HIP):
-        print("Filling missing T_eff, Luminosity and Mass from Vizier V/117A using HD numbers")
+        print("\nFilling missing T_eff, Luminosity and Mass from Vizier V/117A using HD numbers")
         df_consolidated_HD = df_consolidated_HIP.copy()
 
         def clean_hd_number(hd_string):

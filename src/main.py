@@ -158,6 +158,7 @@ def main():
     for detection_limit in DETECTION_LIMITS:
         if detection_limit is not None:
             print(f"Number of stars with HZ Detection Limit [M_Earth] < {detection_limit}:", len(merged_RJ[merged_RJ['mdl(hz) 30min'] < detection_limit]))
+    print('\n')
 
 if __name__ == "__main__":
     main()
