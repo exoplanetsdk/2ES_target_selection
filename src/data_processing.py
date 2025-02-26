@@ -389,7 +389,7 @@ def analyze_bright_neighbors(merged_df, search_radius, execute_gaia_query_func, 
     
     Args:
         merged_df (pd.DataFrame): Input DataFrame containing stellar data
-        search_radius (float): Search radius in degrees for finding neighbors
+        search_radius (float): Search radius for finding neighbors
         execute_gaia_query_func (callable): Function to execute Gaia queries
         max_retries (int, optional): Maximum number of retry attempts for failed queries. Defaults to 3
         delay (int, optional): Delay in seconds between retry attempts. Defaults to 5

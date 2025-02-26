@@ -8,6 +8,7 @@ from stellar_calculations import *
 from utils import *
 from catalog_integration import CatalogProcessor
 from filtering import filter_stellar_data
+from gaia_tess_overlap_new import match_gaia_tess
 
 def main():
 
@@ -158,7 +159,28 @@ def main():
     for detection_limit in DETECTION_LIMITS:
         if detection_limit is not None:
             print(f"Number of stars with HZ Detection Limit [M_Earth] < {detection_limit}:", len(merged_RJ[merged_RJ['mdl(hz) 30min'] < detection_limit]))
-    print('\n')
+
+    #---------------------------------------------------------------------------------------------------    
+    # TESS overlap
+    #---------------------------------------------------------------------------------------------------    
+    print("\nProcessing TOIs with confirmed TESS planets...")
+    matches_confirmed = match_gaia_tess(
+        GAIA_FILE,
+        TESS_CONFIRMED_FILE,
+        OUTPUT_CONFIRMED_FILE,
+        is_candidate=False,
+        threshold_arcsec=THRESHOLD_ARCSEC
+    )
+
+    # Candidates
+    print("\nProcessing TESS candidates...")
+    matches_candidates = match_gaia_tess(
+        GAIA_FILE,
+        TESS_CANDIDATE_FILE,
+        OUTPUT_CANDIDATE_FILE,
+        is_candidate=True,
+        threshold_arcsec=THRESHOLD_ARCSEC
+    )
 
 if __name__ == "__main__":
     main()

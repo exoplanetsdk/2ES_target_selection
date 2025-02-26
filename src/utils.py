@@ -4,6 +4,9 @@ from openpyxl import load_workbook
 import time
 import logging
 import pandas as pd
+import numpy as np
+
+#-------------------------------------------------------------------------------------------------- 
 
 def execute_gaia_query(query, str_columns=None, output_file=None, retries=3, delay=5):
     """
@@ -104,3 +107,29 @@ def save_and_adjust_column_widths(df, output_file):
     df.to_excel(output_file, index=False)
     adjust_column_widths(output_file)
     print(f"Results saved to {output_file}")
+
+#--------------------------------------------------------------------------------------------------
+
+def angular_separation_vectorized(ra1, dec1, ra2_array, dec2_array):
+    """Vectorized calculation of angular separation"""
+    ra1, dec1 = np.radians([ra1, dec1])
+    ra2_array, dec2_array = np.radians([ra2_array, dec2_array])
+    
+    delta_ra = ra2_array - ra1
+    delta_dec = dec2_array - dec1
+    
+    a = np.sin(delta_dec/2)**2 + np.cos(dec1) * np.cos(dec2_array) * np.sin(delta_ra/2)**2
+    c = 2 * np.arcsin(np.sqrt(a))
+    
+    return np.degrees(c)
+
+#-------------------------------------------------------------------------------------------------- 
+
+def format_gaia_id(gaia_id):
+    """Convert GAIA ID to string format without scientific notation"""
+    if pd.isna(gaia_id):
+        return None
+    gaia_id_str = str(gaia_id).replace('Gaia DR2 ', '')
+    if 'e' in gaia_id_str.lower():
+        return f"{float(gaia_id_str):.0f}"
+    return gaia_id_str
