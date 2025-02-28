@@ -8,7 +8,7 @@ from stellar_calculations import *
 from utils import *
 from catalog_integration import CatalogProcessor
 from filtering import filter_stellar_data
-from gaia_tess_overlap_new import match_gaia_tess
+from src.gaia_tess_overlap import match_gaia_tess
 
 def main():
 

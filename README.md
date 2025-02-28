@@ -47,7 +47,9 @@ project/
     ├── rv_prec.py                  # RV precision calculations
     ├── stellar_calculations.py     # Habitable zone and mass detection limits calculations
     ├── stellar_properties.py       # Stellar property handling
-    └── utils.py                    # Utility functions
+    ├── utils.py                    # Utility functions
+    ├── gaia_tess_overlap.py        # Matches GAIA and TESS targets based on position
+    └── plato_lops2.py              # Plots the PLATO LOPS2 field with GAIA stars
 ```
 
 ## Configuration

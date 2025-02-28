@@ -1,6 +1,7 @@
 import requests
 from astroquery.gaia import Gaia
 from openpyxl import load_workbook
+from openpyxl.styles import PatternFill, Font
 import time
 import logging
 import pandas as pd
@@ -72,13 +73,14 @@ def execute_gaia_query(query, str_columns=None, output_file=None, retries=3, del
 
 #--------------------------------------------------------------------------------------------------
 
-def adjust_column_widths(excel_file):
+def adjust_column_widths(excel_file, highlight_columns=None):
     """
     Adjusts the column widths of an Excel workbook based on the maximum length of data in each column,
-    freezes the first row, and saves the updated workbook.
+    freezes the first row, and optionally highlights specific columns.
 
     Parameters:
     - excel_file: str, the path to the Excel file to be processed.
+    - highlight_columns: list, optional, a list of column names to highlight in the Excel workbook.
     """
     # Load the workbook and select the active worksheet
     workbook = load_workbook(excel_file)
@@ -98,16 +100,40 @@ def adjust_column_widths(excel_file):
     # Freeze the first row
     worksheet.freeze_panes = worksheet['A2']
 
+    # Highlight specific columns if provided
+    if highlight_columns:
+        highlight_fill = PatternFill(start_color="FFFF00", end_color="FFFF00", fill_type="solid")  # Yellow fill
+        bold_font = Font(bold=True)
+
+        # Get the column headers from the first row
+        headers = {cell.value: cell.column for cell in worksheet[1]}  # Map header name to column index
+        for col_name in highlight_columns:
+            if col_name in headers:
+                col_idx = headers[col_name]  # Get the column index
+                for cell in worksheet.iter_cols(min_col=col_idx, max_col=col_idx, min_row=1, max_row=worksheet.max_row):
+                    for c in cell:
+                        c.fill = highlight_fill
+                        if c.row == 1:  # Apply bold font to the header row
+                            c.font = bold_font
+
     # Save the workbook
     workbook.save(excel_file)
 
 #--------------------------------------------------------------------------------------------------
 
-def save_and_adjust_column_widths(df, output_file):
-    df.to_excel(output_file, index=False)
-    adjust_column_widths(output_file)
-    print(f"Results saved to {output_file}")
+def save_and_adjust_column_widths(df, output_file, highlight_columns=None):
+    """
+    Saves a DataFrame to an Excel file, adjusts column widths, freezes the first row,
+    and optionally highlights specific columns.
 
+    Parameters:
+    - df: pd.DataFrame, the DataFrame to save.
+    - output_file: str, the path to the output Excel file.
+    - highlight_columns: list, optional, a list of column names to highlight in the Excel workbook.
+    """
+    df.to_excel(output_file, index=False)
+    adjust_column_widths(output_file, highlight_columns=highlight_columns)
+    print(f"Results saved to {output_file}")
 #--------------------------------------------------------------------------------------------------
 
 def angular_separation_vectorized(ra1, dec1, ra2_array, dec2_array):
