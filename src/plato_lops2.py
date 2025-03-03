@@ -38,6 +38,20 @@ gaia_data.columns = gaia_data.columns.str.replace(' ', '_').str.replace('[^0-9a-
 # Convert the full GAIA dataset to SkyCoord
 gaia_coords = SkyCoord(ra=gaia_data['RA'].values * u.deg, dec=gaia_data['DEC'].values * u.deg, frame='icrs')
 
+# Calculate separations from the center for all stars
+separations = lops2_center.separation(gaia_coords)
+
+# Create a mask for stars within the field of view
+within_fov_mask = separations <= (fov_size / 2)
+total_stars_in_field = np.sum(within_fov_mask)
+
+print(f"Total GAIA stars in the dataset: {len(gaia_data)}")
+print(f"Total stars within the PLATO LOPS2 field: {total_stars_in_field}")
+print("\nStars within field by detection limit:")
+print("-" * 41)
+print(f"{'Detection Limit (M_Earth)':<25} {'Number of Stars':>15}")
+print("-" * 41)
+
 # Iterate over detection limits and plot
 for detection_limit in DETECTION_LIMITS:
     # Filter stars based on detection limit (if None, include all stars)
@@ -48,16 +62,25 @@ for detection_limit in DETECTION_LIMITS:
         filtered_coords = SkyCoord(ra=filtered_stars['RA'].values * u.deg, 
                                    dec=filtered_stars['DEC'].values * u.deg, 
                                    frame='icrs')
+        
+        # Calculate how many filtered stars are within the field of view
+        filtered_separations = lops2_center.separation(filtered_coords)
+        stars_in_field = np.sum(filtered_separations <= (fov_size / 2))
+        
+        # Print the count
+        limit_label = f"{detection_limit}" if detection_limit is not None else "All"
+        print(f"{limit_label:<25} {stars_in_field:>15}")
     else:
         filtered_coords = gaia_coords
         filtered_stars = gaia_data
+        print(f"{'All':<25} {total_stars_in_field:>15}")
 
     # Plot the field
     fig = plt.figure(figsize=(10, 10))
     ax = fig.add_subplot(111, projection=wcs)
     ax.set_title(f"PLATO LOPS2 Field (Detection Limit: {detection_limit} M_Earth)", fontsize=16, fontweight='bold')
-    ax.set_xlabel("Right Ascension (J2000)", fontsize=14)
-    ax.set_ylabel("Declination (J2000)", fontsize=14)
+    ax.set_xlabel("Right Ascension", fontsize=14)
+    ax.set_ylabel("Declination", fontsize=14)
 
     # Add a square representing the FoV
     fov_square = SphericalCircle((lops2_center.ra, lops2_center.dec),
@@ -111,7 +134,21 @@ for detection_limit in DETECTION_LIMITS:
     # Add a legend
     ax.legend(loc='upper right', fontsize=12, frameon=True, shadow=True)
 
+    # Add text showing the number of stars in the field
+    if detection_limit is not None:
+        stars_in_field = np.sum((filtered_separations <= (fov_size / 2)))
+        ax.text(0.02, 0.02, f"Stars in field: {stars_in_field}", 
+                transform=ax.transAxes, fontsize=14, color='black',
+                bbox=dict(facecolor='white', alpha=0.7, boxstyle='round,pad=0.5'))
+    else:
+        ax.text(0.02, 0.02, f"Stars in field: {total_stars_in_field}", 
+                transform=ax.transAxes, fontsize=14, color='black',
+                bbox=dict(facecolor='white', alpha=0.7, boxstyle='round,pad=0.5'))
+
     # Save or show the plot
     plt.tight_layout()
-    plt.savefig(f"{FIGURES_DIRECTORY}PLATO_LOPS2_DetectionLimit_{detection_limit}.png")
+    limit_str = str(detection_limit).replace('.', 'p') if detection_limit is not None else "All"
+    plt.savefig(f"{FIGURES_DIRECTORY}PLATO_LOPS2_DetectionLimit_{limit_str}.png")
     plt.close()
+
+print("\nPlots have been saved to the figures directory.")

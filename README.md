@@ -28,7 +28,7 @@ scipy>=1.7.0
 ## Directory Structure
 
 ```
-project/
+2ES_target_selection/
 ├── data/                           # Input data directory
 │   ├── Catalogue_CELESTA.txt       # CELESTA catalog data
 │   ├── Catalogue_V_117A_table1.txt # V_117A catalog
@@ -137,7 +137,7 @@ The photon-limited RV precision calculations, available in the [Radial Velocity 
 
 **Example Usage**
 
-To calculate the Radial Velocity (RV) precision for a star with a temperature of 5000 K and a V magnitude of 10 for 2ES, use the following code:
+To calculate the Radial Velocity (RV) precision for a star with a temperature of 5000 K and a V magnitude of 10, use the following code:
 
 ```python
 from rv_prec import calculate_rv_precision
