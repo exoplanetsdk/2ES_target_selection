@@ -234,13 +234,13 @@ def plot_stellar_properties_vs_temperature(df, detection_limit, show_plot=False)
 
     # Plot each column
     for i, col in enumerate(columns):
-        axs[i].scatter(df['T_eff [K]'], df[col], alpha=0.2, color=colors[i], s=10)
+        axs[i].scatter(df['T_eff [K]'], df[col], alpha=0.8, color=colors[i], s=10)
         axs[i].set_xlabel('$T_{eff}$ (K)', fontsize=12)
         axs[i].set_ylabel(col, fontsize=12)
         axs[i].grid(True, linestyle='--', alpha=0.6)
 
     # Add a main title
-    fig.suptitle('Stellar Properties as a Function of Temperature (' + str(len(df)) + ' < ' + str(detection_limit) + ' M_Earth)', fontsize=14)
+    fig.suptitle('Stellar Properties as a Function of Temperature\n(' + str(len(df)) + ' stars with HZ Detection Limit < ' + str(detection_limit) + ' M_Earth)', fontsize=14)
 
     # Adjust the layout and display the plot
     plt.tight_layout(rect=[0, 0.03, 1, 0.95])
@@ -316,6 +316,102 @@ def plot_hr_diagram_with_detection_limit(df, use_filtered_data=True, detection_l
     plt.grid(True, which="both", ls="--", linewidth=0.5)
 
     # Save and display the plot
+    plt.savefig(filename)
+    print(f'Saved {filename}')
+    plt.show() if show_plot else plt.close()
+
+#---------------------------------------------------------------------------------------------------
+
+def plot_hr_diagram_multi_detection_limits(df, detection_limits=[None, 4, 2, 1.5], dpi=150, show_plot=False):
+    """
+    Create a Hertzsprung-Russell diagram with multiple subplots for different detection limits,
+    all sharing the same colorbar.
+    
+    Args:
+        df (pd.DataFrame): DataFrame containing stellar data
+        detection_limits (list): List of detection limits to plot (None for all data)
+        dpi (int, optional): DPI for the output figure. Defaults to 150
+        show_plot (bool, optional): Whether to show the plot. Defaults to False
+        
+    Returns:
+        None
+    """
+    print('\nPlotting HR diagram with multiple detection limits')
+    
+    # Create figure with subplots
+    fig, axes = plt.subplots(2, 2, figsize=(16, 14), dpi=dpi, sharex=True, sharey=True)
+    axes = axes.flatten()
+    
+    # Get global min/max for temperature and luminosity for consistent axes
+    temp_min = min(df['T_eff [K]']) - 50
+    temp_max = max(df['T_eff [K]']) + 50
+    lum_min = min(df['Luminosity [L_Sun]'])
+    lum_max = max(df['Luminosity [L_Sun]']) + 0.5
+    
+    # Create a list to store scatter plot objects for colorbar
+    scatter_plots = []
+    
+    # Loop through each subplot and detection limit
+    for i, detection_limit in enumerate(detection_limits):
+        ax = axes[i]
+        
+        # Determine which data to plot based on detection limit
+        if detection_limit is not None:
+            data_to_plot = df[df['HZ Detection Limit [M_Earth]'] <= detection_limit]
+            subtitle = f'({len(data_to_plot)} < {detection_limit} M_Earth)'
+        else:
+            data_to_plot = df
+            subtitle = f'(All {len(data_to_plot)} stars)'
+        
+        # Use consistent color mapping across all plots (0-4 M_Earth)
+        color_data = np.minimum(data_to_plot['HZ Detection Limit [M_Earth]'], 4)
+        
+        # Create scatter plot
+        sc = ax.scatter(
+            data_to_plot['T_eff [K]'], 
+            data_to_plot['Luminosity [L_Sun]'], 
+            c=color_data,
+            cmap='viridis',
+            alpha=0.99, 
+            edgecolors='grey',
+            linewidths=0.05,
+            s=data_to_plot['Radius [R_Sun]'] * 20,
+            vmin=0,  # Fixed color scale from 0 to 4
+            vmax=4
+        )
+        scatter_plots.append(sc)
+        
+        # Configure axes
+        ax.set_xscale('log')
+        ax.set_yscale('log')
+        ax.set_xlim(temp_max, temp_min)  # Inverted x-axis
+        ax.set_ylim(lum_min, lum_max)
+        
+        # Add subtitle
+        ax.set_title(subtitle)
+        
+        # Add grid
+        ax.grid(True, which="both", ls="--", linewidth=0.5)
+        
+        # Add labels for outer plots only
+        if i >= 2:  # Bottom row
+            ax.set_xlabel('Effective Temperature (K)')
+        if i % 2 == 0:  # Left column
+            ax.set_ylabel('Luminosity (L/L_sun)')
+    
+    # Add a common colorbar
+    cbar_ax = fig.add_axes([0.92, 0.15, 0.02, 0.7])  # [left, bottom, width, height]
+    cbar = fig.colorbar(scatter_plots[0], cax=cbar_ax)
+    cbar.set_label('HZ Detection Limit [M_Earth]')
+    
+    # Add main title
+    fig.suptitle('Hertzsprung-Russell Diagram', fontsize=20, y=0.98)
+    
+    # Adjust layout
+    plt.tight_layout(rect=[0, 0, 0.9, 0.95])
+    
+    # Save and display the plot
+    filename = f'{FIGURES_DIRECTORY}HR_diagram_multi_detection_limits.png'
     plt.savefig(filename)
     print(f'Saved {filename}')
     plt.show() if show_plot else plt.close()

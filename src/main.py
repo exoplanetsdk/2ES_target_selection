@@ -8,7 +8,7 @@ from stellar_calculations import *
 from utils import *
 from catalog_integration import CatalogProcessor
 from filtering import filter_stellar_data
-from gaia_tess_overlap import match_gaia_tess
+from gaia_tess_overlap import match_gaia_tess, save_overlapping_stars
 
 def main():
 
@@ -129,6 +129,12 @@ def main():
             use_filtered_data=detection_limit is not None, 
             detection_limit=detection_limit
         )
+    if len(DETECTION_LIMITS) == 4:
+        plot_hr_diagram_multi_detection_limits(
+            df=merged_df,
+            detection_limits=DETECTION_LIMITS,
+            show_plot=False
+        )
 
     filtered_dfs = analyze_stellar_data(
         df=merged_df,
@@ -163,24 +169,32 @@ def main():
     #---------------------------------------------------------------------------------------------------    
     # TESS overlap
     #---------------------------------------------------------------------------------------------------    
-    print("\nProcessing TOIs with confirmed TESS planets...")
-    matches_confirmed = match_gaia_tess(
+    # Process confirmed planets
+    print("\nProcessing confirmed TESS planets...")
+    matches_confirmed, merged_confirmed, confirmed_gaia_ids = match_gaia_tess(
         GAIA_FILE,
         TESS_CONFIRMED_FILE,
         OUTPUT_CONFIRMED_FILE,
+        OUTPUT_CONFIRMED_UNIQUE_PLANETS,
         is_candidate=False,
-        threshold_arcsec=THRESHOLD_ARCSEC
+        threshold_arcsec=2.5
     )
+    # Save overlapping stars for confirmed planets
+    overlapping_stars = save_overlapping_stars(GAIA_FILE, confirmed_gaia_ids, OUTPUT_CONFIRMED_UNIQUE_STARS)
 
-    # Candidates
+    # Process candidates
     print("\nProcessing TESS candidates...")
-    matches_candidates = match_gaia_tess(
+    matches_candidates, merged_candidates, candidate_gaia_ids = match_gaia_tess(
         GAIA_FILE,
         TESS_CANDIDATE_FILE,
         OUTPUT_CANDIDATE_FILE,
+        OUTPUT_CANDIDATE_UNIQUE_PLANETS,
         is_candidate=True,
-        threshold_arcsec=THRESHOLD_ARCSEC
+        threshold_arcsec=2.5
     )
+    # Save overlapping stars for candidates only
+    overlapping_stars = save_overlapping_stars(GAIA_FILE, candidate_gaia_ids, OUTPUT_CANDIDATE_UNIQUE_STARS)
+
 
 if __name__ == "__main__":
     main()
