@@ -129,6 +129,7 @@ def main():
             use_filtered_data=detection_limit is not None, 
             detection_limit=detection_limit
         )
+        
     if len(DETECTION_LIMITS) == 4:
         plot_hr_diagram_multi_detection_limits(
             df=merged_df,
