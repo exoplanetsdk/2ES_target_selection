@@ -99,12 +99,19 @@ STELLAR_FILTERS = {
    - Diagnostic plots and figures
    - Cross-matched catalog information
 
-## Usage
 
-1. Set up the environment:
+## Environment Setup
+
+If you are using a conda environment, run the following commands **after creating and activating your environment** (e.g., named `2ES`):
+
 ```bash
+conda create -n 2ES
+conda activate 2ES
+conda install pip
 pip install -r requirements.txt
-```
+
+
+## Usage
 
 2. Configure parameters in `config.py`
 
