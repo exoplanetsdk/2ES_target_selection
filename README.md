@@ -109,13 +109,13 @@ conda create -n 2ES
 conda activate 2ES
 conda install pip
 pip install -r requirements.txt
-
+```
 
 ## Usage
 
-2. Configure parameters in `config.py`
+1. Configure parameters in `config.py`
 
-3. Run the pipeline:
+2. Run the pipeline:
 ```bash
 python main.py
 ```
