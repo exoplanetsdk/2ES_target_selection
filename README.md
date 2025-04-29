@@ -102,7 +102,7 @@ STELLAR_FILTERS = {
 
 ## Environment Setup
 
-If you are using a conda environment, run the following commands **after creating and activating your environment** (e.g., named `2ES`):
+If you are using a conda environment, run the following commands to create and set up a virtual environment (e.g., named `2ES`):
 
 ```bash
 conda create -n 2ES

@@ -22,33 +22,55 @@ warnings.simplefilter('ignore', category=UnitsWarning)
 # Load classification data
 classification_df = pd.read_csv(
     "../data/EEM_dwarf_UBVIJHK_colors_Teff.txt",
-    delim_whitespace=True,
+    sep=r'\s+',
     skiprows=22,
     nrows=118,
     header=0,
     na_values='...'
 )
 
-def get_simbad_info_with_retry(source_id, retries=3, delay=5):
-    custom_simbad = Simbad()
-    custom_simbad.add_votable_fields('ids', 'otype')
+# def get_simbad_info_with_retry(source_id, retries=3, delay=5):
+#     custom_simbad = Simbad()
+#     custom_simbad.add_votable_fields('ids', 'otype')
     
-    for attempt in range(retries):
+#     for attempt in range(retries):
+#         try:
+#             result_table = custom_simbad.query_object(f"Gaia DR3 {source_id}")
+#             if result_table is not None:
+#                 ids = result_table['IDS'][0].split('|')
+#                 return {
+#                     'HD Number': ', '.join([id.strip() for id in ids if id.startswith('HD')]) or None,
+#                     'GJ Number': ', '.join([id.strip() for id in ids if id.startswith('GJ')]) or None,
+#                     'HIP Number': ', '.join([id.strip() for id in ids if id.startswith('HIP')]) or None,
+#                     'Object Type': result_table['OTYPE'][0]
+#                 }
+#         except Exception as e:
+#             print(f"Attempt {attempt + 1} failed: {e}")
+#             if attempt < retries - 1:
+#                 time.sleep(delay)
+#     return None
+
+def get_simbad_info_with_retry(source_id):
+    import time
+    max_attempts = 3
+    for attempt in range(1, max_attempts + 1):
         try:
-            result_table = custom_simbad.query_object(f"Gaia DR3 {source_id}")
-            if result_table is not None:
-                ids = result_table['IDS'][0].split('|')
+            # Format for Gaia DR2 or DR3
+            query_id = f"Gaia DR2 {int(source_id)}"
+            result = Simbad.query_object(query_id)
+            if result is not None:
+                # Extract HD, GJ, HIP, Object Type here
                 return {
-                    'HD Number': ', '.join([id.strip() for id in ids if id.startswith('HD')]) or None,
-                    'GJ Number': ', '.join([id.strip() for id in ids if id.startswith('GJ')]) or None,
-                    'HIP Number': ', '.join([id.strip() for id in ids if id.startswith('HIP')]) or None,
-                    'Object Type': result_table['OTYPE'][0]
+                    'HD Number': result['HD'][0] if 'HD' in result.colnames else None,
+                    'GJ Number': result['GJ'][0] if 'GJ' in result.colnames else None,
+                    'HIP Number': result['HIP'][0] if 'HIP' in result.colnames else None,
+                    'Object Type': result['OTYPE'][0] if 'OTYPE' in result.colnames else None,
                 }
         except Exception as e:
-            print(f"Attempt {attempt + 1} failed: {e}")
-            if attempt < retries - 1:
-                time.sleep(delay)
+            print(f"Attempt {attempt} failed: {e}")
+            time.sleep(1)
     return None
+
 
 def get_star_properties(hd_number):
     """Query Vizier catalog for star properties."""
