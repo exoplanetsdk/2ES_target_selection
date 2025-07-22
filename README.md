@@ -153,6 +153,6 @@ custom_rv_precision
 ```
 and it returns an RV precision of 0.563624937587981 m/s. The telescope parameters are tailored for 2ES and are predefined in the `get_manual_values` function. 
 
-## Maintenance History
+## Recent Maintenance History
 
-- **2024-06-11**: Due to changes in SIMBAD query, the Gaia data release (e.g., Gaia DR3) needs to be specified to ensure stars are retrieved correctly and stellar identifiers (e.g. HD, GJ, HIP) are extracted.
+- **2025-07-22**: Due to changes in SIMBAD query, the Gaia data release (e.g., Gaia DR3) needs to be specified to ensure stars are retrieved correctly and stellar identifiers (e.g. HD, GJ, HIP) are extracted.
