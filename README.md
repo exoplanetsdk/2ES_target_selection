@@ -84,9 +84,9 @@ STELLAR_FILTERS = {
 2. **Data Processing**
    - Clean and merge DR2/DR3 catalog data
    - Retrieve stellar parameters from DR2/DR3
-   - Retrieve additional stellar parameters from other catalogs
-   - Derive stellar parameters empirically if not available
-   - Detect bright neighboring stars
+   - Retrieve additional stellar parameters from other catalogs (currently [CELESTA](https://ui.adsabs.harvard.edu/abs/2016yCat..51510059C/abstract) and [Vizier V/117A](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=V/117A))
+   - Derive stellar parameters empirically based on stellar types if not available
+   - Detect and remove targets with bright neighboring stars 
 
 3. **Analysis**
    - Calculate habitable zones --> orbital radius
@@ -117,7 +117,7 @@ pip install -r requirements.txt
 
 2. Run the pipeline:
 ```bash
-python main.py
+cd src && python main.py
 ```
 
 ## Output Files
