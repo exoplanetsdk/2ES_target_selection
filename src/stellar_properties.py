@@ -221,23 +221,22 @@ def get_star_properties_with_retries(hd_number, retries=3, delay=5):
             else:
                 raise
 
-def get_stellar_type_dr3(gaia_dr3_id, retries=3, delay=5):
+def get_stellar_type(gaia_id, retries=3, delay=5):
     # Customize the Simbad query to include only the spectral type
     custom_simbad = Simbad()
-    custom_simbad.add_votable_fields('sptype')
+    custom_simbad.add_votable_fields('sp_type')
 
     for attempt in range(retries):
         try:
-            # Query SIMBAD using Gaia DR3 ID
-            result_table = custom_simbad.query_object(f"Gaia DR3 {gaia_dr3_id}")
+            # Query SIMBAD using Gaia ID
+            result_table = custom_simbad.query_object(gaia_id)
 
             if result_table is None:
-                # print(f"No data found for Gaia DR3 ID {gaia_dr3_id}.\r")
-                logging.warning(f"No data found for Gaia DR3 ID {gaia_dr3_id}.")
+                logging.warning(f"No data found for {gaia_id}.")
                 return None, None
 
             # Extract the spectral type
-            original_spectral_type = result_table['SP_TYPE'][0] if 'SP_TYPE' in result_table.colnames else None
+            original_spectral_type = result_table['sp_type'][0] if 'sp_type' in result_table.colnames else None
             processed_spectral_type = None
 
             if original_spectral_type:
@@ -260,44 +259,7 @@ def get_stellar_type_dr3(gaia_dr3_id, retries=3, delay=5):
             else:
                 return None, None
 
-def get_stellar_type_dr2(gaia_dr2_id, retries=3, delay=5):
-    # Customize the Simbad query to include only the spectral type
-    custom_simbad = Simbad()
-    custom_simbad.add_votable_fields('sptype')
-
-    for attempt in range(retries):
-        try:
-            # Query SIMBAD using Gaia DR2 ID
-            result_table = custom_simbad.query_object(f"Gaia DR2 {gaia_dr2_id}")
-
-            if result_table is None:
-                # print(f"No data found for Gaia DR2 ID {gaia_dr2_id}.\r")
-                logging.warning(f"No data found for Gaia DR2 ID {gaia_dr2_id}.")
-                return None, None
-
-            # Extract the spectral type
-            original_spectral_type = result_table['SP_TYPE'][0] if 'SP_TYPE' in result_table.colnames else None
-            processed_spectral_type = None
-
-            if original_spectral_type:
-                # Use regex to extract the main spectral type, including formats like K1/2V, K2IV-V, K3+V, or K5/M0V
-                # Allow for ".0" or ".5" in the spectral type and handle them appropriately
-                match = re.match(r"([A-Z]+[0-9]+(?:/[A-Z]?[0-9]+)?(?:\.0|\.5)?(?:IV-V|IV|V|\+V|\-V)?)", original_spectral_type)
-                if match:
-                    processed_spectral_type = match.group(1)
-                    # Treat K3+V and K3-V as K3V
-                    processed_spectral_type = re.sub(r"([A-Z]+[0-9]+)[\+\-]V", r"\1V", processed_spectral_type)
-                    # Treat M3.0V as M3V
-                    processed_spectral_type = re.sub(r"([A-Z]+[0-9]+)\.0V", r"\1V", processed_spectral_type)
-
-            return original_spectral_type, processed_spectral_type
-
-        except Exception as e:
-            print(f"Attempt {attempt + 1} failed: {e}")
-            if attempt < retries - 1:
-                time.sleep(delay)
-            else:
-                return None, None
+#------------------------------------------------------------------------------------------------
 
 def get_empirical_stellar_parameters(dataframe):
     print("\nGetting empirical stellar parameters")
@@ -341,9 +303,9 @@ def get_empirical_stellar_parameters(dataframe):
         }
 
         if pd.notna(gaia_dr3_id):
-            stellar_type_original, stellar_type = get_stellar_type_dr3(gaia_dr3_id)
+            stellar_type_original, stellar_type = get_stellar_type('Gaia DR3 ' + gaia_dr3_id)
         else:
-            stellar_type_original, stellar_type = get_stellar_type_dr2(gaia_dr2_id)
+            stellar_type_original, stellar_type = get_stellar_type('Gaia DR2 ' + gaia_dr2_id)
 
         dataframe_copy.at[index, 'SIMBAD Spectral Type'] = stellar_type_original
         dataframe_copy.at[index, 'Readable Spectral Type (experimental)'] = stellar_type
