@@ -155,4 +155,4 @@ returning an RV precision of 0.563624937587981 m/s. The telescope parameters are
 
 ## Recent Maintenance
 
-- **2025-07-22**: Due to changes in SIMBAD query, the Gaia data release (e.g., Gaia DR3) needs to be specified to ensure stars are retrieved correctly and stellar identifiers (e.g. HD, GJ, HIP) are extracted.
+- **2025-07-22**: Due to changes in SIMBAD query, the Gaia data release (e.g., Gaia DR3) needs to be specified to ensure stars are retrieved correctly and stellar identifiers (e.g. HD, GJ, HIP) are extracted. Updated column name handling to accommodate SIMBAD's revised naming conventions for stellar types. 
