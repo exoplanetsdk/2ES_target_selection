@@ -29,48 +29,167 @@ classification_df = pd.read_csv(
     na_values='...'
 )
 
-# def get_simbad_info_with_retry(source_id, retries=3, delay=5):
-#     custom_simbad = Simbad()
-#     custom_simbad.add_votable_fields('ids', 'otype')
-    
-#     for attempt in range(retries):
-#         try:
-#             result_table = custom_simbad.query_object(f"Gaia DR3 {source_id}")
-#             if result_table is not None:
-#                 ids = result_table['IDS'][0].split('|')
-#                 return {
-#                     'HD Number': ', '.join([id.strip() for id in ids if id.startswith('HD')]) or None,
-#                     'GJ Number': ', '.join([id.strip() for id in ids if id.startswith('GJ')]) or None,
-#                     'HIP Number': ', '.join([id.strip() for id in ids if id.startswith('HIP')]) or None,
-#                     'Object Type': result_table['OTYPE'][0]
-#                 }
-#         except Exception as e:
-#             print(f"Attempt {attempt + 1} failed: {e}")
-#             if attempt < retries - 1:
-#                 time.sleep(delay)
-#     return None
+#------------------------------------------------------------------------------------------------
 
-def get_simbad_info_with_retry(source_id):
-    import time
-    max_attempts = 3
-    for attempt in range(1, max_attempts + 1):
+if 0: # old function
+    def get_simbad_info_with_retry(source_id):
+        import time
+        max_attempts = 3
+        for attempt in range(1, max_attempts + 1):
+            try:
+                # Format for Gaia DR2 or DR3
+                query_id = f"Gaia DR2 {int(source_id)}"
+                result = Simbad.query_object(query_id)
+                if result is not None:
+                    # Extract HD, GJ, HIP, Object Type here
+                    return {
+                        'HD Number': result['HD'][0] if 'HD' in result.colnames else None,
+                        'GJ Number': result['GJ'][0] if 'GJ' in result.colnames else None,
+                        'HIP Number': result['HIP'][0] if 'HIP' in result.colnames else None,
+                        'Object Type': result['OTYPE'][0] if 'OTYPE' in result.colnames else None,
+                    }
+            except Exception as e:
+                print(f"Attempt {attempt} failed: {e}")
+                time.sleep(1)
+        return None
+
+#------------------------------------------------------------------------------------------------
+
+# Update 2025-07-22: 
+# - specify the Gaia data release (e.g., Gaia DR3) to ensure identifiers are extracted in SIMBAD
+# e.g., gaia_identifier = 'Gaia DR3 2452378776434477184'
+
+def get_simbad_info_with_retry(gaia_identifier, max_retries=3, delay=1):
+    """
+    Query SIMBAD with Gaia identifier and extract specific catalog numbers
+    
+    Parameters:
+    -----------
+    gaia_identifier : str
+        Full Gaia identifier (e.g., 'Gaia DR3 2452378776434477184')
+    max_retries : int
+        Maximum number of retry attempts
+    delay : float
+        Delay between retries in seconds
+    
+    Returns:
+    --------
+    dict or None
+        Dictionary containing HD Number, GJ Number, HIP Number, and Object Type
+        Returns None if query fails or object not found
+    """
+    
+    # Configure SIMBAD to return identifiers and object type
+    Simbad.reset_votable_fields()
+    Simbad.add_votable_fields('ids', 'otype', 'main_id')
+    
+    for attempt in range(max_retries):
         try:
-            # Format for Gaia DR2 or DR3
-            query_id = f"Gaia DR2 {int(source_id)}"
-            result = Simbad.query_object(query_id)
-            if result is not None:
-                # Extract HD, GJ, HIP, Object Type here
-                return {
-                    'HD Number': result['HD'][0] if 'HD' in result.colnames else None,
-                    'GJ Number': result['GJ'][0] if 'GJ' in result.colnames else None,
-                    'HIP Number': result['HIP'][0] if 'HIP' in result.colnames else None,
-                    'Object Type': result['OTYPE'][0] if 'OTYPE' in result.colnames else None,
-                }
+            # Query SIMBAD with the Gaia identifier
+            result = Simbad.query_object(gaia_identifier)
+            
+            if result is None or len(result) == 0:
+                return None
+            
+            # Extract the identifiers and object type
+            ids_string = ""
+            object_type = ""
+            main_id = ""
+            
+            # Handle different possible column names
+            if 'IDS' in result.colnames:
+                ids_string = str(result['IDS'][0])
+            elif 'ids' in result.colnames:
+                ids_string = str(result['ids'][0])
+                
+            if 'OTYPE' in result.colnames:
+                object_type = str(result['OTYPE'][0])
+            elif 'otype' in result.colnames:
+                object_type = str(result['otype'][0])
+                
+            if 'MAIN_ID' in result.colnames:
+                main_id = str(result['MAIN_ID'][0])
+            elif 'main_id' in result.colnames:
+                main_id = str(result['main_id'][0])
+            
+            # Initialize result dictionary
+            simbad_info = {
+                'HD Number': None,
+                'GJ Number': None, 
+                'HIP Number': None,
+                'Object Type': object_type.strip() if object_type else None
+            }
+            
+            # Parse identifiers from both ids_string and main_id
+            all_identifiers = []
+            
+            if ids_string and ids_string != 'nan':
+                # Split by common delimiters
+                for delimiter in ['|', '\n', ';']:
+                    if delimiter in ids_string:
+                        all_identifiers.extend([id_str.strip() for id_str in ids_string.split(delimiter)])
+                        break
+                else:
+                    # No delimiter found, treat as single identifier
+                    all_identifiers.append(ids_string.strip())
+            
+            if main_id and main_id != 'nan':
+                all_identifiers.append(main_id.strip())
+            
+            # Extract catalog numbers from all identifiers
+            for identifier in all_identifiers:
+                if not identifier or identifier == 'nan':
+                    continue
+                    
+                # Extract HD number (various formats)
+                hd_patterns = [
+                    r'HD\s*(\d+)',
+                    r'HD(\d+)',
+                    r'Henry\s*Draper\s*(\d+)'
+                ]
+                for pattern in hd_patterns:
+                    hd_match = re.search(pattern, identifier, re.IGNORECASE)
+                    if hd_match and simbad_info['HD Number'] is None:
+                        simbad_info['HD Number'] = f"HD {hd_match.group(1)}"
+                        break
+                
+                # Extract GJ number (Gliese-Jahreiss catalog)
+                gj_patterns = [
+                    r'GJ\s*(\d+(?:\.\d+)?[A-Z]*)',
+                    r'Gl\s*(\d+(?:\.\d+)?[A-Z]*)',
+                    r'Gliese\s*(\d+(?:\.\d+)?[A-Z]*)'
+                ]
+                for pattern in gj_patterns:
+                    gj_match = re.search(pattern, identifier, re.IGNORECASE)
+                    if gj_match and simbad_info['GJ Number'] is None:
+                        simbad_info['GJ Number'] = f"GJ {gj_match.group(1)}"
+                        break
+                
+                # Extract HIP number (Hipparcos catalog)
+                hip_patterns = [
+                    r'HIP\s*(\d+)',
+                    r'Hipparcos\s*(\d+)'
+                ]
+                for pattern in hip_patterns:
+                    hip_match = re.search(pattern, identifier, re.IGNORECASE)
+                    if hip_match and simbad_info['HIP Number'] is None:
+                        simbad_info['HIP Number'] = f"HIP {hip_match.group(1)}"
+                        break
+            
+            return simbad_info
+            
         except Exception as e:
-            print(f"Attempt {attempt} failed: {e}")
-            time.sleep(1)
+            print(f"Attempt {attempt + 1} failed for {gaia_identifier}: {str(e)}")
+            if attempt < max_retries - 1:
+                time.sleep(delay)
+                delay *= 2  # Exponential backoff
+            else:
+                print(f"All {max_retries} attempts failed for {gaia_identifier}")
+                return None
+    
     return None
 
+#------------------------------------------------------------------------------------------------
 
 def get_star_properties(hd_number):
     """Query Vizier catalog for star properties."""

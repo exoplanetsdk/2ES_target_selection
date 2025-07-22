@@ -41,8 +41,8 @@ def main():
 
     # Obtain stellar properties from catalogs
     processor = CatalogProcessor(
-        celesta_path='../data/Catalogue_CELESTA.txt',
-        stellar_catalog_path='../data/Catalogue_V_117A_table1.txt'
+        celesta_path ='../data/Catalogue_CELESTA.txt',
+        stellar_catalog_path ='../data/Catalogue_V_117A_table1.txt'
     )
     df_consolidated = processor.process_catalogs(consolidated_results)
 
