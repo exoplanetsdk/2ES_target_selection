@@ -145,7 +145,11 @@ def consolidate_data(df):
     df['bp_rp'] = df['bp_rp'].fillna(df['phot_bp_mean_mag'] - df['phot_rp_mean_mag'])
 
     # Add the new source_id column
-    df['source_id'] = df['source_id_dr3'].fillna(df['source_id_dr2'])
+    df['source_id'] = np.where(
+        pd.notna(df['source_id_dr3']),
+        'Gaia DR3 ' + df['source_id_dr3'].astype('Int64').astype(str),
+        'Gaia DR2 ' + df['source_id_dr2'].astype('Int64').astype(str)
+    )    
 
     # Update the final columns list to include the new source_id column
     final_columns = ['source_id', 'source_id_dr2', 'source_id_dr3', 'ra', 'dec', 'phot_g_mean_mag', 'phot_bp_mean_mag', 'phot_rp_mean_mag', 

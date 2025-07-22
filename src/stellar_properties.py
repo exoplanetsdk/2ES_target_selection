@@ -291,9 +291,6 @@ def get_empirical_stellar_parameters(dataframe):
                           desc="Processing stellar types",
                           ncols=100):  # Fixed width progress bar
                           
-        gaia_dr3_id = row['source_id_dr3']
-        gaia_dr2_id = row['source_id_dr2']
-
         # Check for missing properties
         missing_properties = {
             'T_eff [K]': pd.isna(row['T_eff [K]']),
@@ -302,10 +299,7 @@ def get_empirical_stellar_parameters(dataframe):
             'Radius [R_Sun]': pd.isna(row['Radius [R_Sun]'])
         }
 
-        if pd.notna(gaia_dr3_id):
-            stellar_type_original, stellar_type = get_stellar_type('Gaia DR3 ' + gaia_dr3_id)
-        else:
-            stellar_type_original, stellar_type = get_stellar_type('Gaia DR2 ' + gaia_dr2_id)
+        stellar_type_original, stellar_type = get_stellar_type(row['source_id'])
 
         dataframe_copy.at[index, 'SIMBAD Spectral Type'] = stellar_type_original
         dataframe_copy.at[index, 'Readable Spectral Type (experimental)'] = stellar_type
@@ -378,31 +372,6 @@ def get_empirical_stellar_parameters(dataframe):
                 'Radius [R_Sun]': classification_row['R_Rsun'].values[0],
                 'T_eff [K]': classification_row['Teff'].values[0],
             }
-
-        # Retrieve missing properties from Simbad if necessary
-        if any(missing_properties.values()):
-            dataframe_copy.at[index, 'Stellar Parameter Source'] = 'SIMBAD + empirical'
-            for attempt in range(3):
-                try:
-                    simbad_result = Simbad.query_object(row['source_id'])
-                    if simbad_result is not None:
-                        if missing_properties['T_eff [K]']:
-                            properties['T_eff [K]'] = simbad_result['Teff'].data[0]
-                        if missing_properties['Mass [M_Sun]']:
-                            properties['Mass [M_Sun]'] = simbad_result['mass'].data[0]
-                        if missing_properties['Luminosity [L_Sun]']:
-                            properties['Luminosity [L_Sun]'] = simbad_result['luminosity'].data[0]
-                        if missing_properties['Radius [R_Sun]']:
-                            properties['Radius [R_Sun]'] = simbad_result['radius'].data[0]
-                    break
-                except Exception as e:
-                    print(f"Attempt {attempt + 1} to query Simbad failed: {e}")
-                    if attempt < 2:
-                        time.sleep(5)
-                    else:
-                        print(f"Failed to retrieve data from Simbad for {row['source_id']} after 3 attempts.")
-                        logging.error(f"Failed to retrieve data from Simbad for {row['source_id']} after 3 attempts.")
-                        continue
 
         # Update the DataFrame copy with the retrieved properties
         for key, value in properties.items():
