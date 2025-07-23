@@ -172,6 +172,6 @@ This could mean:
 4. If a 503 was encountered, retry after the suggested delay.
 ```
 
-This issue is related to the SIMBAD service connection and is not caused by the pipeline code itself. If you encounter this error, it is likely due to a temporary outage or network issue with the SIMBAD service. There is currently no workaround from the code side. If this happens, simply wait and try running the code again at a later time. 
+This issue is related to the SIMBAD service connection and is not caused by the pipeline code itself. If you encounter this error, it is likely due to a temporary outage or network issue with the SIMBAD service. If this happens, simply wait and try running the code again at a later time. 
 
 

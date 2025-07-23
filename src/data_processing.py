@@ -517,9 +517,9 @@ def merge_and_format_stellar_data(df_main, ralf_file_path):
     merged_df = df_main.copy()
     
     # Process HD Numbers
-    merged_df[['HD Number 1', 'HD Number 2']] = merged_df['HD Number'].str.split(', ', expand=True, n=1)
-    merged_df['HD Number 1'] = merged_df['HD Number 1'].str.replace(r'HD\s+', 'HD', regex=True)
-    merged_df['HD Number 2'] = merged_df['HD Number 2'].fillna('').str.replace(r'HD\s+', 'HD', regex=True)
+    # merged_df[['HD Number 1', 'HD Number 2']] = merged_df['HD Number'].str.split(', ', expand=True, n=1)
+    # merged_df['HD Number 1'] = merged_df['HD Number 1'].str.replace(r'HD\s+', 'HD', regex=True)
+    # merged_df['HD Number 2'] = merged_df['HD Number 2'].fillna('').str.replace(r'HD\s+', 'HD', regex=True)
     
     # Process HIP Numbers
     merged_df['HIP Number'] = merged_df['HIP Number'].apply(
@@ -527,12 +527,13 @@ def merge_and_format_stellar_data(df_main, ralf_file_path):
     )
     
     # Process GJ Numbers
-    merged_df[['GJ Number 1', 'GJ Number 2']] = merged_df['GJ Number'].str.split(', ', expand=True, n=1)
-    merged_df['GJ Number 1'] = merged_df['GJ Number 1'].str.replace(r'\s+', '', regex=True)
-    merged_df['GJ Number 2'] = merged_df['GJ Number 2'].fillna('').str.replace(r'\s+', '', regex=True)
+    # merged_df[['GJ Number 1', 'GJ Number 2']] = merged_df['GJ Number'].str.split(', ', expand=True, n=1)
+    # merged_df['GJ Number 1'] = merged_df['GJ Number 1'].str.replace(r'\s+', '', regex=True)
+    # merged_df['GJ Number 2'] = merged_df['GJ Number 2'].fillna('').str.replace(r'\s+', '', regex=True)
     
     # Merge DataFrames
-    merge_keys = ['HD Number 1', 'HD Number 2', 'HIP Number', 'GJ Number 1', 'GJ Number 2']
+    # merge_keys = ['HD Number 1', 'HD Number 2', 'HIP Number', 'GJ Number 1', 'GJ Number 2']
+    merge_keys = ['HD Number', 'HIP Number', 'GJ Number']
     merged_RJ = pd.concat([
         df_Ralf.merge(merged_df, left_on='star_ID  ', right_on=key, how='left') 
         for key in merge_keys

@@ -39,54 +39,63 @@ def main():
     # clean_results = clean_merged_results(merged_results)
     # consolidated_results = consolidate_data(clean_results)
 
-    consolidated_results = pd.read_excel(f"{RESULTS_DIRECTORY}consolidated_results.xlsx", 
-                                         dtype={'source_id': str, 
-                                                'source_id_dr2': str, 
-                                                'source_id_dr3': str, 
-                                                'HIP Number': str,
-                                                'HD Number': str,
-                                                'GJ Number': str,
-                                                'Object Type': str})
+    # consolidated_results = pd.read_excel(f"{RESULTS_DIRECTORY}consolidated_results.xlsx", 
+    #                                      dtype={'source_id': str, 
+    #                                             'source_id_dr2': str, 
+    #                                             'source_id_dr3': str, 
+    #                                             'HIP Number': str,
+    #                                             'HD Number': str,
+    #                                             'GJ Number': str,
+    #                                             'Object Type': str})
 
-    # Obtain stellar properties from catalogs
-    processor = CatalogProcessor(
-        celesta_path ='../data/Catalogue_CELESTA.txt',
-        stellar_catalog_path ='../data/Catalogue_V_117A_table1.txt'
-    )
-    df_consolidated = processor.process_catalogs(consolidated_results)
+    # # Obtain stellar properties from catalogs
+    # processor = CatalogProcessor(
+    #     celesta_path ='../data/Catalogue_CELESTA.txt',
+    #     stellar_catalog_path ='../data/Catalogue_V_117A_table1.txt'
+    # )
+    # df_consolidated = processor.process_catalogs(consolidated_results)
 
-    # Plot density vs logg
-    plot_density_vs_logg(
-        df_consolidated, 
-        output_path=f'{FIGURES_DIRECTORY}density_vs_logg.png', 
-        show_plot=False
-    )
+    # # Plot density vs logg
+    # plot_density_vs_logg(
+    #     df_consolidated, 
+    #     output_path=f'{FIGURES_DIRECTORY}density_vs_logg.png', 
+    #     show_plot=False
+    # )
 
-    df_filtered = filter_stellar_data(df_consolidated, STELLAR_FILTERS)
+    # df_filtered = filter_stellar_data(df_consolidated, STELLAR_FILTERS)
 
-    plot_color_histogram(
-        df_filtered,
-        output_path=f'{FIGURES_DIRECTORY}color_histogram.png',
-        show_plot=False
-    )
+    # plot_color_histogram(
+    #     df_filtered,
+    #     output_path=f'{FIGURES_DIRECTORY}color_histogram.png',
+    #     show_plot=False
+    # )
 
-    combined_df = plot_color_magnitude_diagram(
-        df_filtered,
-        output_path=f'{FIGURES_DIRECTORY}color_magnitude_diagram.png',
-        show_plot=False
-    )
+    # combined_df = plot_color_magnitude_diagram(
+    #     df_filtered,
+    #     output_path=f'{FIGURES_DIRECTORY}color_magnitude_diagram.png',
+    #     show_plot=False
+    # )
 
-    df_with_hz = calculate_and_insert_habitable_zone(combined_df)
-    df_with_rv = calculate_and_insert_rv_precision(df_with_hz)
-    merged_df = calculate_and_insert_hz_detection_limit(df_with_rv)
+    # df_with_hz = calculate_and_insert_habitable_zone(combined_df)
+    # df_with_rv = calculate_and_insert_rv_precision(df_with_hz)
+    # merged_df = calculate_and_insert_hz_detection_limit(df_with_rv)
 
-    df_with_bright_neighbors, df_without_bright_neighbors = analyze_bright_neighbors(
-        merged_df=merged_df,
-        search_radius=SEARCH_RADIUS,
-        execute_gaia_query_func=execute_gaia_query
-    )
+    # df_with_bright_neighbors, df_without_bright_neighbors = analyze_bright_neighbors(
+    #     merged_df=merged_df,
+    #     search_radius=SEARCH_RADIUS,
+    #     execute_gaia_query_func=execute_gaia_query
+    # )
 
-    merged_df = df_without_bright_neighbors.copy()
+    # merged_df = df_without_bright_neighbors.copy()
+
+    merged_df = pd.read_excel(f"{RESULTS_DIRECTORY}stars_without_bright_neighbors.xlsx",
+                                                                dtype={'source_id': str, 
+                                                                        'source_id_dr2': str, 
+                                                                        'source_id_dr3': str, 
+                                                                        'HIP Number': str,
+                                                                        'HD Number': str,
+                                                                        'GJ Number': str,
+                                                                        'Object Type': str})
 
     #---------------------------------------------------------------------------------------------------    
     # Plotting
