@@ -156,3 +156,22 @@ returning an RV precision of 0.563624937587981 m/s. The telescope parameters are
 ## Recent Maintenance
 
 - **2025-07-22**: Due to changes in SIMBAD query, the Gaia data release (e.g., Gaia DR3) needs to be specified to ensure stars are retrieved correctly and stellar identifiers (e.g. HD, GJ, HIP) are extracted. Updated column name handling to accommodate SIMBAD's revised naming conventions for stellar types. 
+
+## Troubleshooting: SIMBAD Connection Issues
+
+Occasionally, the pipeline may be interrupted by an error similar to the following:
+
+```
+pyvo.dal.exceptions.DALServiceError: Unable to access the capabilities endpoint at:
+- https://simbad.cds.unistra.fr/simbad/sim-tap/capabilities: Connection failed (Possible causes: incorrect URL, DNS issue, or service is down)
+
+This could mean:
+1. The service URL is incorrect
+2. The service is temporarily unavailable
+3. The service doesn't support this protocol
+4. If a 503 was encountered, retry after the suggested delay.
+```
+
+This issue is related to the SIMBAD service connection and is not caused by the pipeline code itself. If you encounter this error, it is likely due to a temporary outage or network issue with the SIMBAD service. There is currently no workaround from the code side. If this happens, simply wait and try running the code again at a later time. 
+
+

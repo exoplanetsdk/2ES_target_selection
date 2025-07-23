@@ -345,7 +345,7 @@ def get_empirical_stellar_parameters(dataframe):
 
             dataframe_copy.at[index, 'Readable Spectral Type (experimental)'] = str(base_type) + ' and ' + str(next_type)
             # print(base_type, next_type)
-            logging.warning(f"Base Type: {base_type}, Next Type: {next_type}")
+            logging.warning(f"Lower Type: {base_type}, Higher Type: {next_type}")
 
             if classification_row_base.empty or classification_row_next.empty:
                 # print(f"-- No data found for stellar type {stellar_type}.\r")
