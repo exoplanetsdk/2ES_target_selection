@@ -42,6 +42,7 @@ scipy>=1.7.0
     ├── catalog_integration.py      # Catalog processing
     ├── data_processing.py          # Data cleaning and merging
     ├── filtering.py                # Stellar filtering
+    ├── G_stars_within_15_pc.py     # G star selection within 15 pc
     ├── gaia_queries.py             # Gaia queries
     ├── plotting.py                 # Visualization functions
     ├── rv_prec.py                  # RV precision calculations
@@ -173,5 +174,3 @@ This could mean:
 ```
 
 This issue is related to the SIMBAD service connection and is not caused by the pipeline code itself. If you encounter this error, it is likely due to a temporary outage or network issue with the SIMBAD service. If this happens, simply wait and try running the code again at a later time. 
-
-
