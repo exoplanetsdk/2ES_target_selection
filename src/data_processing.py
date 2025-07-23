@@ -111,7 +111,7 @@ def clean_merged_results(merged_results):
 #------------------------------------------------------------------------------------------------
 
 def consolidate_data(df):
-    print("\nConsolidating data between DR2 and DR3")
+    print("\nMerging and consolidating Gaia DR2 and DR3 data columns...")
     def choose_value(row, col_name):
         dr3_col = f'{col_name}_dr3'
         dr2_col = f'{col_name}_dr2'
@@ -145,6 +145,7 @@ def consolidate_data(df):
     df['bp_rp'] = df['bp_rp'].fillna(df['phot_bp_mean_mag'] - df['phot_rp_mean_mag'])
 
     # Add the new source_id column
+    print("Adding Gaia ID column")
     df['source_id'] = np.where(
         pd.notna(df['source_id_dr3']),
         'Gaia DR3 ' + df['source_id_dr3'].astype('Int64').astype(str),
