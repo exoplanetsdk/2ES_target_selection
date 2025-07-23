@@ -223,13 +223,17 @@ def get_star_properties_with_retries(hd_number, retries=3, delay=5):
 
 def get_stellar_type(gaia_id, retries=3, delay=5):
     # Customize the Simbad query to include only the spectral type
-    custom_simbad = Simbad()
-    custom_simbad.add_votable_fields('sp_type')
+    try:
+        Simbad.reset_votable_fields()
+        Simbad.add_votable_fields('sp_type')
+    except Exception as e:
+        logging.error(f"SIMBAD configuration failed: {e}")
+        return "SERVICE_DOWN", "SERVICE_DOWN"
 
     for attempt in range(retries):
         try:
             # Query SIMBAD using Gaia ID
-            result_table = custom_simbad.query_object(gaia_id)
+            result_table = Simbad.query_object(gaia_id)
 
             if result_table is None:
                 logging.warning(f"No data found for {gaia_id}.")

@@ -166,10 +166,7 @@ def consolidate_data(df):
 
     for index, row in tqdm(df_consolidated.iterrows(), total=df_new.shape[0], 
                            desc="Retrieving HD, GJ and HIP numbers and object type from Simbad based on Gaia identifiers"):
-        if pd.notna(row['source_id_dr3']):
-            simbad_info = get_simbad_info_with_retry('Gaia DR3 ' + row['source_id_dr3'])
-        else:
-            simbad_info = get_simbad_info_with_retry('Gaia DR2 ' + row['source_id_dr2'])
+        simbad_info = get_simbad_info_with_retry(row['source_id'])
         if simbad_info:
             df_new.loc[index, 'HD Number'] = simbad_info['HD Number']
             df_new.loc[index, 'GJ Number'] = simbad_info['GJ Number']
