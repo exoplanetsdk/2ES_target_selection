@@ -582,3 +582,73 @@ def merge_and_format_stellar_data(df_main, ralf_file_path):
     return merged_RJ, df_Ralf
 
 #------------------------------------------------------------------------------------------------   
+
+def add_granulation_to_dataframe(df, t_eff_col='T_eff [K]', mass_col='Mass [M_Sun]', 
+                                luminosity_col='Luminosity [L_Sun]'):
+    """
+    Add granulation noise column to a pandas DataFrame after 'RV precision [m/s]' column.
+    
+    Parameters:
+    -----------
+    df : pandas.DataFrame
+        DataFrame containing stellar parameters
+    t_eff_col : str
+        Column name for effective temperature
+    mass_col : str  
+        Column name for stellar mass
+    luminosity_col : str
+        Column name for stellar luminosity
+        
+    Returns:
+    --------
+    pandas.DataFrame
+        DataFrame with added 'Granulation_Noise_ms' column after 'RV precision [m/s]'
+    """
+    df = df.copy()
+    
+    # Check if required columns exist
+    required_cols = [t_eff_col, mass_col, luminosity_col]
+    missing_cols = [col for col in required_cols if col not in required_cols if col not in df.columns]
+    
+    if missing_cols:
+        print(f"Warning: Missing columns: {missing_cols}")
+        return df
+    
+    # Calculate granulation noise for each star
+    granulation_values = []
+    for idx, row in df.iterrows():
+        try:
+            t_eff = float(row[t_eff_col])
+            mass = float(row[mass_col]) 
+            luminosity = float(row[luminosity_col])
+            
+            gran_noise = calculate_granulation_noise(t_eff, mass, luminosity)
+            granulation_values.append(gran_noise)
+            
+        except (ValueError, TypeError):
+            granulation_values.append(np.nan)
+    
+    # Find the position of 'RV precision [m/s]' column
+    rv_precision_col = 'RV precision [m/s]'
+    if rv_precision_col not in df.columns:
+        print(f"Warning: '{rv_precision_col}' column not found. Adding granulation column at the end.")
+        df['Granulation_Noise_ms'] = granulation_values
+        return df
+    
+    # Get the position of RV precision column
+    rv_precision_idx = df.columns.get_loc(rv_precision_col)
+    
+    # Insert the granulation noise column right after RV precision
+    insert_position = rv_precision_idx + 1
+    
+    # Create new column order
+    columns = df.columns.tolist()
+    columns.insert(insert_position, 'Granulation_Noise_ms')
+    
+    # Add the granulation noise data
+    df['Granulation_Noise_ms'] = granulation_values
+    
+    # Reorder columns
+    df = df[columns]
+    
+    return df

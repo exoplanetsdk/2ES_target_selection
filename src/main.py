@@ -79,6 +79,9 @@ def main():
 
     merged_df = df_without_bright_neighbors.copy()
 
+    # Add granulation noise
+    merged_df = add_granulation_to_dataframe(merged_df)
+
     #---------------------------------------------------------------------------------------------------    
     # Plotting
     #---------------------------------------------------------------------------------------------------    
