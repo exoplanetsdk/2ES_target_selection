@@ -602,7 +602,7 @@ def add_granulation_to_dataframe(df, t_eff_col='T_eff [K]', mass_col='Mass [M_Su
     Returns:
     --------
     pandas.DataFrame
-        DataFrame with added 'Granulation_Noise_ms' column after 'RV precision [m/s]'
+        DataFrame with added 'σ_granulation [m/s]' column after 'RV precision [m/s]'
     """
     df = df.copy()
     
@@ -630,9 +630,10 @@ def add_granulation_to_dataframe(df, t_eff_col='T_eff [K]', mass_col='Mass [M_Su
     
     # Find the position of 'RV precision [m/s]' column
     rv_precision_col = 'RV precision [m/s]'
+    gran_col_name = 'σ_granulation [m/s]'
     if rv_precision_col not in df.columns:
         print(f"Warning: '{rv_precision_col}' column not found. Adding granulation column at the end.")
-        df['Granulation_Noise_ms'] = granulation_values
+        df[gran_col_name] = granulation_values
         return df
     
     # Get the position of RV precision column
@@ -643,10 +644,10 @@ def add_granulation_to_dataframe(df, t_eff_col='T_eff [K]', mass_col='Mass [M_Su
     
     # Create new column order
     columns = df.columns.tolist()
-    columns.insert(insert_position, 'Granulation_Noise_ms')
+    columns.insert(insert_position, gran_col_name)
     
     # Add the granulation noise data
-    df['Granulation_Noise_ms'] = granulation_values
+    df[gran_col_name] = granulation_values
     
     # Reorder columns
     df = df[columns]
