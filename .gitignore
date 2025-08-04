@@ -4,3 +4,4 @@
 /Development mode
 src/test.ipynb
 results/test.csv
+__pycache__/
