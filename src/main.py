@@ -79,8 +79,9 @@ def main():
 
     merged_df = df_without_bright_neighbors.copy()
 
-    # Add granulation noise
+    # Add granulation noise and p-mode noise
     merged_df = add_granulation_to_dataframe(merged_df)
+    merged_df = add_pmode_rms_to_dataframe(merged_df)
 
     #---------------------------------------------------------------------------------------------------    
     # Plotting

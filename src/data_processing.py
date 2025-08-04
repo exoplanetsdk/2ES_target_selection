@@ -653,3 +653,86 @@ def add_granulation_to_dataframe(df, t_eff_col='T_eff [K]', mass_col='Mass [M_Su
     df = df[columns]
     
     return df
+
+#------------------------------------------------------------------------------------------------
+
+def add_pmode_rms_to_dataframe(df, t_eff_col='T_eff [K]', mass_col='Mass [M_Sun]', 
+                              luminosity_col='Luminosity [L_Sun]', 
+                              alpha=0.63, beta=0.47, gamma=-0.45, delta=0.57):
+    """
+    Add p-mode oscillation RMS column to a pandas DataFrame after 'σ_granulation [m/s]' column.
+    
+    Parameters:
+    -----------
+    df : pandas.DataFrame
+        DataFrame containing stellar parameters
+    t_eff_col : str
+        Column name for effective temperature
+    mass_col : str  
+        Column name for stellar mass
+    luminosity_col : str
+        Column name for stellar luminosity
+    alpha : float, optional
+        Scaling coefficient (default: 0.63 m/s)
+    beta : float, optional
+        Luminosity exponent (default: 0.47)
+    gamma : float, optional
+        Mass exponent (default: -0.45)
+    delta : float, optional
+        Temperature exponent (default: 0.57)
+        
+    Returns:
+    --------
+    pandas.DataFrame
+        DataFrame with added 'σ_p-mode [m/s]' column after 'σ_granulation [m/s]'
+    """
+    df = df.copy()
+    
+    # Check if required columns exist
+    required_cols = [t_eff_col, mass_col, luminosity_col]
+    missing_cols = [col for col in required_cols if col not in df.columns]
+    
+    if missing_cols:
+        print(f"Warning: Missing columns: {missing_cols}")
+        return df
+    
+    # Calculate p-mode RMS for each star
+    pmode_values = []
+    for idx, row in df.iterrows():
+        try:
+            t_eff = float(row[t_eff_col])
+            mass = float(row[mass_col]) 
+            luminosity = float(row[luminosity_col])
+            
+            pmode_rms = calculate_pmode_rms(t_eff, mass, luminosity, alpha, beta, gamma, delta)
+            pmode_values.append(pmode_rms)
+            
+        except (ValueError, TypeError):
+            pmode_values.append(np.nan)
+    
+    # Find the position of 'σ_granulation [m/s]' column
+    granulation_col = 'σ_granulation [m/s]'
+    pmode_col_name = 'σ_p-mode [m/s]'
+    
+    if granulation_col not in df.columns:
+        print(f"Warning: '{granulation_col}' column not found. Adding p-mode column at the end.")
+        df[pmode_col_name] = pmode_values
+        return df
+    
+    # Get the position of granulation column
+    granulation_idx = df.columns.get_loc(granulation_col)
+    
+    # Insert the p-mode RMS column right after granulation
+    insert_position = granulation_idx + 1
+    
+    # Create new column order
+    columns = df.columns.tolist()
+    columns.insert(insert_position, pmode_col_name)
+    
+    # Add the p-mode RMS data
+    df[pmode_col_name] = pmode_values
+    
+    # Reorder columns
+    df = df[columns]
+    
+    return df

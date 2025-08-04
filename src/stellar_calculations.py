@@ -144,3 +144,46 @@ def calculate_granulation_noise(T_eff, mass, luminosity):
     granulation_noise = SOLAR_GRANULATION_RMS * luminosity_factor * mass_factor * temperature_factor
     
     return granulation_noise
+
+
+#------------------------------------------------------------------------------------------------
+
+def calculate_pmode_rms(T_eff, mass, luminosity, alpha=0.63, beta=0.47, gamma=-0.45, delta=0.57):
+    """
+    Calculate p-mode oscillation RMS using the scaling relation:
+    F = α * (L/L_sun)^β * (M/M_sun)^γ * (T_eff/T_eff_sun)^δ
+    
+    Parameters:
+    -----------
+    T_eff : float
+        Effective temperature in Kelvin
+    mass : float  
+        Stellar mass in solar masses
+    luminosity : float
+        Stellar luminosity in solar luminosities
+    alpha : float, optional
+        Scaling coefficient (default: 0.63 m/s)
+    beta : float, optional
+        Luminosity exponent (default: 0.47)
+    gamma : float, optional
+        Mass exponent (default: -0.45)
+    delta : float, optional
+        Temperature exponent (default: 0.57)
+        
+    Returns:
+    --------
+    float
+        P-mode oscillation RMS in m/s
+    """
+    if T_eff <= 0 or mass <= 0 or luminosity <= 0:
+        return np.nan
+    
+    # Calculate scaling factors
+    luminosity_factor = (luminosity / SOLAR_LUMINOSITY) ** beta
+    mass_factor = (mass / SOLAR_MASS) ** gamma
+    temperature_factor = (T_eff / SOLAR_T_EFF) ** delta
+    
+    # Calculate p-mode RMS
+    pmode_rms = alpha * luminosity_factor * mass_factor * temperature_factor
+    
+    return pmode_rms
