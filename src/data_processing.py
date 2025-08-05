@@ -299,7 +299,7 @@ def calculate_and_insert_habitable_zone(df):
 
 #------------------------------------------------------------------------------------------------
 
-def calculate_and_insert_rv_precision(df):
+def calculate_and_insert_photon_noise(df):
     print("\nCalculating and inserting RV precision for each star")
     """
     Calculate RV precision for each star in the DataFrame and insert the results.
@@ -326,10 +326,10 @@ def calculate_and_insert_rv_precision(df):
     # Insert RV precision values after HZ_limit column
     if 'HZ_limit [AU]' in processed_df.columns:
         hz_limit_index = processed_df.columns.get_loc('HZ_limit [AU]')
-        processed_df.insert(hz_limit_index + 1, 'RV precision [m/s]', rv_precisions)
+        processed_df.insert(hz_limit_index + 1, 'σ_photon [m/s]', rv_precisions)
     else:
         # If HZ_limit column doesn't exist, add to the end
-        processed_df['RV precision [m/s]'] = rv_precisions
+        processed_df['σ_photon [m/s]'] = rv_precisions
 
     # Filter out White Dwarfs
     processed_df = processed_df[processed_df['Object Type'] != 'WhiteDwarf']
@@ -392,10 +392,17 @@ def calculate_hz_orbital_period(df):
 
 #------------------------------------------------------------------------------------------------
 
-def calculate_K(df, N=1000, tau_years=5.0, alpha=6.0):
+def calculate_K(
+    df,
+    N=1000,
+    tau_years=5.0,
+    alpha=6.0,
+    sigma_rv_col='σ_photon [m/s]',
+    output_col=None
+):
     """
     Calculate minimum detectable RV semi-amplitude K for DataFrame using Zechmeister et al. (2009)
-    and insert it into the DataFrame after the 'HZ_limit [AU]' column as 'K [m/s]'.
+    and insert it into the DataFrame after the 'Orbital Period [days]' column.
 
     This function implements Equation 5 from Zechmeister et al. (2009):
     K = α * (σ_RV / √N) * √(1 + 10^((P/τ - 1.5)²))
@@ -403,80 +410,107 @@ def calculate_K(df, N=1000, tau_years=5.0, alpha=6.0):
     Parameters:
     -----------
     df : pandas.DataFrame
-        DataFrame containing 'RV precision [m/s]' and 'Orbital Period [d]' columns
+        DataFrame containing RV noise and orbital period columns.
     N : int
         Number of RV observations (default: 1000)
     tau_years : float
         Total observational baseline in years (default: 5.0)
     alpha : float
         Detection threshold parameter (default: 6.0 for ~50% detection probability)
+    sigma_rv_col : str
+        Name of the column to use for σ_RV (e.g., 'σ_photon [m/s]', 'σ_RV,total [m/s]')
+    output_col : str or None
+        Name of the output column. If None, will use 'Semi-Amplitude_{sigma_rv_col} [m/s]'
 
     Returns:
     --------
     pandas.DataFrame
-        DataFrame with added 'Semi-Amplitude [m/s]' column after 'Orbital Period [days]'
+        DataFrame with added semi-amplitude column after 'Orbital Period [days]'
     """
-    # Get required columns
-    sigma_rv = df['RV precision [m/s]']
+    # Validate sigma_rv_col exists
+    if sigma_rv_col not in df.columns:
+        raise ValueError(f"Column '{sigma_rv_col}' not found in DataFrame.")
+
+    # Use output_col or construct default
+    if output_col is None:
+        output_col = f"Semi-Amplitude_{sigma_rv_col.replace('[m/s]', '').replace(' ', '').replace(',', '_')} [m/s]"
+
+    sigma_rv = df[sigma_rv_col]
     P_days = df['Orbital Period [days]']
 
-    # Calculate the period-dependent term
-    period_term = (P_days / 365.25 / tau_years - 1.5) ** 2
-
     # Calculate K using equation 5
-    K = alpha * (sigma_rv / np.sqrt(N)) * np.sqrt(1 + 10 ** period_term)
+    period_scale_factor = np.sqrt(1 + (10 ** ((P_days / 365.25 / tau_years) - 1.5)) ** 2)
+    K = sigma_rv * alpha / np.sqrt(N) * period_scale_factor
 
-    # Insert K after 'HZ_limit [AU]'
+    # Insert K after 'Orbital Period [days]'
     df_new = df.copy()
-    hz_limit_idx = df_new.columns.get_loc('Orbital Period [days]')
-    df_new.insert(hz_limit_idx + 1, 'Semi-Amplitude [m/s]', K)
+    period_idx = df_new.columns.get_loc('Orbital Period [days]')
+    df_new.insert(period_idx + 1, output_col, K)
 
     return df_new
 
 #------------------------------------------------------------------------------------------------
 
-
-def calculate_and_insert_hz_detection_limit(df):
-    print("\nCalculating and inserting habitable zone detection limits")
+def calculate_and_insert_hz_detection_limit(
+    df,
+    semi_amplitude_col='Semi-Amplitude_σ_photon [m/s]'
+):
     """
     Calculate and insert the habitable zone detection limit for each star in the DataFrame.
-    
+
     Args:
         df (pd.DataFrame): DataFrame containing stellar data with RV precision, Mass, and HZ_limit columns
-        
+        semi_amplitude_col (str): Column name to use for the semi-amplitude, e.g.,
+            'Semi-Amplitude_σ_photon [m/s]' or 'Semi-Amplitude_σ_RV_total [m/s]'
+
     Returns:
         pd.DataFrame: Processed DataFrame with added HZ detection limit
     """
     # Create a copy to avoid modifying the original
     processed_df = df.copy()
-    
+
+    # Check if the specified semi_amplitude_col exists
+    if semi_amplitude_col not in processed_df.columns:
+        raise ValueError(f"Column '{semi_amplitude_col}' not found in DataFrame.")
+
+    # Make concise output column name (e.g., 'HZ Detection Limit (σ_photon) [M_Earth]')
+    if semi_amplitude_col.startswith('Semi-Amplitude_'):
+        concise_name = semi_amplitude_col.replace('Semi-Amplitude_', '').replace(' [m/s]', '')
+    else:
+        concise_name = semi_amplitude_col.replace(' [m/s]', '')
+    output_col = f"HZ Detection Limit ({concise_name}) [M_Earth]"
+
+    print(f"\nCalculating and inserting habitable zone detection limits using '{semi_amplitude_col}' -> '{output_col}'")
+
     # Calculate HZ detection limit for each star
-    processed_df['HZ Detection Limit [M_Earth]'] = processed_df.apply(
+    processed_df[output_col] = processed_df.apply(
         lambda row: calculate_hz_detection_limit_simplify(
-            row['Semi-Amplitude [m/s]'],
+            row[semi_amplitude_col],
             row['Mass [M_Sun]'],
             row['HZ_limit [AU]']
         ),
         axis=1
     )
 
-    # Print statistics about the new column
-    # print("\nHZ Detection Limit Statistics:")
-    # print(processed_df['HZ Detection Limit [M_Earth]'].describe())
-
     # Count and print the number of NaN values
-    nan_count = processed_df['HZ Detection Limit [M_Earth]'].isna().sum()
-    print(f"Number of NaN values in HZ Detection Limit [M_Earth]: {nan_count}")
+    nan_count = processed_df[output_col].isna().sum()
+    print(f"Number of NaN values in {output_col}: {nan_count}")
 
-    # Reorder columns to place the new column next to RV precision
+    # Reorder columns to place the new column next to the chosen semi-amplitude column
     cols = processed_df.columns.tolist()
-    rv_precision_index = cols.index('RV precision [m/s]')
-    cols.insert(rv_precision_index + 1, cols.pop(cols.index('HZ Detection Limit [M_Earth]')))
-    processed_df = processed_df[cols]
+    try:
+        sa_index = cols.index(semi_amplitude_col)
+        cols.insert(sa_index + 1, cols.pop(cols.index(output_col)))
+        processed_df = processed_df[cols]
+    except Exception as e:
+        print(f"Warning: Could not reorder columns due to: {e}")
 
     # Save the updated DataFrame
-    save_and_adjust_column_widths(processed_df, f"{RESULTS_DIRECTORY}combined_query_with_mass_detection_limit.xlsx")
-    
+    save_and_adjust_column_widths(
+        processed_df,
+        f"{RESULTS_DIRECTORY}combined_query_with_mass_detection_limit.xlsx"
+    )
+
     return processed_df
 
 #------------------------------------------------------------------------------------------------
@@ -680,7 +714,7 @@ def merge_and_format_stellar_data(df_main, ralf_file_path):
 def add_granulation_to_dataframe(df, t_eff_col='T_eff [K]', mass_col='Mass [M_Sun]', 
                                 luminosity_col='Luminosity [L_Sun]'):
     """
-    Add granulation noise column to a pandas DataFrame after 'RV precision [m/s]' column.
+    Add granulation noise column to a pandas DataFrame after 'σ_photon [m/s]' column.
     
     Parameters:
     -----------
@@ -696,7 +730,7 @@ def add_granulation_to_dataframe(df, t_eff_col='T_eff [K]', mass_col='Mass [M_Su
     Returns:
     --------
     pandas.DataFrame
-        DataFrame with added 'σ_granulation [m/s]' column after 'RV precision [m/s]'
+        DataFrame with added 'σ_granulation [m/s]' column after 'σ_photon [m/s]'
     """
     df = df.copy()
     
@@ -722,8 +756,8 @@ def add_granulation_to_dataframe(df, t_eff_col='T_eff [K]', mass_col='Mass [M_Su
         except (ValueError, TypeError):
             granulation_values.append(np.nan)
     
-    # Find the position of 'RV precision [m/s]' column
-    rv_precision_col = 'RV precision [m/s]'
+    # Find the position of 'σ_photon [m/s]' column
+    rv_precision_col = 'σ_photon [m/s]'
     gran_col_name = 'σ_granulation [m/s]'
     if rv_precision_col not in df.columns:
         print(f"Warning: '{rv_precision_col}' column not found. Adding granulation column at the end.")
@@ -829,4 +863,44 @@ def add_pmode_rms_to_dataframe(df, t_eff_col='T_eff [K]', mass_col='Mass [M_Sun]
     # Reorder columns
     df = df[columns]
     
+    return df
+
+
+#------------------------------------------------------------------------------------------------
+
+def calculate_and_insert_RV_noise(df):
+    """
+    Calculate the total RV noise as the quadrature sum of σ_photon [m/s], σ_granulation [m/s], and σ_p-mode [m/s],
+    and insert it as a new column 'σ_RV,total [m/s]' immediately after the 'σ_p-mode [m/s]' column.
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        DataFrame containing the relevant noise columns.
+
+    Returns
+    -------
+    pandas.DataFrame
+        DataFrame with the new 'σ_RV,total [m/s]' column inserted.
+    """
+    df = df.copy()
+    photon_col = 'σ_photon [m/s]'
+    gran_col = 'σ_granulation [m/s]'
+    pmode_col = 'σ_p-mode [m/s]'
+    total_col = 'σ_RV,total [m/s]'
+
+    # Calculate the quadrature sum
+    df[total_col] = (
+        df[photon_col]**2 +
+        df[gran_col]**2 +
+        df[pmode_col]**2
+    ) ** 0.5
+
+    # Insert after σ_p-mode [m/s]
+    pmode_idx = df.columns.get_loc(pmode_col)
+    cols = df.columns.tolist()
+    # Remove and re-insert at the right position
+    cols.insert(pmode_idx + 1, cols.pop(cols.index(total_col)))
+    df = df[cols]
+
     return df

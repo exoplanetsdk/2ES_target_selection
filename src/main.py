@@ -67,23 +67,27 @@ def main():
         show_plot=False
     )
 
-    df_with_hz                  = calculate_and_insert_habitable_zone(combined_df)
-    df_with_rv_precision        = calculate_and_insert_rv_precision(df_with_hz)
-    df_with_hz_orbital_period   = calculate_hz_orbital_period(df_with_rv_precision)
-    df_with_K                   = calculate_K(df_with_hz_orbital_period)
-    merged_df                   = calculate_and_insert_hz_detection_limit(df_with_K)
-
     df_with_bright_neighbors, df_without_bright_neighbors = analyze_bright_neighbors(
-        merged_df=merged_df,
+        merged_df=combined_df,
         search_radius=SEARCH_RADIUS,
         execute_gaia_query_func=execute_gaia_query
     )
 
     merged_df = df_without_bright_neighbors.copy()
 
+    merged_df = calculate_and_insert_habitable_zone(merged_df)
+    merged_df = calculate_and_insert_photon_noise(merged_df)
+    merged_df = calculate_hz_orbital_period(merged_df)
+
     # Add granulation noise and p-mode noise
     merged_df = add_granulation_to_dataframe(merged_df)
     merged_df = add_pmode_rms_to_dataframe(merged_df)
+    merged_df = calculate_and_insert_RV_noise(merged_df)
+    merged_df = calculate_K(merged_df)
+    merged_df = calculate_K(merged_df, sigma_rv_col='σ_RV,total [m/s]')
+
+    merged_df = calculate_and_insert_hz_detection_limit(merged_df, semi_amplitude_col='Semi-Amplitude_σ_photon [m/s]')
+    merged_df = calculate_and_insert_hz_detection_limit(merged_df, semi_amplitude_col='Semi-Amplitude_σ_RV_total [m/s]')
 
     #---------------------------------------------------------------------------------------------------    
     # Plotting
@@ -162,7 +166,7 @@ def main():
     plot_scatter_with_options(merged_RJ, 'mass ', 'Mass [M_Sun]', min_value=0.5, max_value=1.5)
     plot_scatter_with_options(merged_RJ, 'HZ Rmid', 'HZ_limit [AU]', min_value=0.1, max_value=2, label=True)
     plot_scatter_with_options(merged_RJ, 'logg', 'logg_gaia', min_value=1.9, max_value=5, label=True)
-    plot_scatter_with_options(merged_RJ, 'RV_Prec(390-870) 30m', 'RV precision [m/s]', min_value=0, max_value=1.6, label=True)
+    plot_scatter_with_options(merged_RJ, 'RV_Prec(390-870) 30m', 'σ_photon [m/s]', min_value=0, max_value=1.6, label=True)
     plot_scatter_with_options(merged_RJ, 'mdl(hz) 30min', 'HZ Detection Limit [M_Earth]', min_value=0, max_value=3, label=True)
 
     plot_RV_precision_HZ_detection_limit_vs_temperature(merged_df, df_Ralf)

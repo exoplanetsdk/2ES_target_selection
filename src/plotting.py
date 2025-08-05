@@ -226,7 +226,7 @@ def plot_stellar_properties_vs_temperature(df, detection_limit, show_plot=False)
     # List of columns to plot, including the new Density column
     columns = [
         'V_mag', 'Mass [M_Sun]', 'Luminosity [L_Sun]', 'Radius [R_Sun]', 
-        'Density [Solar unit]', 'HZ_limit [AU]', 'RV precision [m/s]', 'HZ Detection Limit [M_Earth]'
+        'Density [Solar unit]', 'HZ_limit [AU]', 'σ_photon [m/s]', 'HZ Detection Limit [M_Earth]'
     ]
 
     # Define a color palette
@@ -452,7 +452,7 @@ def analyze_stellar_data(df, hz_limits=None, date_str=None, show_plot=False):
     columns_to_plot = [
         'V_mag', 'Phot G Mean Mag', 'Phot BP Mean Mag', 'Distance [pc]',
         'T_eff [K]', 'Luminosity [L_Sun]', 'Mass [M_Sun]', 'Radius [R_Sun]', 
-        'Density [Solar unit]', 'HZ_limit [AU]', 'RV precision [m/s]', 'HZ Detection Limit [M_Earth]'
+        'Density [Solar unit]', 'HZ_limit [AU]', 'σ_photon [m/s]', 'HZ Detection Limit [M_Earth]'
     ]
 
     # Define group colors
@@ -595,10 +595,10 @@ def plot_RV_precision_HZ_detection_limit_vs_temperature(merged_df, df_Ralf):
     # Use the function to create the plot
     plot_scatter(
         x='T_eff [K]',
-        y='RV precision [m/s]',
+        y='σ_photon [m/s]',
         data=merged_df,
         xlabel='Stellar Temperature (K)',
-        ylabel='RV precision [m/s]',
+        ylabel='σ_photon [m/s]',
         xlim=(min(min(merged_df['T_eff [K]']), min(df_Ralf['Teff '])) - 100, max(max(merged_df['T_eff [K]']), max(df_Ralf['Teff '])) + 100),
         ylim=(0, 2),
         filename=f'{FIGURES_DIRECTORY}RV_precision_vs_temperature.png',
