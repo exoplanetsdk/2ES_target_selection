@@ -473,12 +473,15 @@ def calculate_and_insert_hz_detection_limit(
     if semi_amplitude_col not in processed_df.columns:
         raise ValueError(f"Column '{semi_amplitude_col}' not found in DataFrame.")
 
-    # Make concise output column name (e.g., 'HZ Detection Limit (σ_photon) [M_Earth]')
-    if semi_amplitude_col.startswith('Semi-Amplitude_'):
-        concise_name = semi_amplitude_col.replace('Semi-Amplitude_', '').replace(' [m/s]', '')
+    # Determine output column name according to the rule
+    if semi_amplitude_col == 'Semi-Amplitude_σ_RV_total [m/s]':
+        output_col = 'HZ Detection Limit [M_Earth]'
     else:
-        concise_name = semi_amplitude_col.replace(' [m/s]', '')
-    output_col = f"HZ Detection Limit ({concise_name}) [M_Earth]"
+        if semi_amplitude_col.startswith('Semi-Amplitude_'):
+            concise_name = semi_amplitude_col.replace('Semi-Amplitude_', '').replace(' [m/s]', '')
+        else:
+            concise_name = semi_amplitude_col.replace(' [m/s]', '')
+        output_col = f"HZ Detection Limit ({concise_name}) [M_Earth]"
 
     print(f"\nCalculating and inserting habitable zone detection limits using '{semi_amplitude_col}' -> '{output_col}'")
 
