@@ -6,3 +6,4 @@ src/test.ipynb
 results/test.csv
 __pycache__/
 *.pyc
+/src/__pycache__

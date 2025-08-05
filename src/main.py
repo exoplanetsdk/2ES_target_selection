@@ -67,9 +67,11 @@ def main():
         show_plot=False
     )
 
-    df_with_hz = calculate_and_insert_habitable_zone(combined_df)
-    df_with_rv = calculate_and_insert_rv_precision(df_with_hz)
-    merged_df = calculate_and_insert_hz_detection_limit(df_with_rv)
+    df_with_hz                  = calculate_and_insert_habitable_zone(combined_df)
+    df_with_rv_precision        = calculate_and_insert_rv_precision(df_with_hz)
+    df_with_hz_orbital_period   = calculate_hz_orbital_period(df_with_rv_precision)
+    df_with_K                   = calculate_K(df_with_hz_orbital_period)
+    merged_df                   = calculate_and_insert_hz_detection_limit(df_with_K)
 
     df_with_bright_neighbors, df_without_bright_neighbors = analyze_bright_neighbors(
         merged_df=merged_df,

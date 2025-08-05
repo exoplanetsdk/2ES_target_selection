@@ -339,8 +339,102 @@ def calculate_and_insert_rv_precision(df):
 
     return processed_df
 
+#------------------------------------------------------------------------------------------------
+def calculate_hz_orbital_period(df):
+    """
+    Calculate orbital period for habitable zone planets using Kepler's third law,
+    and insert the result as a new column 'P_days' immediately after 'HZ_limit [AU]'.
+
+    Uses Kepler's third law: P² = (4π²/GM) * a³
+    Where:
+    - P = orbital period (seconds)
+    - G = gravitational constant
+    - M = stellar mass (kg)
+    - a = semi-major axis (meters)
+
+    Parameters:
+    -----------
+    df : pandas.DataFrame
+        DataFrame containing columns:
+        - 'Mass [M_Sun]': Stellar mass in solar masses
+        - 'HZ_limit [AU]': Habitable zone distance in AU
+
+    Returns:
+    --------
+    pandas.DataFrame
+        DataFrame with 'P_days' column inserted after 'HZ_limit [AU]'
+    """
+    # Physical constants
+    G = 6.67430e-11  # m³ kg⁻¹ s⁻²
+    M_sun = 1.989e30  # kg
+    AU = 1.496e11    # meters
+
+    # Get stellar mass in kg
+    M_star_kg = df['Mass [M_Sun]'] * M_sun
+
+    # Get HZ distance in meters
+    a_hz_m = df['HZ_limit [AU]'] * AU
+
+    # Calculate orbital period using Kepler's third law
+    # P² = (4π²/GM) * a³
+    P_squared = (4 * np.pi**2 / (G * M_star_kg)) * (a_hz_m**3)
+    P_seconds = np.sqrt(P_squared)
+
+    # Convert to days
+    P_days = P_seconds / (24 * 3600)
+
+    # Insert 'P_days' after 'HZ_limit [AU]'
+    df_new = df.copy()
+    hz_limit_idx = df_new.columns.get_loc('HZ_limit [AU]')
+    df_new.insert(hz_limit_idx + 1, 'Orbital Period [days]', P_days)
+
+    return df_new
 
 #------------------------------------------------------------------------------------------------
+
+def calculate_K(df, N=1000, tau_years=5.0, alpha=6.0):
+    """
+    Calculate minimum detectable RV semi-amplitude K for DataFrame using Zechmeister et al. (2009)
+    and insert it into the DataFrame after the 'HZ_limit [AU]' column as 'K [m/s]'.
+
+    This function implements Equation 5 from Zechmeister et al. (2009):
+    K = α * (σ_RV / √N) * √(1 + 10^((P/τ - 1.5)²))
+
+    Parameters:
+    -----------
+    df : pandas.DataFrame
+        DataFrame containing 'RV precision [m/s]' and 'Orbital Period [d]' columns
+    N : int
+        Number of RV observations (default: 1000)
+    tau_years : float
+        Total observational baseline in years (default: 5.0)
+    alpha : float
+        Detection threshold parameter (default: 6.0 for ~50% detection probability)
+
+    Returns:
+    --------
+    pandas.DataFrame
+        DataFrame with added 'Semi-Amplitude [m/s]' column after 'Orbital Period [days]'
+    """
+    # Get required columns
+    sigma_rv = df['RV precision [m/s]']
+    P_days = df['Orbital Period [days]']
+
+    # Calculate the period-dependent term
+    period_term = (P_days / 365.25 / tau_years - 1.5) ** 2
+
+    # Calculate K using equation 5
+    K = alpha * (sigma_rv / np.sqrt(N)) * np.sqrt(1 + 10 ** period_term)
+
+    # Insert K after 'HZ_limit [AU]'
+    df_new = df.copy()
+    hz_limit_idx = df_new.columns.get_loc('Orbital Period [days]')
+    df_new.insert(hz_limit_idx + 1, 'Semi-Amplitude [m/s]', K)
+
+    return df_new
+
+#------------------------------------------------------------------------------------------------
+
 
 def calculate_and_insert_hz_detection_limit(df):
     print("\nCalculating and inserting habitable zone detection limits")
@@ -358,8 +452,8 @@ def calculate_and_insert_hz_detection_limit(df):
     
     # Calculate HZ detection limit for each star
     processed_df['HZ Detection Limit [M_Earth]'] = processed_df.apply(
-        lambda row: calculate_hz_detection_limit(
-            row['RV precision [m/s]'],
+        lambda row: calculate_hz_detection_limit_simplify(
+            row['Semi-Amplitude [m/s]'],
             row['Mass [M_Sun]'],
             row['HZ_limit [AU]']
         ),
