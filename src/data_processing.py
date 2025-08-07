@@ -895,8 +895,8 @@ def calculate_and_insert_RV_noise(df):
     # Calculate the quadrature sum
     df[total_col] = (
         df[photon_col]**2 +
-        df[gran_col]**2 +
-        df[pmode_col]**2
+        df[gran_col]**2 * 0.01 +
+        df[pmode_col]**2 * 0.01
     ) ** 0.5
 
     # Insert after σ_p-mode [m/s]
