@@ -6,7 +6,7 @@ from data_processing import *
 from plotting import *
 from stellar_calculations import *
 from utils import *
-from catalog_integration import CatalogProcessor
+from catalog_integration import CatalogProcessor, add_rhk_to_dataframe
 from filtering import filter_stellar_data
 from gaia_tess_overlap import match_gaia_tess, save_overlapping_stars
 
@@ -53,6 +53,8 @@ def main():
         show_plot=False
     )
 
+    df_consolidated = add_rhk_to_dataframe(df_consolidated)
+
     df_filtered = filter_stellar_data(df_consolidated, STELLAR_FILTERS)
 
     plot_color_histogram(
@@ -74,6 +76,8 @@ def main():
     )
 
     merged_df = df_without_bright_neighbors.copy()
+
+    
 
     merged_df = calculate_and_insert_habitable_zone(merged_df)
     merged_df = calculate_and_insert_photon_noise(merged_df)

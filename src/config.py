@@ -22,7 +22,8 @@ STELLAR_FILTERS = {
     'lum_max':      5.2,        # Maximum luminosity in solar units (increased to include HD23754)
     'density_min':  0.1,        # Minimum density in solar units
     'density_max':  5,          # Maximum density in solar units
-    'logg_min':     3.8         # Minimum log g value (for filtering out sub-giants/giants)
+    'logg_min':     3.8,        # Minimum log g value (for filtering out sub-giants/giants)
+    'log_rhk_max': -4.5,        # Maximum log R'HK value (for stellar activity corresponding to ~10 m/s RMS)
 }
 
 RALF_FILE_PATH = f'{DATA_DIRECTORY}2ES_targetlist_astrid_export_2024Dec_comments.xlsx'

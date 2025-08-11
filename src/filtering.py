@@ -3,7 +3,7 @@ from config import RESULTS_DIRECTORY
 from utils import adjust_column_widths
 
 def filter_stellar_data(df, config):
-    print("\nFiltering stars based on stellar parameters")
+    print("\\nFiltering stars based on stellar parameters")
     """
     Filter stellar data based on various physical parameters and thresholds.
     
@@ -18,6 +18,7 @@ def filter_stellar_data(df, config):
                 'density_min': Minimum density in solar units
                 'density_max': Maximum density in solar units
                 'logg_min': Minimum log g value
+                'log_rhk_max': Maximum log R'HK value (for stellar activity)
             }
         output_directory (str, optional): Directory to save filtered results
             
@@ -28,15 +29,17 @@ def filter_stellar_data(df, config):
     # Create a copy to avoid modifying the original
     df_filtered = df.copy()
 
-    columns_to_convert = ['T_eff [K]', 'Mass [M_Sun]', 'Luminosity [L_Sun]', 'Radius [R_Sun]', 'logg_gaia']
+    columns_to_convert = ['T_eff [K]', 'Mass [M_Sun]', 'Luminosity [L_Sun]', 'Radius [R_Sun]', 'logg_gaia', 'log_rhk']
     for column in columns_to_convert:
-        df_filtered[column] = pd.to_numeric(df_filtered[column], errors='coerce')
+        if column in df_filtered.columns:
+            df_filtered[column] = pd.to_numeric(df_filtered[column], errors='coerce')
 
     # Initial statistics for data availability
     stats_dict = {
         'total_initial': len(df),
         'has_temp_and_lum': 0,
-        'has_all_params': 0
+        'has_all_params': 0,
+        'has_log_rhk': 0
     }
     
     # Filter out stars with missing mass or luminosity information
@@ -54,6 +57,11 @@ def filter_stellar_data(df, config):
         df['Mass [M_Sun]'].notna()
     ]
     stats_dict['has_all_params'] = len(non_empty_rows)
+    
+    # Check for rows with log_rhk data
+    if 'log_rhk' in df.columns:
+        log_rhk_rows = df[df['log_rhk'].notna()]
+        stats_dict['has_log_rhk'] = len(log_rhk_rows)
     
     # Apply temperature filter
     df_filtered = df_filtered[
@@ -79,6 +87,23 @@ def filter_stellar_data(df, config):
         (df_filtered['logg_gaia'] >= config['logg_min']) | 
         (df_filtered['logg_gaia'].isna())
     ]
+    
+    # Apply log R'HK maximum filter (exclude overly active stars)
+    if 'log_rhk' in df_filtered.columns and 'log_rhk_max' in config:
+        print(f"Applying log R'HK filter: log_rhk <= {config['log_rhk_max']} (excluding overly active stars)")
+        before_log_rhk = len(df_filtered)
+        
+        # Keep stars with log_rhk <= max OR missing log_rhk data
+        df_filtered = df_filtered[
+            (df_filtered['log_rhk'] <= config['log_rhk_max']) |
+            df_filtered['log_rhk'].isna()
+        ]
+        
+        after_log_rhk = len(df_filtered)
+        removed_by_activity = before_log_rhk - after_log_rhk
+        print(f"Log R'HK filter removed {removed_by_activity} overly active stars (log R'HK > {config['log_rhk_max']})")
+    elif 'log_rhk_max' in config:
+        print("Warning: 'log_rhk' column not found in data. Skipping log R'HK filter.")
     
     # Find removed entries
     df_removed = df[~df['source_id'].isin(df_filtered['source_id'])]
