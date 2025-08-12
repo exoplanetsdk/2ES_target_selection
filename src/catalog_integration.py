@@ -301,7 +301,7 @@ def find_rhk_for_star(star, catalog):
 def add_rhk_to_dataframe(df, catalog_file='../data/catalog_BoroSaikia2018.dat', verbose=True):
     """
     Add R'HK values to a DataFrame containing stellar data - FIXED VERSION
-    
+
     Parameters:
     -----------
     df : pandas.DataFrame
@@ -311,21 +311,22 @@ def add_rhk_to_dataframe(df, catalog_file='../data/catalog_BoroSaikia2018.dat', 
         Path to the R'HK catalog file (default: '../data/catalog_BoroSaikia2018.dat')
     verbose : bool
         Whether to print progress information (default: True)
-    
+
     Returns:
     --------
     pandas.DataFrame
         DataFrame with added R'HK columns:
         - 'log_rhk': The R'HK value
+        - 'activity_noise_floor [m/s]': Activity noise floor in m/s
         - 'rhk_source': How the match was found
-    
+
     FIXED: Now uses exact matching instead of partial matching to prevent 
            false matches like HD2151 matching HD215152
     """
-    
+
     # Make a copy to avoid modifying the original DataFrame
     result_df = df.copy()
-    
+
     # Load the R'HK catalog
     if verbose:
         catalog = load_catalog_simple(catalog_file)
@@ -340,7 +341,7 @@ def add_rhk_to_dataframe(df, catalog_file='../data/catalog_BoroSaikia2018.dat', 
                         seq = int(parts[0])
                         name = parts[1]
                         sptype = parts[2]
-                        
+
                         rhk_value = None
                         for part in reversed(parts):
                             try:
@@ -350,7 +351,7 @@ def add_rhk_to_dataframe(df, catalog_file='../data/catalog_BoroSaikia2018.dat', 
                                     break
                             except:
                                 continue
-                        
+
                         ra, dec = None, None
                         if len(parts) >= 6:
                             try:
@@ -358,7 +359,7 @@ def add_rhk_to_dataframe(df, catalog_file='../data/catalog_BoroSaikia2018.dat', 
                                 dec = float(parts[-2])
                             except:
                                 pass
-                        
+
                         catalog_data.append({
                             'Seq': seq,
                             'Name': name,
@@ -368,43 +369,52 @@ def add_rhk_to_dataframe(df, catalog_file='../data/catalog_BoroSaikia2018.dat', 
                             'logRpHK': rhk_value
                         })
         catalog = pd.DataFrame(catalog_data)
-    
+
     # Initialize result columns
     result_df['log_rhk'] = np.nan
     result_df['rhk_source'] = ''
-    
+
     # Process each star
     if verbose:
         print(f"\n🔍 Searching for R'HK values for {len(result_df)} stars...")
-    
+
     found_count = 0
-    
+
     for idx, star in result_df.iterrows():
-        
+
         results = find_rhk_for_star(star, catalog)
-        
+
         # Only update 'log_rhk' and 'rhk_source'
         result_df.at[idx, 'log_rhk'] = results.get('log_rhk', np.nan)
         result_df.at[idx, 'rhk_source'] = results.get('rhk_source', '')
-        
+
         if not pd.isna(results['log_rhk']):
             found_count += 1
-    
-    # Move 'log_rhk' and 'rhk_source' after 'logg_gaia' if present
+
+    # Calculate activity_noise_floor [m/s] as 10**(1.66*log_rhk+8.39)
+    # Insert after 'log_rhk'
+    result_df['activity_noise_floor [m/s]'] = np.power(10, 1.66 * result_df['log_rhk'] + 8.39)
+
+    # Move 'log_rhk', 'activity_noise_floor [m/s]', and 'rhk_source' after 'logg_gaia' if present
     if 'logg_gaia' in result_df.columns:
         cols = result_df.columns.tolist()
         # Remove if already present
-        cols.remove('log_rhk')
-        cols.remove('rhk_source')
+        for col in ['log_rhk', 'activity_noise_floor [m/s]', 'rhk_source']:
+            if col in cols:
+                cols.remove(col)
         logg_idx = cols.index('logg_gaia')
         # Insert after logg_gaia
-        cols = cols[:logg_idx+1] + ['log_rhk', 'rhk_source'] + cols[logg_idx+1:]
+        cols = (
+            cols[:logg_idx+1]
+            + ['log_rhk', 'activity_noise_floor [m/s]', 'rhk_source']
+            + cols[logg_idx+1:]
+        )
         result_df = result_df[cols]
-    
+
     if verbose:
         print(f"\n✅ Search complete!")
         print(f"📊 Found R'HK values for {found_count}/{len(result_df)} stars ({found_count/len(result_df)*100:.1f}%)")
-        
+
         # Show summary statistics
         found_stars = result_df.dropna(subset=['log_rhk'])
         if len(found_stars) > 0:
@@ -412,10 +422,10 @@ def add_rhk_to_dataframe(df, catalog_file='../data/catalog_BoroSaikia2018.dat', 
             print(f"  Range: [{found_stars['log_rhk'].min():.3f}, {found_stars['log_rhk'].max():.3f}]")
             print(f"  Mean: {found_stars['log_rhk'].mean():.3f}")
             print(f"  Median: {found_stars['log_rhk'].median():.3f}")
-            
+
             print(f"\nMatching methods used:")
             method_counts = found_stars['rhk_source'].value_counts()
             for method, count in method_counts.items():
                 print(f"  {method}: {count} stars")
-    
+
     return result_df    

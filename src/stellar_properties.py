@@ -3,11 +3,14 @@ import re
 import logging
 import pandas as pd
 import warnings
+import os
+import pickle
 from astroquery.simbad import Simbad
 from astroquery.vizier import Vizier
 from astropy.units import UnitsWarning
 from requests.exceptions import ConnectionError
 from tqdm import tqdm
+from config import *
 
 # Configure logging
 # logging.basicConfig(
@@ -265,7 +268,7 @@ def get_stellar_type(gaia_id, retries=3, delay=5):
 
 #------------------------------------------------------------------------------------------------
 
-def get_empirical_stellar_parameters(dataframe):
+def get_empirical_stellar_parameters(dataframe, stellar_type_cache_path=RESULTS_DIRECTORY+"stellar_type_cache.pkl"):
     print("\nGetting empirical stellar parameters")
 
     # Configure logging to use tqdm.write
@@ -290,11 +293,24 @@ def get_empirical_stellar_parameters(dataframe):
         if column not in dataframe_copy.columns:
             dataframe_copy[column] = None
 
+    # --- Load or initialize the stellar type cache ---
+    if os.path.exists(stellar_type_cache_path):
+        try:
+            with open(stellar_type_cache_path, "rb") as f:
+                stellar_type_cache = pickle.load(f)
+        except Exception as e:
+            print(f"Warning: Could not load stellar type cache: {e}")
+            stellar_type_cache = {}
+    else:
+        stellar_type_cache = {}
+
+    updated_cache = False
+
     for index, row in tqdm(dataframe_copy.iterrows(), 
                           total=dataframe_copy.shape[0], 
                           desc="Processing stellar types",
                           ncols=100):  # Fixed width progress bar
-                          
+
         # Check for missing properties
         missing_properties = {
             'T_eff [K]': pd.isna(row['T_eff [K]']),
@@ -303,14 +319,21 @@ def get_empirical_stellar_parameters(dataframe):
             'Radius [R_Sun]': pd.isna(row['Radius [R_Sun]'])
         }
 
-        stellar_type_original, stellar_type = get_stellar_type(row['source_id'])
+        gaia_id = row['source_id']
+
+        # --- Use cache if available, otherwise query and update cache ---
+        if gaia_id in stellar_type_cache:
+            stellar_type_original, stellar_type = stellar_type_cache[gaia_id]
+        else:
+            stellar_type_original, stellar_type = get_stellar_type(gaia_id)
+            stellar_type_cache[gaia_id] = (stellar_type_original, stellar_type)
+            updated_cache = True
 
         dataframe_copy.at[index, 'SIMBAD Spectral Type'] = stellar_type_original
         dataframe_copy.at[index, 'Readable Spectral Type (experimental)'] = stellar_type
 
         # print(index, row['source_id'], stellar_type_original, stellar_type, end='\r')
         logging.warning(f"{index}: {row['source_id']}, {stellar_type_original} --> {stellar_type}")
-
 
         if stellar_type is None:
             continue
@@ -381,5 +404,13 @@ def get_empirical_stellar_parameters(dataframe):
         for key, value in properties.items():
             if pd.isna(row[key]):
                 dataframe_copy.at[index, key] = value
+
+    # --- Save the updated cache if it was changed ---
+    if updated_cache:
+        try:
+            with open(stellar_type_cache_path, "wb") as f:
+                pickle.dump(stellar_type_cache, f)
+        except Exception as e:
+            print(f"Warning: Could not save stellar type cache: {e}")
 
     return dataframe_copy

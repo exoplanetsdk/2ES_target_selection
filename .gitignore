@@ -7,3 +7,4 @@ results/test.csv
 __pycache__/
 *.pyc
 /src/__pycache__
+*.pyc

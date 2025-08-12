@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from config import *
 
 # Load the dataset
 def load_data(file_path):
@@ -35,9 +36,9 @@ def process_file(file_path, output_csv):
 
 def main():
     files = [
-        ("../results/Gaia_homogeneous_target_selection_M_earth_1_5_2025.03.10.xlsx", "../results/g_stars_within_15pc_M_earth_1_5.csv"),
-        ("../results/Gaia_homogeneous_target_selection_M_earth_2_2025.03.10.xlsx", "../results/g_stars_within_15pc_M_earth_2.csv"),
-        ("../results/Gaia_homogeneous_target_selection_M_earth_4_2025.03.10.xlsx", "../results/g_stars_within_15pc_M_earth_4.csv"),
+        (RESULTS_DIRECTORY+"Gaia_homogeneous_target_selection_M_earth_1_5_2025.03.10.xlsx", RESULTS_DIRECTORY+"g_stars_within_15pc_M_earth_1_5.csv"),
+        (RESULTS_DIRECTORY+"Gaia_homogeneous_target_selection_M_earth_2_2025.03.10.xlsx", RESULTS_DIRECTORY+"g_stars_within_15pc_M_earth_2.csv"),
+        (RESULTS_DIRECTORY+"Gaia_homogeneous_target_selection_M_earth_4_2025.03.10.xlsx", RESULTS_DIRECTORY+"g_stars_within_15pc_M_earth_4.csv"),
     ]
     for file_path, output_csv in files:
         print(f"\nProcessing file: {file_path}")

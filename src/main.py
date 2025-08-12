@@ -54,6 +54,7 @@ def main():
     )
 
     df_consolidated = add_rhk_to_dataframe(df_consolidated)
+    save_and_adjust_column_widths(df_consolidated, '../results/merged_df_with_rhk.xlsx')
 
     df_filtered = filter_stellar_data(df_consolidated, STELLAR_FILTERS)
 

@@ -71,7 +71,8 @@ STELLAR_FILTERS = {
     'lum_max': 5.2,       # Maximum luminosity (L_sun)
     'density_min': 0.1,   # Minimum density (solar units)
     'density_max': 5,     # Maximum density (solar units)
-    'logg_min': 3.8       # Minimum log g
+    'logg_min': 3.8,      # Minimum log g
+    'log_rhk_max': -4.5   # maximum log_rhk
 }
 ```
 

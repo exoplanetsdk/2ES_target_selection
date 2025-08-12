@@ -2,6 +2,8 @@ import time
 import pandas as pd
 from tqdm import tqdm
 from concurrent.futures import ThreadPoolExecutor
+import os
+import json
 
 from config import *
 from utils import *
@@ -110,8 +112,13 @@ def clean_merged_results(merged_results):
 
 #------------------------------------------------------------------------------------------------
 
-def consolidate_data(df):
+def consolidate_data(df, simbad_cache_path=None):
+    """
+    Merges and consolidates Gaia DR2 and DR3 data columns, and retrieves HD, GJ, HIP numbers and object type from Simbad.
+    Uses a cache file to store and reuse Simbad query results for speedup.
+    """
     print("\nMerging and consolidating Gaia DR2 and DR3 data columns...")
+
     def choose_value(row, col_name):
         dr3_col = f'{col_name}_dr3'
         dr2_col = f'{col_name}_dr2'
@@ -165,14 +172,58 @@ def consolidate_data(df):
     # Populate the new DataFrame
     df_new['source_id'] = df_consolidated['source_id_dr3'].fillna(df_consolidated['source_id_dr2'])
 
-    for index, row in tqdm(df_consolidated.iterrows(), total=df_new.shape[0], 
+    # --- Simbad cache logic ---
+    if simbad_cache_path is None:
+        simbad_cache_path = os.path.join(RESULTS_DIRECTORY, "simbad_cache.json")
+    # Load cache if exists
+    if os.path.exists(simbad_cache_path):
+        try:
+            with open(simbad_cache_path, "r", encoding="utf-8") as f:
+                simbad_cache = json.load(f)
+        except Exception as e:
+            print(f"Warning: Could not load Simbad cache file: {e}")
+            simbad_cache = {}
+    else:
+        simbad_cache = {}
+
+    # Helper: get Simbad info with cache
+    def get_simbad_info_cached(gaia_id):
+        gaia_id_str = str(gaia_id)
+        if gaia_id_str in simbad_cache:
+            return simbad_cache[gaia_id_str]
+        info = get_simbad_info_with_retry(gaia_id)
+        if info:
+            simbad_cache[gaia_id_str] = info
+        return info
+
+    # Query Simbad, using cache, and update cache file as we go
+    updated = False
+    for index, row in tqdm(df_consolidated.iterrows(), total=df_consolidated.shape[0], 
                            desc="Retrieving HD, GJ and HIP numbers and object type from Simbad based on Gaia identifiers"):
-        simbad_info = get_simbad_info_with_retry(row['source_id'])
+        gaia_id = row['source_id_dr3'] if pd.notna(row['source_id_dr3']) else row['source_id_dr2']
+        if pd.isna(gaia_id):
+            continue
+        simbad_info = get_simbad_info_cached(gaia_id)
         if simbad_info:
-            df_new.loc[index, 'HD Number'] = simbad_info['HD Number']
-            df_new.loc[index, 'GJ Number'] = simbad_info['GJ Number']
-            df_new.loc[index, 'HIP Number'] = simbad_info['HIP Number']
-            df_new.loc[index, 'Object Type'] = simbad_info['Object Type']
+            df_new.loc[index, 'HD Number'] = simbad_info.get('HD Number', None)
+            df_new.loc[index, 'GJ Number'] = simbad_info.get('GJ Number', None)
+            df_new.loc[index, 'HIP Number'] = simbad_info.get('HIP Number', None)
+            df_new.loc[index, 'Object Type'] = simbad_info.get('Object Type', None)
+            updated = True
+        # Save cache every 50 queries to avoid data loss
+        if updated and (index % 50 == 0):
+            try:
+                with open(simbad_cache_path, "w", encoding="utf-8") as f:
+                    json.dump(simbad_cache, f, ensure_ascii=False, indent=2)
+            except Exception as e:
+                print(f"Warning: Could not save Simbad cache file: {e}")
+            updated = False
+    # Save cache at the end
+    try:
+        with open(simbad_cache_path, "w", encoding="utf-8") as f:
+            json.dump(simbad_cache, f, ensure_ascii=False, indent=2)
+    except Exception as e:
+        print(f"Warning: Could not save Simbad cache file: {e}")
 
     # Combine the new DataFrame with the original one
     df_consolidated = pd.concat([df_consolidated, df_new[['HD Number', 'GJ Number', 'HIP Number', 'Object Type']]], axis=1)
@@ -895,8 +946,8 @@ def calculate_and_insert_RV_noise(df):
     # Calculate the quadrature sum
     df[total_col] = (
         df[photon_col]**2 +
-        df[gran_col]**2 * 0.01 +
-        df[pmode_col]**2 * 0.01
+        (df[gran_col] * RESIDUAL_GRANULATION_FRACTION) **2 +
+        (df[pmode_col] * RESIDUAL_P_MODE_FRACTION) **2
     ) ** 0.5
 
     # Insert after σ_p-mode [m/s]

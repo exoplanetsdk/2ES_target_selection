@@ -26,6 +26,9 @@ STELLAR_FILTERS = {
     'log_rhk_max': -4.5,        # Maximum log R'HK value (for stellar activity corresponding to ~10 m/s RMS)
 }
 
+RESIDUAL_P_MODE_FRACTION = 0.1 # p-mode noise (tested; recommended by J. Zhao)
+RESIDUAL_GRANULATION_FRACTION = 0 # 10% of the granulation noise (not tested; use with caution)
+
 RALF_FILE_PATH = f'{DATA_DIRECTORY}2ES_targetlist_astrid_export_2024Dec_comments.xlsx'
 
 # Determine the current date in the format 'YYYY.MM.DD'
