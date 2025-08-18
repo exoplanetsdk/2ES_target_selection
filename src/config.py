@@ -27,7 +27,7 @@ STELLAR_FILTERS = {
 }
 
 RESIDUAL_P_MODE_FRACTION = 0.1 # p-mode noise (tested; recommended by J. Zhao)
-RESIDUAL_GRANULATION_FRACTION = 0 # 10% of the granulation noise (not tested; use with caution)
+RESIDUAL_GRANULATION_FRACTION = 0.1 # 10% of the granulation noise (not tested; use with caution)
 
 RALF_FILE_PATH = f'{DATA_DIRECTORY}2ES_targetlist_astrid_export_2024Dec_comments.xlsx'
 
@@ -41,22 +41,24 @@ today_file = f"{RESULTS_DIRECTORY}Gaia_homogeneous_target_selection_{today_date}
 backup_file = f"{RESULTS_DIRECTORY}Gaia_homogeneous_target_selection_2025.02.17.xlsx"
 
 # Check if today's file exists; if it does, use it as GAIA_FILE, otherwise use the backup file
-if os.path.exists(today_file):
-    GAIA_FILE = today_file
-else:
-    GAIA_FILE = backup_file
+# if os.path.exists(today_file):
+#     GAIA_FILE = today_file
+# else:
+#     GAIA_FILE = backup_file
+
+GAIA_FILE = today_file
 
 # Define the file path for the TESS confirmed targets file
 TESS_CONFIRMED_FILE = f"{DATA_DIRECTORY}TESS_confirmed.tab"
 TESS_CANDIDATE_FILE = f"{DATA_DIRECTORY}TESS_candidate.tab"
 
 # Define the output file path for the Gaia-TESS matches
-OUTPUT_CONFIRMED_FILE = f"{RESULTS_DIRECTORY}GAIA__TESS_confirmed__matches.xlsx"
-OUTPUT_CANDIDATE_FILE = f"{RESULTS_DIRECTORY}GAIA__TESS_candidate__matches.xlsx"
+OUTPUT_CONFIRMED_FILE = f"{RESULTS_DIRECTORY}GAIA_TESS_confirmed_matches.xlsx"
+OUTPUT_CANDIDATE_FILE = f"{RESULTS_DIRECTORY}GAIA_TESS_candidate_matches.xlsx"
 
-OUTPUT_CONFIRMED_UNIQUE_PLANETS = OUTPUT_CONFIRMED_FILE.replace('.xlsx', '__unique_planets.xlsx')
-OUTPUT_CONFIRMED_UNIQUE_STARS   = OUTPUT_CONFIRMED_FILE.replace('.xlsx', '__unique_stars.xlsx')
-OUTPUT_CANDIDATE_UNIQUE_PLANETS = OUTPUT_CANDIDATE_FILE.replace('.xlsx', '__unique_planets.xlsx')
-OUTPUT_CANDIDATE_UNIQUE_STARS   = OUTPUT_CANDIDATE_FILE.replace('.xlsx', '__unique_stars.xlsx')
+OUTPUT_CONFIRMED_UNIQUE_PLANETS = OUTPUT_CONFIRMED_FILE.replace('.xlsx', '_unique_planets.xlsx')
+OUTPUT_CONFIRMED_UNIQUE_STARS   = OUTPUT_CONFIRMED_FILE.replace('.xlsx', '_unique_stars.xlsx')
+OUTPUT_CANDIDATE_UNIQUE_PLANETS = OUTPUT_CANDIDATE_FILE.replace('.xlsx', '_unique_planets.xlsx')
+OUTPUT_CANDIDATE_UNIQUE_STARS   = OUTPUT_CANDIDATE_FILE.replace('.xlsx', '_unique_stars.xlsx')
 
 DETECTION_LIMITS = [None, 4, 2, 1.5] # M_Earth
