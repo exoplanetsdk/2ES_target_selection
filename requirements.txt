@@ -1,9 +1,23 @@
-astroquery>=0.4.6
+# Core scientific and data analysis libraries
 numpy>=1.20.0
 pandas>=1.3.0
+scipy>=1.7.0
+
+# Astronomy tools
+astroquery>=0.4.6
+
+# Visualization
 matplotlib>=3.4.0
 seaborn>=0.11.0
-tqdm>=4.60.0
+plotly>=5.0.0
+
+# Excel and file output
 openpyxl>=3.0.7
-scipy>=1.7.0
 xlsxwriter>=3.0.0
+
+# Progress bars and interactivity
+tqdm>=4.60.0
+ipywidgets>=7.6.0
+
+# Jupyter dashboarding (optional, for interactive apps)
+voila>=0.3.0
