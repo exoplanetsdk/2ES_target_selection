@@ -27,7 +27,7 @@ STELLAR_FILTERS = {
 }
 
 RESIDUAL_P_MODE_FRACTION = 0.1 # p-mode noise (tested; recommended by J. Zhao)
-RESIDUAL_GRANULATION_FRACTION = 0.1 # 10% of the granulation noise (not tested; use with caution)
+RESIDUAL_GRANULATION_FRACTION = 0.5 # residual granulation noise (not tested; use with caution)
 
 RALF_FILE_PATH = f'{DATA_DIRECTORY}2ES_targetlist_astrid_export_2024Dec_comments.xlsx'
 

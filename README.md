@@ -146,7 +146,7 @@ Visualize and analyze the Gaia target list interactively in your browser. Launch
 
 [![Launch Interactive Target List (Binder + Voilà)](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/exoplanetsdk/2ES_target_selection/main?urlpath=voila/render/notebooks/Interactive_GAIA_Histogram_Explorer.ipynb)
 
-<img src="figures/histogram.png" alt="Interactive Gaia Explorer" width="600"/>
+<img src="figures/histogram.png" alt="Interactive Gaia Explorer"/>
 
 ## Radial Velocity precision calculator
 
