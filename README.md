@@ -2,6 +2,9 @@
 
 A Python pipeline for generating a homogeneous stellar target list for the 2ES spectrograph, primarily utilizing Gaia DR2 and DR3 catalogs.
 
+[![Launch Interactive Target List (Binder + Voilà)](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/exoplanetsdk/2ES_target_selection/main?urlpath=voila/render/notebooks/Interactive_GAIA_Histogram_Explorer.ipynb)
+![Interactive Gaia Explorer](figures/histogram)
+
 ## Highlights
 
 - Automated querying of Gaia DR2/DR3 catalogs
