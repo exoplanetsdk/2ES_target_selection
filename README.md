@@ -140,10 +140,13 @@ Generated plots in `figures/` include:
 - Stellar parameter distributions
 - Target sky distribution (RA/DEC)
 
-## Interactive Histogram for Target List 
+## Interactive Target List Explorer
+
+Visualize and analyze the Gaia target list interactively in your browser. Launch the interactive histogram explorer (powered by Binder and Voilà) with the button below. *Note: The first launch may take a few minutes to start.*
 
 [![Launch Interactive Target List (Binder + Voilà)](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/exoplanetsdk/2ES_target_selection/main?urlpath=voila/render/notebooks/Interactive_GAIA_Histogram_Explorer.ipynb)
-![Interactive Gaia Explorer](figures/histogram.png)
+
+<img src="figures/histogram.png" alt="Interactive Gaia Explorer" width="600"/>
 
 ## Radial Velocity precision calculator
 
