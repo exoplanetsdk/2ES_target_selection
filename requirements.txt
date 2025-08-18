@@ -17,7 +17,7 @@ xlsxwriter>=3.0.0
 
 # Progress bars and interactivity
 tqdm>=4.60.0
-ipywidgets>=7.6.0
+ipywidgets>=8.1
 
 # Jupyter dashboarding (optional, for interactive apps)
-voila>=0.3.0
+voila>=0.5,<0.6

@@ -157,7 +157,7 @@ returning an RV precision of 0.563624937587981 m/s. The telescope parameters are
 
 ## Recent Major Maintenance
 
-- **2025-08-18**: Added p-mode and granulation RV noise terms; integrated log R'HK activity metric; introduced composite HWO/TESS/PLATO prioritization score; enabled interactive histograms.
+- **2025-08-18**: Included p-mode and granulation RV noise for calculating the detection limit; integrated log R'HK activity metric for estimating stellar noise floor; introduced score for cross-matching HWO/TESS/PLATO targets; enabled interactive histograms.
 
 - **2025-07-22**: Due to changes in SIMBAD query, the Gaia data release (e.g., Gaia DR3) needs to be specified to ensure stars are retrieved correctly and stellar identifiers (e.g. HD, GJ, HIP) are extracted. Updated column name handling to accommodate SIMBAD's revised naming conventions for stellar types. Updated the crossmatching logic. 
 
