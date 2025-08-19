@@ -898,8 +898,8 @@ def calculate_and_insert_RV_noise(df):
     df[total_col] = (
         INSTRUMENTAL_NOISE**2 +
         df[photon_col]**2 +
-        df[gran_col]**2 * RESIDUAL_GRANULATION_FRACTION +
-        df[pmode_col]**2 * RESIDUAL_P_MODE_FRACTION
+        (df[gran_col] * RESIDUAL_GRANULATION_FRACTION) **2 +
+        (df[pmode_col] * RESIDUAL_P_MODE_FRACTION) **2
     ) ** 0.5
 
     # Insert after σ_p-mode [m/s]

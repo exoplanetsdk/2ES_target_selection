@@ -12,19 +12,6 @@ A Python pipeline for generating a homogeneous stellar target list for the 2ES s
 - Habitable zone and mass detection limits calculations
 - Cross-matching with other catalogs
 
-## Requirements
-
-### Python Dependencies
-```bash
-astroquery>=0.4.6
-numpy>=1.20.0
-pandas>=1.3.0
-matplotlib>=3.4.0
-seaborn>=0.11.0
-tqdm>=4.60.0
-openpyxl>=3.0.7
-scipy>=1.7.0
-```
 
 ## Directory Structure
 
