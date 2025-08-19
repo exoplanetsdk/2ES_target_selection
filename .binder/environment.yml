@@ -1,18 +1,11 @@
-name: 2es
+name: 2es-minimal
 channels:
   - conda-forge
 dependencies:
   - python=3.11
   - numpy
   - pandas
-  - scipy
-  - astropy
-  - astroquery
-  - matplotlib
-  - seaborn
   - plotly
-  - openpyxl
-  - xlsxwriter
-  - tqdm
-  - ipywidgets
-  - voila
+  - openpyxl  # For Excel reading
+  - ipywidgets>=7.6  # For FileDownload widget
+  - voila  # Required for voila rendering
