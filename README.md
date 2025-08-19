@@ -142,7 +142,13 @@ Generated plots in `figures/` include:
 
 ## Interactive Target List Explorer
 
-Visualize and analyze the Gaia target list interactively in your browser. Launch the interactive histogram explorer (powered by Binder and Voilà) with the button here [![Launch Interactive Target List (Binder + Voilà)](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/exoplanetsdk/2ES_target_selection/main?urlpath=voila/render/notebooks/Interactive_GAIA_Histogram_Explorer.ipynb) or in a Jupyter notebook interface [here](https://mybinder.org/v2/gh/exoplanetsdk/2ES_target_selection/HEAD?urlpath=%2Fdoc%2Ftree%2Fnotebooks%2FInteractive_GAIA_Histogram_Explorer.ipynb). *Note: The first launch may take a few minutes to start.*
+Explore and analyze the Gaia target list interactively in your browser. You can launch the interactive histogram explorer (powered by Binder and Voilà) using the button below:
+
+[![Launch Interactive Target List (Binder + Voilà)](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/exoplanetsdk/2ES_target_selection/main?urlpath=voila/render/notebooks/Interactive_GAIA_Histogram_Explorer.ipynb)
+
+Alternatively, open the explorer in a standard Jupyter notebook interface [here](https://mybinder.org/v2/gh/exoplanetsdk/2ES_target_selection/HEAD?urlpath=%2Fdoc%2Ftree%2Fnotebooks%2FInteractive_GAIA_Histogram_Explorer.ipynb).
+
+*Note: The first launch may take a few minutes to initialize.*
 
 <img src="figures/histogram.png" alt="Interactive Gaia Explorer"/>
 
