@@ -28,7 +28,7 @@ STELLAR_FILTERS = {
 
 INSTRUMENTAL_NOISE = 0.1 # m/s (instrumental noise， optimistic)
 RESIDUAL_P_MODE_FRACTION = 0.1 # p-mode noise RMS residual (tested; recommended by J. Zhao)
-RESIDUAL_GRANULATION_FRACTION = 0.1 # granulation noise RMS residual (not tested; use with caution)
+RESIDUAL_GRANULATION_FRACTION = 1.0 # granulation noise RMS residual (not tested; use with caution)
 
 
 RALF_FILE_PATH = f'{DATA_DIRECTORY}2ES_targetlist_astrid_export_2024Dec_comments.xlsx'
@@ -37,7 +37,7 @@ RALF_FILE_PATH = f'{DATA_DIRECTORY}2ES_targetlist_astrid_export_2024Dec_comments
 today_date = datetime.today().strftime('%Y.%m.%d')
 
 # Construct the file path for today's Gaia homogeneous target selection file
-today_file = f"{RESULTS_DIRECTORY}Gaia_homogeneous_target_selection_{today_date}.xlsx"
+today_file = f"{RESULTS_DIRECTORY}Gaia_homogeneous_target_selection_{today_date}_{int(10*RESIDUAL_GRANULATION_FRACTION)}.xlsx"
 
 # Define the backup file path for the Gaia homogeneous target selection file
 backup_file = f"{RESULTS_DIRECTORY}Gaia_homogeneous_target_selection_2025.02.17.xlsx"

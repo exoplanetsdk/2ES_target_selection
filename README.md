@@ -146,14 +146,14 @@ The photon-limited RV precision calculations, available in the [Radial Velocity 
 
 **Example Usage**
 
-To calculate the Radial Velocity (RV) precision for a star with a temperature of 5000 K and a V magnitude of 10, use the following code:
+To compute the photon-limited Radial Velocity (RV) precision for a star (e.g., Teff = 5000 K, Vmag = 8, 10-minute exposure by default), simply run:
 
 ```python
 from rv_prec import calculate_rv_precision
-result, custom_rv_precision = calculate_rv_precision(5000, 10)
+result, custom_rv_precision = calculate_rv_precision(5000, 8)
 custom_rv_precision
 ```
-returning an RV precision of 0.563624937587981 m/s. The telescope parameters are tailored for 2ES and are predefined in the `get_manual_values` function. 
+returning an RV precision of 0.3886429800604213 m/s. The telescope parameters are tailored for 2ES and are predefined in the `get_manual_values` function. 
 
 ## Recent Major Maintenance
 
