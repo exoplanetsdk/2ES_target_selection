@@ -18,11 +18,11 @@ def get_manual_values(Temp: float = 4200.0, Vmag: float = 7.0) -> Dict[str, floa
     return {
         "Temp": Temp,    # Temperature in K
         "Vmag": Vmag,    # V magnitude
-        "MiDia": 2.2,    # Mirror Diameter in m
-        "SpRes": 120000, # Spectral Resolution
-        "TObs": 10.0,    # Observation Time in min
-        "Lam_min": 390,  # Minimum wavelength in nm;
-        "Lam_max": 870   # Maximum wavelength in nm; 
+        "MiDia": 2.5,    # Mirror Diameter in m
+        "SpRes": 110000, # Spectral Resolution
+        "TObs": 20.0,    # Observation Time in min
+        "Lam_min": 380,  # Minimum wavelength in nm;
+        "Lam_max": 670   # Maximum wavelength in nm; 
     }
 
 

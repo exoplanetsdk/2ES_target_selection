@@ -62,7 +62,7 @@ echo "Python path: $(which python)"
 
 # Run the analysis
 echo "=== Starting 2ES Analysis ==="
-cd src && python main.py
+cd src && python 2ES.py
 
 # Check if analysis completed successfully
 if [ $? -eq 0 ]; then
