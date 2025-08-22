@@ -2,7 +2,6 @@
 .DS_Store
 
 /Development mode
-src/test.ipynb
 results/test.csv
 __pycache__/
 *.pyc
