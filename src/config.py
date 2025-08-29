@@ -7,7 +7,7 @@ FIGURES_DIRECTORY = '../figures/'
 DATA_DIRECTORY = '../data/'
 
 # Query parameters
-TARGET_G_MAG_LIMIT = 12     # Gaia G-band magnitude limit
+TARGET_G_MAG_LIMIT = 8     # Gaia G-band magnitude limit
 MIN_DEC = -15               # Minimum declination in degrees
 MAX_DEC = 75                # Maximum declination in degrees
 MIN_PARALLAX = 20           # Minimum parallax in mas; corresponds to 50 pc
@@ -28,7 +28,7 @@ STELLAR_FILTERS = {
 
 INSTRUMENTAL_NOISE = 0.1 # m/s (instrumental noise， optimistic)
 RESIDUAL_P_MODE_FRACTION = 0.1 # p-mode noise RMS residual (tested; recommended by J. Zhao)
-RESIDUAL_GRANULATION_FRACTION = 1.0 # granulation noise RMS residual (not tested; use with caution)
+RESIDUAL_GRANULATION_FRACTION = 0.1 # granulation noise RMS residual (not tested; use with caution)
 
 
 RALF_FILE_PATH = f'{DATA_DIRECTORY}2ES_targetlist_astrid_export_2024Dec_comments.xlsx'
