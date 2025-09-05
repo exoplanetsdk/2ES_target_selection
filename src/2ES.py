@@ -96,11 +96,11 @@ def main():
     df = calculate_K(df, sigma_rv_col='σ_RV,total [m/s]')
     df = calculate_and_insert_hz_detection_limit(
         df,
-        semi_amplitude_col='Semi-Amplitude_σ_photon [m/s]'
+        semi_amplitude_col='K_σ_photon [m/s]'
     )
     df = calculate_and_insert_hz_detection_limit(
         df,
-        semi_amplitude_col='Semi-Amplitude_σ_RV_total [m/s]'
+        semi_amplitude_col='K_σ_RV_total [m/s]'
     )
 
     # -----------------------------------------------------------
@@ -216,6 +216,7 @@ def main():
         df['TESS_candidate_match'] * 0.5
     )
     df = df.sort_values(['sum_score', 'HZ Detection Limit [M_Earth]'], ascending=[False, True])
+    df = df[df['HZ Detection Limit [M_Earth]'] <= 2]
     save_and_adjust_column_widths(df, GAIA_FILE)
 
 if __name__ == "__main__":

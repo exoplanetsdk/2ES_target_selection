@@ -1,15 +1,18 @@
+import os
+import sys
 import time
+import json
 import pandas as pd
 from tqdm import tqdm
 from concurrent.futures import ThreadPoolExecutor
-import os
-import json
 
 from config import *
 from utils import *
 from rv_prec import calculate_rv_precision
 from stellar_properties import get_simbad_info_with_retry
 from stellar_calculations import *
+sys.path.append('../TACS')
+import THE_TCS_classes as tcsc
 
 #------------------------------------------------------------------------------------------------
 def process_gaia_data(df_dr2, df_dr3, df_crossmatch):
@@ -185,6 +188,10 @@ def consolidate_data(df):
     # Create the final dataframe with the updated column list
     df_consolidated = df_consolidated[final_columns]
 
+    # Keep only rows where Object Type is one of '*', '**', 'MS*', or 'SB*'
+    allowed_types = ['*', '**', 'MS*', 'SB*', 'PM*']
+    df_consolidated = df_consolidated[df_consolidated['Object Type'].isin(allowed_types)]
+
     # Rename the columns
     print("Renaming columns")
     df_consolidated = df_consolidated.rename(columns={
@@ -333,9 +340,6 @@ def calculate_and_insert_photon_noise(df):
         # If HZ_limit column doesn't exist, add to the end
         processed_df['σ_photon [m/s]'] = rv_precisions
 
-    # Filter out White Dwarfs
-    processed_df = processed_df[processed_df['Object Type'] != 'WhiteDwarf']
-
     # Save the result to a new Excel file
     save_and_adjust_column_widths(processed_df, f"{RESULTS_DIRECTORY}combined_query_with_RV_precision.xlsx")
 
@@ -394,6 +398,33 @@ def calculate_hz_orbital_period(df):
 
 #------------------------------------------------------------------------------------------------
 
+import warnings
+import os
+from contextlib import redirect_stdout
+
+def observable_nights(ra_array, dec_array):
+    """
+    Compute observable nights for arrays of RA and Dec without reloading tcsc each time.
+    ra_array, dec_array: arrays or lists of same length
+    Returns: list of observable nights for each (ra, dec) pair
+    """
+    # Suppress matplotlib warnings
+    warnings.filterwarnings('ignore', message='Attempting to set identical low and high xlims*')
+    warnings.filterwarnings('ignore', message='FigureCanvasAgg is non-interactive*')
+
+    results = []
+    with redirect_stdout(open(os.devnull, 'w')):
+        star = tcsc.tcs(sun_elevation=-12, instrument=INSTRUMENT)
+        for ra, dec in zip(ra_array, dec_array):
+            star.set_star(ra=ra, dec=dec)
+            airmass = star.info_IM_airmass_night.data
+            observable_nights = np.sum(np.sum((airmass < 1.5) & (airmass >= 0.5), axis=0) > 30)
+            results.append(int(observable_nights))
+    return results
+
+
+#------------------------------------------------------------------------------------------------
+
 def calculate_K(
     df,
     N=1000,
@@ -403,10 +434,9 @@ def calculate_K(
     output_col=None
 ):
     """
-    Calculate minimum detectable RV semi-amplitude K for DataFrame using Zechmeister et al. (2009)
+    Calculate minimum detectable RV semi-amplitude K
     and insert it into the DataFrame after the 'Orbital Period [days]' column.
 
-    This function implements Equation 5 from Zechmeister et al. (2009):
     K = α * (σ_RV / √N) * √(1 + 10^((P/τ - 1.5)²))
 
     Parameters:
@@ -422,32 +452,41 @@ def calculate_K(
     sigma_rv_col : str
         Name of the column to use for σ_RV (e.g., 'σ_photon [m/s]', 'σ_RV,total [m/s]')
     output_col : str or None
-        Name of the output column. If None, will use 'Semi-Amplitude_{sigma_rv_col} [m/s]'
+        Name of the output column. If None, will use 'K_{sigma_rv_col} [m/s]'
 
     Returns:
     --------
     pandas.DataFrame
-        DataFrame with added semi-amplitude column after 'Orbital Period [days]'
+        DataFrame with added semi-amplitude column after 'Orbital Period [days]', with rows where N=0 (star is not observable) removed
     """
+
+    print("\nCalculating minimum detectable RV semi-amplitude K")
+
     # Validate sigma_rv_col exists
     if sigma_rv_col not in df.columns:
         raise ValueError(f"Column '{sigma_rv_col}' not found in DataFrame.")
 
     # Use output_col or construct default
     if output_col is None:
-        output_col = f"Semi-Amplitude_{sigma_rv_col.replace('[m/s]', '').replace(' ', '').replace(',', '_')} [m/s]"
+        output_col = f"K_{sigma_rv_col.replace('[m/s]', '').replace(' ', '').replace(',', '_')} [m/s]"
 
     sigma_rv = df[sigma_rv_col]
     P_days = df['Orbital Period [days]']
-
-    # Calculate K using equation 5
-    period_scale_factor = np.sqrt(1 + (10 ** ((P_days / 365.25 / tau_years) - 1.5)) ** 2)
-    K = sigma_rv * alpha / np.sqrt(N) * period_scale_factor
-
-    # Insert K after 'Orbital Period [days]'
     df_new = df.copy()
-    period_idx = df_new.columns.get_loc('Orbital Period [days]')
-    df_new.insert(period_idx + 1, output_col, K)
+    period_idx = df_new.columns.get_loc('Orbital Period [days]')    
+
+    # Compute observable nights for each row using RA and DEC columns
+    if 'Yearly_Observable_nights' not in df_new.columns:
+        yearly_nights = observable_nights(df_new['RA'].values, df_new['DEC'].values)
+        N = np.maximum(1, yearly_nights)
+        df_new.insert(period_idx + 1, 'Yearly_Observable_nights', N)
+        df_new = df_new[df_new['Yearly_Observable_nights'] != 1].reset_index(drop=True)
+        
+    # Calculate K using equation 5
+    period_scale_factor = np.sqrt(1 + (10 ** ((df_new['Orbital Period [days]'] / 365.25 / tau_years) - 1.5)) ** 2)
+    K = df_new[sigma_rv_col] * alpha / np.sqrt(tau_years * df_new['Yearly_Observable_nights'] * 0.8) * period_scale_factor # 0.8 is the efficiency factor (20% weather loss)
+        
+    df_new.insert(period_idx + 2, output_col, K)
 
     return df_new
 
@@ -455,7 +494,7 @@ def calculate_K(
 
 def calculate_and_insert_hz_detection_limit(
     df,
-    semi_amplitude_col='Semi-Amplitude_σ_photon [m/s]'
+    semi_amplitude_col='K_σ_photon [m/s]'
 ):
     """
     Calculate and insert the habitable zone detection limit for each star in the DataFrame.
@@ -463,7 +502,7 @@ def calculate_and_insert_hz_detection_limit(
     Args:
         df (pd.DataFrame): DataFrame containing stellar data with RV precision, Mass, and HZ_limit columns
         semi_amplitude_col (str): Column name to use for the semi-amplitude, e.g.,
-            'Semi-Amplitude_σ_photon [m/s]' or 'Semi-Amplitude_σ_RV_total [m/s]'
+            'K_σ_photon [m/s]' or 'K_σ_RV_total [m/s]'
 
     Returns:
         pd.DataFrame: Processed DataFrame with added HZ detection limit
@@ -476,11 +515,11 @@ def calculate_and_insert_hz_detection_limit(
         raise ValueError(f"Column '{semi_amplitude_col}' not found in DataFrame.")
 
     # Determine output column name according to the rule
-    if semi_amplitude_col == 'Semi-Amplitude_σ_RV_total [m/s]':
+    if semi_amplitude_col == 'K_σ_RV_total [m/s]':
         output_col = 'HZ Detection Limit [M_Earth]'
     else:
-        if semi_amplitude_col.startswith('Semi-Amplitude_'):
-            concise_name = semi_amplitude_col.replace('Semi-Amplitude_', '').replace(' [m/s]', '')
+        if semi_amplitude_col.startswith('K_'):
+            concise_name = semi_amplitude_col.replace('K_', '').replace(' [m/s]', '')
         else:
             concise_name = semi_amplitude_col.replace(' [m/s]', '')
         output_col = f"HZ Detection Limit ({concise_name}) [M_Earth]"
@@ -562,7 +601,7 @@ def analyze_bright_neighbors(merged_df, search_radius, execute_gaia_query_func, 
                         source_id=row['source_id_dr3'],
                         ra=row['RA'],
                         dec=row['DEC'],
-                        neighbor_g_mag_limit=row['Phot G Mean Mag']+3,
+                        neighbor_g_mag_limit=row['Phot G Mean Mag']+6.5,
                         search_radius=search_radius,
                         data_release='gaiadr3'
                     )
@@ -571,7 +610,7 @@ def analyze_bright_neighbors(merged_df, search_radius, execute_gaia_query_func, 
                         source_id=row['source_id_dr2'],
                         ra=row['RA'],
                         dec=row['DEC'],
-                        neighbor_g_mag_limit=row['Phot G Mean Mag']+3,
+                        neighbor_g_mag_limit=row['Phot G Mean Mag']+6.5,
                         search_radius=search_radius,
                         data_release='gaiadr2'
                     )
@@ -649,24 +688,12 @@ def merge_and_format_stellar_data(df_main, ralf_file_path):
     
     # Create a copy of the main DataFrame to avoid modifying the original
     merged_df = df_main.copy()
-    
-    # Process HD Numbers
-    # merged_df[['HD Number 1', 'HD Number 2']] = merged_df['HD Number'].str.split(', ', expand=True, n=1)
-    # merged_df['HD Number 1'] = merged_df['HD Number 1'].str.replace(r'HD\s+', 'HD', regex=True)
-    # merged_df['HD Number 2'] = merged_df['HD Number 2'].fillna('').str.replace(r'HD\s+', 'HD', regex=True)
-    
+        
     # Process HIP Numbers
     merged_df['HIP Number'] = merged_df['HIP Number'].apply(
         lambda x: f'HIP{x}' if pd.notna(x) and x != '' and not str(x).startswith('HIP') else x
     )
     
-    # Process GJ Numbers
-    # merged_df[['GJ Number 1', 'GJ Number 2']] = merged_df['GJ Number'].str.split(', ', expand=True, n=1)
-    # merged_df['GJ Number 1'] = merged_df['GJ Number 1'].str.replace(r'\s+', '', regex=True)
-    # merged_df['GJ Number 2'] = merged_df['GJ Number 2'].fillna('').str.replace(r'\s+', '', regex=True)
-    
-    # Merge DataFrames
-    # merge_keys = ['HD Number 1', 'HD Number 2', 'HIP Number', 'GJ Number 1', 'GJ Number 2']
     merge_keys = ['HD Number', 'HIP Number', 'GJ Number']
     merged_RJ = pd.concat([
         df_Ralf.merge(merged_df, left_on='star_ID  ', right_on=key, how='left') 

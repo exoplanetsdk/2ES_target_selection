@@ -17,7 +17,7 @@ THRESHOLD_ARCSEC = 2.5      # arcseconds for GAIA-TESS overlap (already tuned to
 # Stellar filtering parameters
 STELLAR_FILTERS = {
     'temp_min':     3800,       # Minimum effective temperature in K
-    'temp_max':     7000,       # Maximum effective temperature in K
+    'temp_max':     6500,       # Maximum effective temperature in K
     'lum_min':      0.05,       # Minimum luminosity in solar units
     'lum_max':      5.2,        # Maximum luminosity in solar units (increased to include HD23754)
     'density_min':  0.1,        # Minimum density in solar units
@@ -26,9 +26,10 @@ STELLAR_FILTERS = {
     'log_rhk_max': -4.5,        # Maximum log R'HK value (for stellar activity corresponding to ~10 m/s RMS)
 }
 
+INSTRUMENT = 'HARPS3'
 INSTRUMENTAL_NOISE = 0.1 # m/s (instrumental noise， optimistic)
 RESIDUAL_P_MODE_FRACTION = 0.1 # p-mode noise RMS residual (tested; recommended by J. Zhao)
-RESIDUAL_GRANULATION_FRACTION = 0.1 # granulation noise RMS residual (not tested; use with caution)
+RESIDUAL_GRANULATION_FRACTION = 1 # granulation noise RMS residual (not tested; use with caution)
 
 
 RALF_FILE_PATH = f'{DATA_DIRECTORY}2ES_targetlist_astrid_export_2024Dec_comments.xlsx'
