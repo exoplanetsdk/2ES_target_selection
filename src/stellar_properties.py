@@ -34,30 +34,6 @@ classification_df = pd.read_csv(
 
 #------------------------------------------------------------------------------------------------
 
-if 0: # old function
-    def get_simbad_info_with_retry(source_id):
-        import time
-        max_attempts = 3
-        for attempt in range(1, max_attempts + 1):
-            try:
-                # Format for Gaia DR2 or DR3
-                query_id = f"Gaia DR2 {int(source_id)}"
-                result = Simbad.query_object(query_id)
-                if result is not None:
-                    # Extract HD, GJ, HIP, Object Type here
-                    return {
-                        'HD Number': result['HD'][0] if 'HD' in result.colnames else None,
-                        'GJ Number': result['GJ'][0] if 'GJ' in result.colnames else None,
-                        'HIP Number': result['HIP'][0] if 'HIP' in result.colnames else None,
-                        'Object Type': result['OTYPE'][0] if 'OTYPE' in result.colnames else None,
-                    }
-            except Exception as e:
-                print(f"Attempt {attempt} failed: {e}")
-                time.sleep(1)
-        return None
-
-#------------------------------------------------------------------------------------------------
-
 # Update 2025-07-22: 
 # - specify the Gaia data release (e.g., Gaia DR3) to ensure identifiers are extracted in SIMBAD
 # e.g., gaia_identifier = 'Gaia DR3 2452378776434477184'
