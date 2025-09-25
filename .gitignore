@@ -57,17 +57,17 @@ logfiles/
 # Data files (large files that shouldn't be in git)
 results/
 figures/
-# Allow data directory files
+# Exclude xlsx/csv/dat/txt files globally
+*.xlsx
+*.csv
+*.dat
+*.txt
+# But allow data directory files
 !data/*.xlsx
 !data/*.csv
 !data/*.dat
 !data/*.txt
 !data/*.tab
-# But exclude other xlsx/csv/dat/txt files
-*.xlsx
-*.csv
-*.dat
-*.txt
 !requirements.txt
 !README.md
 

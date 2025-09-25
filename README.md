@@ -1,6 +1,6 @@
 # 2ES Target Selection Pipeline
 
-A professional, modular pipeline for selecting optimal targets for the 2ES (Two Earth-Sized) exoplanet detection mission. This pipeline processes Gaia data, applies stellar filters, calculates habitable zones, and performs crossmatching with external catalogs to identify the best targets for exoplanet detection.
+A professional, modular pipeline for selecting optimal targets for the 2ES (The Second Earth Spectrograph) exoplanet detection mission. This pipeline processes Gaia data, applies stellar filters, calculates habitable zones, and performs crossmatching with external catalogs to identify the best targets for exoplanet detection.
 
 ## 🚀 Quick Start
 
@@ -146,65 +146,56 @@ class StellarFilters:
     # ... other parameters
 ```
 
-## 📝 Logging
-
-The pipeline includes comprehensive logging:
-
-- **File Logging**: All logs saved to `logs/pipeline.log`
-- **Console Output**: Real-time progress updates
-- **Stage Tracking**: Detailed progress through each pipeline stage
-- **Error Handling**: Robust error reporting and recovery
-
-## 🔍 Data Validation
-
-The pipeline includes extensive data validation:
-
-- **Coordinate Validation**: RA/Dec range checks
-- **Magnitude Validation**: Photometric data quality
-- **Parallax Validation**: Distance calculation accuracy
-- **Temperature Validation**: Stellar parameter ranges
-
-## 📚 Dependencies
-
-Key Python packages required:
-
-- `pandas` - Data manipulation
-- `numpy` - Numerical computations
-- `matplotlib` - Plotting
-- `astropy` - Astronomical calculations
-- `astroquery` - Database queries
-- `tqdm` - Progress bars
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 📞 Support
-
-For questions or issues:
-1. Check the logs in `logs/pipeline.log`
-2. Review the configuration in `src/core/config.py`
-3. Open an issue on the repository
-
-## 🎯 Mission Goals
-
-The 2ES target selection pipeline is designed to identify the best stellar targets for detecting Earth-sized exoplanets in the habitable zone. The pipeline optimizes for:
-
-- **High-precision RV measurements** - Stars with low noise characteristics
-- **Habitable zone accessibility** - Detectable Earth-sized planets
-- **Observational efficiency** - Bright, nearby stars
-- **Scientific value** - Targets with known planetary systems
 
 ---
+## Interactive 2ES Target List Explorer
 
-**Last Updated**: 2025-09-25  
-**Version**: 2.0 (Modular Pipeline)  
-**Status**: Production Ready ✅
+Explore and analyze the Gaia target list interactively in your browser. You can launch the interactive histogram explorer (powered by Binder and Voilà) using the button below:
+
+[![Launch Interactive Target List (Binder + Voilà)](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/exoplanetsdk/2ES_target_selection/THE?urlpath=voila/render/notebooks/Interactive_2ES_Targets_Explorer.ipynb)
+
+Alternatively, open the explorer in a standard Jupyter notebook interface [here](https://mybinder.org/v2/gh/exoplanetsdk/2ES_target_selection/THE?urlpath=%2Fdoc%2Ftree%2Fnotebooks%2FInteractive_2ES_Targets_Explorer.ipynb).
+
+*Note: The first launch may take a few minutes to initialize.*
+
+<img src="figures/histogram.png" alt="Interactive Gaia Explorer"/>
+
+## Radial Velocity precision calculator
+
+The photon-limited RV precision calculations, available in the [Radial Velocity precision calculator](http://www.astro.physik.uni-goettingen.de/research/rvprecision/) (Reiners & Zechmeister, 2020), have been automated in the `rv_prec.py` script. This automation eliminates the need for the online calculator, significantly speeding up the pipeline and allowing it to scale efficiently for a large number of stars.
+![Radial Velocity precision calculator](figures/RV_tool.png)
+
+**Example Usage**
+
+To compute the photon-limited Radial Velocity (RV) precision for a star (e.g., Teff = 5000 K, Vmag = 8, 10-minute exposure by default), simply run:
+
+```python
+from rv_prec import calculate_rv_precision
+result, custom_rv_precision = calculate_rv_precision(5000, 8)
+custom_rv_precision
+```
+returning an RV precision of 0.3886429800604213 m/s. The telescope parameters are tailored for 2ES and are predefined in the `get_manual_values` function. 
+
+
+## Recent Major Maintenance
+
+- **2025-08-18**: Included p-mode and granulation RV noise for calculating the detection limit; integrated log R'HK activity metric for estimating stellar noise floor; introduced score for cross-matching HWO/TESS/PLATO targets; enabled interactive histograms.
+
+- **2025-07-22**: Due to changes in SIMBAD query, the Gaia data release (e.g., Gaia DR3) needs to be specified to ensure stars are retrieved correctly and stellar identifiers (e.g. HD, GJ, HIP) are extracted. Updated column name handling to accommodate SIMBAD's revised naming conventions for stellar types. Updated the crossmatching logic. 
+
+## Troubleshooting: SIMBAD Connection Issues
+
+Occasionally, the pipeline may be interrupted by an error similar to the following:
+
+```
+pyvo.dal.exceptions.DALServiceError: Unable to access the capabilities endpoint at:
+- https://simbad.cds.unistra.fr/simbad/sim-tap/capabilities: Connection failed (Possible causes: incorrect URL, DNS issue, or service is down)
+
+This could mean:
+1. The service URL is incorrect
+2. The service is temporarily unavailable
+3. The service doesn't support this protocol
+4. If a 503 was encountered, retry after the suggested delay.
+```
+
+This issue is related to the SIMBAD service connection and is not caused by the pipeline code itself. If you encounter this error, it is likely due to a temporary outage or network issue with the SIMBAD service. If this happens, simply wait and try running the code again at a later time. 
