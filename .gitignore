@@ -68,7 +68,10 @@ figures/
 # Development and temporary files
 /Development mode
 /TACS
-notebooks/granulation_HD166620.ipynb
+
+# Notebooks (except Interactive_2ES_Targets_Explorer.ipynb)
+notebooks/*.ipynb
+!notebooks/Interactive_2ES_Targets_Explorer.ipynb
 
 # Archive (keep in git for reference)
 # archive/ is intentionally not ignored
