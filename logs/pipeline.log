@@ -1,0 +1,152 @@
+2025-09-25 15:18:20,563 - 2ES_pipeline - INFO - test_logging:73 - This is an info message
+2025-09-25 15:18:20,563 - 2ES_pipeline - WARNING - test_logging:74 - This is a warning message
+2025-09-25 15:18:20,563 - 2ES_pipeline - ERROR - test_logging:75 - This is an error message
+2025-09-25 15:18:27,881 - 2ES_pipeline - INFO - test_logging:73 - This is an info message
+2025-09-25 15:18:27,881 - 2ES_pipeline - WARNING - test_logging:74 - This is a warning message
+2025-09-25 15:18:27,881 - 2ES_pipeline - ERROR - test_logging:75 - This is an error message
+2025-09-25 15:18:45,037 - 2ES_pipeline - INFO - test_logging:73 - This is an info message
+2025-09-25 15:18:45,037 - 2ES_pipeline - WARNING - test_logging:74 - This is a warning message
+2025-09-25 15:18:45,037 - 2ES_pipeline - ERROR - test_logging:75 - This is an error message
+2025-09-25 15:18:59,244 - 2ES_pipeline - INFO - test_logging:73 - This is an info message
+2025-09-25 15:18:59,244 - 2ES_pipeline - WARNING - test_logging:74 - This is a warning message
+2025-09-25 15:18:59,244 - 2ES_pipeline - ERROR - test_logging:75 - This is an error message
+2025-09-25 15:19:45,303 - 2ES_pipeline - INFO - demonstrate_new_structure:25 - === Demonstrating New Structure ===
+2025-09-25 15:19:45,303 - 2ES_pipeline - INFO - demonstrate_new_structure:28 - Data directory: ../data
+2025-09-25 15:19:45,303 - 2ES_pipeline - INFO - demonstrate_new_structure:29 - Results directory: ../results
+2025-09-25 15:19:45,303 - 2ES_pipeline - INFO - demonstrate_new_structure:30 - Detection limits: [None, 4, 2, 1.5]
+2025-09-25 15:19:45,303 - 2ES_pipeline - INFO - demonstrate_new_structure:31 - Stellar filters: {'temp_min': 3800, 'temp_max': 6500, 'lum_min': 0.05, 'lum_max': 5.2, 'density_min': 0.1, 'density_max': 5, 'logg_min': 3.8, 'log_rhk_max': -4.5}
+2025-09-25 15:19:45,304 - 2ES_pipeline - INFO - demonstrate_new_structure:64 - Created sample data with 3 stars
+2025-09-25 15:19:45,304 - 2ES_pipeline - INFO - demonstrate_new_structure:67 - === Data Validation ===
+2025-09-25 15:19:45,304 - 2ES_pipeline - INFO - demonstrate_new_structure:73 - ✓ Coordinate validation passed
+2025-09-25 15:19:45,304 - 2ES_pipeline - ERROR - demonstrate_new_structure:82 - ✗ Temperature validation failed: Temperature column not found
+2025-09-25 15:19:45,304 - 2ES_pipeline - INFO - demonstrate_new_structure:85 - === Data Consolidation ===
+2025-09-25 15:19:45,304 - 2ES_pipeline - INFO - demonstrate_new_structure:90 - Data consolidation would process the sample data
+2025-09-25 15:19:45,304 - 2ES_pipeline - INFO - demonstrate_new_structure:91 - This would merge DR2/DR3 columns, add SIMBAD info, etc.
+2025-09-25 15:19:45,304 - 2ES_pipeline - INFO - demonstrate_new_structure:94 - Consolidation steps:
+2025-09-25 15:19:45,304 - 2ES_pipeline - INFO - demonstrate_new_structure:95 -   1. Merge DR2 and DR3 columns
+2025-09-25 15:19:45,304 - 2ES_pipeline - INFO - demonstrate_new_structure:96 -   2. Add source identifiers
+2025-09-25 15:19:45,304 - 2ES_pipeline - INFO - demonstrate_new_structure:97 -   3. Add SIMBAD information
+2025-09-25 15:19:45,304 - 2ES_pipeline - INFO - demonstrate_new_structure:98 -   4. Filter object types
+2025-09-25 15:19:45,304 - 2ES_pipeline - INFO - demonstrate_new_structure:99 -   5. Rename columns
+2025-09-25 15:19:45,304 - 2ES_pipeline - INFO - demonstrate_new_structure:100 -   6. Convert numeric columns
+2025-09-25 15:19:45,304 - 2ES_pipeline - INFO - demonstrate_new_structure:106 - === Benefits of New Structure ===
+2025-09-25 15:19:45,304 - 2ES_pipeline - INFO - demonstrate_new_structure:107 - ✓ Centralized configuration management
+2025-09-25 15:19:45,304 - 2ES_pipeline - INFO - demonstrate_new_structure:108 - ✓ Proper logging instead of print statements
+2025-09-25 15:19:45,304 - 2ES_pipeline - INFO - demonstrate_new_structure:109 - ✓ Modular, testable components
+2025-09-25 15:19:45,304 - 2ES_pipeline - INFO - demonstrate_new_structure:110 - ✓ Clear separation of concerns
+2025-09-25 15:19:45,304 - 2ES_pipeline - INFO - demonstrate_new_structure:111 - ✓ Better error handling
+2025-09-25 15:19:45,304 - 2ES_pipeline - INFO - demonstrate_new_structure:112 - ✓ Data validation at each stage
+2025-09-25 15:19:45,304 - 2ES_pipeline - INFO - demonstrate_new_structure:113 - ✓ Easy to extend and modify
+2025-09-25 15:19:45,304 - 2ES_pipeline - INFO - demonstrate_new_structure:115 - === Demo Complete ===
+2025-09-25 15:20:30,774 - 2ES_pipeline - INFO - test_logging:73 - This is an info message
+2025-09-25 15:20:30,774 - 2ES_pipeline - WARNING - test_logging:74 - This is a warning message
+2025-09-25 15:20:30,774 - 2ES_pipeline - ERROR - test_logging:75 - This is an error message
+2025-09-25 15:20:33,588 - 2ES_pipeline - INFO - demonstrate_new_structure:25 - === Demonstrating New Structure ===
+2025-09-25 15:20:33,588 - 2ES_pipeline - INFO - demonstrate_new_structure:28 - Data directory: ../data
+2025-09-25 15:20:33,588 - 2ES_pipeline - INFO - demonstrate_new_structure:29 - Results directory: ../results
+2025-09-25 15:20:33,588 - 2ES_pipeline - INFO - demonstrate_new_structure:30 - Detection limits: [None, 4, 2, 1.5]
+2025-09-25 15:20:33,588 - 2ES_pipeline - INFO - demonstrate_new_structure:31 - Stellar filters: {'temp_min': 3800, 'temp_max': 6500, 'lum_min': 0.05, 'lum_max': 5.2, 'density_min': 0.1, 'density_max': 5, 'logg_min': 3.8, 'log_rhk_max': -4.5}
+2025-09-25 15:20:33,588 - 2ES_pipeline - INFO - demonstrate_new_structure:64 - Created sample data with 3 stars
+2025-09-25 15:20:33,588 - 2ES_pipeline - INFO - demonstrate_new_structure:67 - === Data Validation ===
+2025-09-25 15:20:33,589 - 2ES_pipeline - INFO - demonstrate_new_structure:73 - ✓ Coordinate validation passed
+2025-09-25 15:20:33,589 - 2ES_pipeline - ERROR - demonstrate_new_structure:82 - ✗ Temperature validation failed: Temperature column not found
+2025-09-25 15:20:33,589 - 2ES_pipeline - INFO - demonstrate_new_structure:85 - === Data Consolidation ===
+2025-09-25 15:20:33,589 - 2ES_pipeline - INFO - demonstrate_new_structure:90 - Data consolidation would process the sample data
+2025-09-25 15:20:33,589 - 2ES_pipeline - INFO - demonstrate_new_structure:91 - This would merge DR2/DR3 columns, add SIMBAD info, etc.
+2025-09-25 15:20:33,589 - 2ES_pipeline - INFO - demonstrate_new_structure:94 - Consolidation steps:
+2025-09-25 15:20:33,589 - 2ES_pipeline - INFO - demonstrate_new_structure:95 -   1. Merge DR2 and DR3 columns
+2025-09-25 15:20:33,589 - 2ES_pipeline - INFO - demonstrate_new_structure:96 -   2. Add source identifiers
+2025-09-25 15:20:33,589 - 2ES_pipeline - INFO - demonstrate_new_structure:97 -   3. Add SIMBAD information
+2025-09-25 15:20:33,589 - 2ES_pipeline - INFO - demonstrate_new_structure:98 -   4. Filter object types
+2025-09-25 15:20:33,589 - 2ES_pipeline - INFO - demonstrate_new_structure:99 -   5. Rename columns
+2025-09-25 15:20:33,589 - 2ES_pipeline - INFO - demonstrate_new_structure:100 -   6. Convert numeric columns
+2025-09-25 15:20:33,589 - 2ES_pipeline - INFO - demonstrate_new_structure:106 - === Benefits of New Structure ===
+2025-09-25 15:20:33,589 - 2ES_pipeline - INFO - demonstrate_new_structure:107 - ✓ Centralized configuration management
+2025-09-25 15:20:33,589 - 2ES_pipeline - INFO - demonstrate_new_structure:108 - ✓ Proper logging instead of print statements
+2025-09-25 15:20:33,589 - 2ES_pipeline - INFO - demonstrate_new_structure:109 - ✓ Modular, testable components
+2025-09-25 15:20:33,589 - 2ES_pipeline - INFO - demonstrate_new_structure:110 - ✓ Clear separation of concerns
+2025-09-25 15:20:33,589 - 2ES_pipeline - INFO - demonstrate_new_structure:111 - ✓ Better error handling
+2025-09-25 15:20:33,589 - 2ES_pipeline - INFO - demonstrate_new_structure:112 - ✓ Data validation at each stage
+2025-09-25 15:20:33,589 - 2ES_pipeline - INFO - demonstrate_new_structure:113 - ✓ Easy to extend and modify
+2025-09-25 15:20:33,589 - 2ES_pipeline - INFO - demonstrate_new_structure:115 - === Demo Complete ===
+2025-09-25 15:21:05,492 - 2ES_pipeline - INFO - test_full_pipeline:189 - Starting comprehensive pipeline test
+2025-09-25 15:21:05,493 - 2ES_pipeline.PipelineRunner - INFO - run:97 - Starting pipeline with 4 stages
+2025-09-25 15:21:05,493 - 2ES_pipeline.PipelineRunner - INFO - run:102 - Running stage 1/4: DataCreation
+2025-09-25 15:21:05,493 - 2ES_pipeline.DataCreation - INFO - run:61 - Starting DataCreation
+2025-09-25 15:21:05,493 - 2ES_pipeline.DataCreation - ERROR - validate_input:43 - Input data is None
+2025-09-25 15:21:05,493 - 2ES_pipeline.DataCreation - ERROR - run:72 - Error in DataCreation: Input validation failed for DataCreation
+2025-09-25 15:21:05,493 - 2ES_pipeline - ERROR - test_full_pipeline:230 - Pipeline test failed: Stage DataCreation failed: Input validation failed for DataCreation
+2025-09-25 15:21:12,336 - 2ES_pipeline - INFO - test_full_pipeline:193 - Starting comprehensive pipeline test
+2025-09-25 15:21:12,336 - 2ES_pipeline.PipelineRunner - INFO - run:97 - Starting pipeline with 4 stages
+2025-09-25 15:21:12,337 - 2ES_pipeline.PipelineRunner - INFO - run:102 - Running stage 1/4: DataCreation
+2025-09-25 15:21:12,337 - 2ES_pipeline.DataCreation - INFO - run:61 - Starting DataCreation
+2025-09-25 15:21:12,337 - 2ES_pipeline.DataCreation - INFO - process:29 - Creating sample stellar data
+2025-09-25 15:21:12,337 - 2ES_pipeline.DataCreation - INFO - process:61 - Created sample data with 4 stars
+2025-09-25 15:21:12,337 - 2ES_pipeline.DataCreation - INFO - run:68 - Completed DataCreation
+2025-09-25 15:21:12,337 - 2ES_pipeline.PipelineRunner - INFO - run:102 - Running stage 2/4: DataValidation
+2025-09-25 15:21:12,337 - 2ES_pipeline.DataValidation - INFO - run:61 - Starting DataValidation
+2025-09-25 15:21:12,337 - 2ES_pipeline.DataValidation - INFO - process:70 - Validating data quality
+2025-09-25 15:21:12,337 - 2ES_pipeline.DataValidation - INFO - process:77 - ✓ Coordinate validation passed
+2025-09-25 15:21:12,337 - 2ES_pipeline.DataValidation - INFO - process:84 - ✓ Magnitude validation passed
+2025-09-25 15:21:12,337 - 2ES_pipeline.DataValidation - INFO - process:91 - ✓ Parallax validation passed
+2025-09-25 15:21:12,338 - 2ES_pipeline.DataValidation - INFO - run:68 - Completed DataValidation
+2025-09-25 15:21:12,338 - 2ES_pipeline.PipelineRunner - INFO - run:102 - Running stage 3/4: DataConsolidation
+2025-09-25 15:21:12,338 - 2ES_pipeline.DataConsolidation - INFO - run:61 - Starting DataConsolidation
+2025-09-25 15:21:12,338 - 2ES_pipeline.DataConsolidation - INFO - process:103 - Consolidating Gaia data
+2025-09-25 15:21:12,340 - 2ES_pipeline.DataConsolidation - INFO - process:153 - Data consolidation completed. Final shape: (4, 36)
+2025-09-25 15:21:12,340 - 2ES_pipeline.DataConsolidation - INFO - run:68 - Completed DataConsolidation
+2025-09-25 15:21:12,340 - 2ES_pipeline.PipelineRunner - INFO - run:102 - Running stage 4/4: FinalValidation
+2025-09-25 15:21:12,340 - 2ES_pipeline.FinalValidation - INFO - run:61 - Starting FinalValidation
+2025-09-25 15:21:12,340 - 2ES_pipeline.FinalValidation - INFO - process:162 - Performing final data validation
+2025-09-25 15:21:12,340 - 2ES_pipeline.FinalValidation - INFO - process:169 - ✓ Temperature validation passed
+2025-09-25 15:21:12,342 - 2ES_pipeline.FinalValidation - INFO - process:181 - Final validation stats: {'total_stars': 4, 'valid_temps': np.int64(4), 'valid_masses': np.int64(4), 'valid_luminosities': np.int64(4)}
+2025-09-25 15:21:12,342 - 2ES_pipeline.FinalValidation - INFO - run:68 - Completed FinalValidation
+2025-09-25 15:21:12,342 - 2ES_pipeline.PipelineRunner - INFO - run:105 - Pipeline completed successfully
+2025-09-25 15:21:12,342 - 2ES_pipeline - INFO - test_full_pipeline:210 - Pipeline completed successfully!
+2025-09-25 15:21:12,342 - 2ES_pipeline - INFO - test_full_pipeline:211 - Final result shape: (4, 36)
+2025-09-25 15:21:12,342 - 2ES_pipeline - INFO - test_full_pipeline:212 - Final columns: ['source_id_dr2', 'source_id_dr3', 'ra_dr2', 'ra_dr3', 'dec_dr2', 'dec_dr3', 'phot_g_mean_mag_dr2', 'phot_g_mean_mag_dr3', 'teff_gspphot', 'teff_val', 'mass_flame_dr2', 'mass_flame_dr3', 'lum_flame_dr2', 'lum_flame_dr3', 'radius_flame_dr2', 'radius_flame_dr3', 'logg_gaia_dr2', 'logg_gaia_dr3', 'spectraltype_esphs_dr2', 'spectraltype_esphs_dr3', 'phot_bp_mean_mag_dr2', 'phot_bp_mean_mag_dr3', 'phot_rp_mean_mag_dr2', 'phot_rp_mean_mag_dr3', 'parallax_dr2', 'parallax_dr3', 'bp_rp_dr3', 'RA', 'DEC', 'Phot G Mean Mag', 'Parallax', 'source_id', 'T_eff [K]', 'Mass [M_Sun]', 'Luminosity [L_Sun]', 'Radius [R_Sun]']
+2025-09-25 15:21:12,342 - 2ES_pipeline - INFO - test_full_pipeline:215 - Sample of final data:
+2025-09-25 15:21:12,345 - 2ES_pipeline - INFO - test_full_pipeline:216 - 
+            source_id  T_eff [K]  Mass [M_Sun]  Luminosity [L_Sun]
+0  Gaia DR3 123456789       5500           1.0                 1.0
+1  Gaia DR2 987654321       6000           1.1                 1.2
+2  Gaia DR3 555666777       5200           0.9                 0.8
+3  Gaia DR3 111222333       4800           0.8                 0.6
+2025-09-25 15:21:12,379 - 2ES_pipeline - INFO - test_full_pipeline:221 - Results saved to ../results/pipeline_test_results.xlsx
+2025-09-25 15:23:28,818 - 2ES_pipeline - INFO - test_full_pipeline:193 - Starting comprehensive pipeline test
+2025-09-25 15:23:28,818 - 2ES_pipeline.PipelineRunner - INFO - run:97 - Starting pipeline with 4 stages
+2025-09-25 15:23:28,818 - 2ES_pipeline.PipelineRunner - INFO - run:102 - Running stage 1/4: DataCreation
+2025-09-25 15:23:28,818 - 2ES_pipeline.DataCreation - INFO - run:61 - Starting DataCreation
+2025-09-25 15:23:28,818 - 2ES_pipeline.DataCreation - INFO - process:29 - Creating sample stellar data
+2025-09-25 15:23:28,819 - 2ES_pipeline.DataCreation - INFO - process:61 - Created sample data with 4 stars
+2025-09-25 15:23:28,819 - 2ES_pipeline.DataCreation - INFO - run:68 - Completed DataCreation
+2025-09-25 15:23:28,819 - 2ES_pipeline.PipelineRunner - INFO - run:102 - Running stage 2/4: DataValidation
+2025-09-25 15:23:28,819 - 2ES_pipeline.DataValidation - INFO - run:61 - Starting DataValidation
+2025-09-25 15:23:28,819 - 2ES_pipeline.DataValidation - INFO - process:70 - Validating data quality
+2025-09-25 15:23:28,819 - 2ES_pipeline.DataValidation - INFO - process:77 - ✓ Coordinate validation passed
+2025-09-25 15:23:28,819 - 2ES_pipeline.DataValidation - INFO - process:84 - ✓ Magnitude validation passed
+2025-09-25 15:23:28,819 - 2ES_pipeline.DataValidation - INFO - process:91 - ✓ Parallax validation passed
+2025-09-25 15:23:28,819 - 2ES_pipeline.DataValidation - INFO - run:68 - Completed DataValidation
+2025-09-25 15:23:28,819 - 2ES_pipeline.PipelineRunner - INFO - run:102 - Running stage 3/4: DataConsolidation
+2025-09-25 15:23:28,819 - 2ES_pipeline.DataConsolidation - INFO - run:61 - Starting DataConsolidation
+2025-09-25 15:23:28,819 - 2ES_pipeline.DataConsolidation - INFO - process:103 - Consolidating Gaia data
+2025-09-25 15:23:28,822 - 2ES_pipeline.DataConsolidation - INFO - process:153 - Data consolidation completed. Final shape: (4, 36)
+2025-09-25 15:23:28,822 - 2ES_pipeline.DataConsolidation - INFO - run:68 - Completed DataConsolidation
+2025-09-25 15:23:28,822 - 2ES_pipeline.PipelineRunner - INFO - run:102 - Running stage 4/4: FinalValidation
+2025-09-25 15:23:28,822 - 2ES_pipeline.FinalValidation - INFO - run:61 - Starting FinalValidation
+2025-09-25 15:23:28,822 - 2ES_pipeline.FinalValidation - INFO - process:162 - Performing final data validation
+2025-09-25 15:23:28,822 - 2ES_pipeline.FinalValidation - INFO - process:169 - ✓ Temperature validation passed
+2025-09-25 15:23:28,822 - 2ES_pipeline.FinalValidation - INFO - process:181 - Final validation stats: {'total_stars': 4, 'valid_temps': np.int64(4), 'valid_masses': np.int64(4), 'valid_luminosities': np.int64(4)}
+2025-09-25 15:23:28,822 - 2ES_pipeline.FinalValidation - INFO - run:68 - Completed FinalValidation
+2025-09-25 15:23:28,823 - 2ES_pipeline.PipelineRunner - INFO - run:105 - Pipeline completed successfully
+2025-09-25 15:23:28,823 - 2ES_pipeline - INFO - test_full_pipeline:210 - Pipeline completed successfully!
+2025-09-25 15:23:28,823 - 2ES_pipeline - INFO - test_full_pipeline:211 - Final result shape: (4, 36)
+2025-09-25 15:23:28,823 - 2ES_pipeline - INFO - test_full_pipeline:212 - Final columns: ['source_id_dr2', 'source_id_dr3', 'ra_dr2', 'ra_dr3', 'dec_dr2', 'dec_dr3', 'phot_g_mean_mag_dr2', 'phot_g_mean_mag_dr3', 'teff_gspphot', 'teff_val', 'mass_flame_dr2', 'mass_flame_dr3', 'lum_flame_dr2', 'lum_flame_dr3', 'radius_flame_dr2', 'radius_flame_dr3', 'logg_gaia_dr2', 'logg_gaia_dr3', 'spectraltype_esphs_dr2', 'spectraltype_esphs_dr3', 'phot_bp_mean_mag_dr2', 'phot_bp_mean_mag_dr3', 'phot_rp_mean_mag_dr2', 'phot_rp_mean_mag_dr3', 'parallax_dr2', 'parallax_dr3', 'bp_rp_dr3', 'RA', 'DEC', 'Phot G Mean Mag', 'Parallax', 'source_id', 'T_eff [K]', 'Mass [M_Sun]', 'Luminosity [L_Sun]', 'Radius [R_Sun]']
+2025-09-25 15:23:28,823 - 2ES_pipeline - INFO - test_full_pipeline:215 - Sample of final data:
+2025-09-25 15:23:28,825 - 2ES_pipeline - INFO - test_full_pipeline:216 - 
+            source_id  T_eff [K]  Mass [M_Sun]  Luminosity [L_Sun]
+0  Gaia DR3 123456789       5500           1.0                 1.0
+1  Gaia DR2 987654321       6000           1.1                 1.2
+2  Gaia DR3 555666777       5200           0.9                 0.8
+3  Gaia DR3 111222333       4800           0.8                 0.6
+2025-09-25 15:23:28,859 - 2ES_pipeline - INFO - test_full_pipeline:221 - Results saved to ../results/pipeline_test_results.xlsx
