@@ -181,61 +181,11 @@ returning an RV precision of 0.3886429800604213 m/s. The telescope parameters ar
 
 ### **2025-09-25: Complete Repository Restructuring & Optimization**
 
-**🏗️ Major Structural Changes:**
-- **Complete Code Refactoring**: Migrated monolithic `2ES.py` script into modular pipeline architecture
-- **New Pipeline System**: Implemented 10-stage pipeline with `PipelineStage` base classes
-- **Modular Architecture**: Separated concerns into `core/`, `data/`, `pipeline/` modules
-- **Configuration Management**: Centralized all settings using dataclasses in `core/config.py`
-- **Professional Logging**: Replaced print statements with structured logging system
-- **Data Validation**: Added comprehensive data validation at pipeline stages
-- **Error Handling**: Implemented custom exception classes for better error management
+- **2025-09**: Complete repository restructuring & optimization, now a modular 10-stage pipeline (`core/`, `data/`, `pipeline/`), with centralized config, logging, and data validation. Implemented [TACS](https://github.com/MichaelCretignier/TACS) from Michael Cretignier to calculate stellar visibility throughout the year. 
 
-**📁 New Directory Structure:**
-```
-src/
-├── core/                      # Core infrastructure
-│   ├── config.py             # Centralized configuration
-│   ├── exceptions.py         # Custom exception handling
-│   └── logging_config.py     # Professional logging
-├── data/                     # Data processing modules
-│   ├── validation/           # Data validation
-│   └── processing/           # Data processing
-├── pipeline/                 # Pipeline architecture
-│   ├── base_simple.py       # Base pipeline classes
-│   └── stages/               # Individual pipeline stages
-└── main_2ES_pipeline.py      # Main pipeline script
-```
 
-**🚀 Repository Optimization:**
-- **File Reduction**: Reduced tracked files from 370 to 65 (82% reduction)
-- **Smart .gitignore**: Excludes large output files but includes essential input data
-- **Clean Structure**: Only essential source code and documentation tracked
-- **Archive System**: Original files preserved in `archive/old_src/`
-- **Production Ready**: Optimized for version control and collaboration
-
-**📊 Pipeline Stages (10 stages):**
-1. **Gaia Acquisition** - Queries Gaia DR2/DR3 databases
-2. **Data Cleaning** - Removes duplicates and cleans data
-3. **Data Consolidation** - Merges DR2/DR3 data and adds identifiers
-4. **Catalog Enrichment** - Adds external catalog data (CELESTA, Vizier, R'HK)
-5. **Filtering** - Applies stellar parameter filters
-6. **Bright Neighbors** - Identifies and filters stars with bright neighbors
-7. **Habitable Zone** - Calculates habitable zones and noise models
-8. **Visualization** - Creates plots and diagrams
-9. **Ralf Comparison** - Compares with Ralf's target list
-10. **Crossmatching** - Crossmatches with HWO, PLATO, and TESS catalogs
-
-**✅ Benefits of New Structure:**
-- **Maintainable**: Modular code with clear separation of concerns
-- **Testable**: Individual stages can be tested independently
-- **Scalable**: Easy to add new pipeline stages
-- **Professional**: Production-ready code with proper error handling
-- **Collaborative**: Clean repository optimized for team development
-
-### **2025-08-18: Scientific Enhancements**
 - **2025-08-18**: Included p-mode and granulation RV noise for calculating the detection limit; integrated log R'HK activity metric for estimating stellar noise floor; introduced score for cross-matching HWO/TESS/PLATO targets; enabled interactive histograms.
 
-### **2025-07-22: SIMBAD Integration Updates**
 - **2025-07-22**: Due to changes in SIMBAD query, the Gaia data release (e.g., Gaia DR3) needs to be specified to ensure stars are retrieved correctly and stellar identifiers (e.g. HD, GJ, HIP) are extracted. Updated column name handling to accommodate SIMBAD's revised naming conventions for stellar types. Updated the crossmatching logic. 
 
 ## Troubleshooting: SIMBAD Connection Issues
