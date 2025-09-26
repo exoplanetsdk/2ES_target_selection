@@ -4,6 +4,7 @@ Data cleaning stage - implements the original data cleaning functionality.
 import pandas as pd
 from ..base_simple import PipelineStage
 from core.exceptions import PipelineError
+from . import import_helpers  # This sets up the archive imports
 from data_processing import clean_merged_results
 
 

@@ -4,6 +4,7 @@ Gaia data acquisition stage - implements the original Gaia query functionality.
 import pandas as pd
 from ..base_simple import PipelineStage
 from core.exceptions import PipelineError
+from . import import_helpers  # This sets up the archive imports
 from gaia_queries import get_dr2_query, get_dr3_query, get_crossmatch_query
 from utils import execute_gaia_query
 

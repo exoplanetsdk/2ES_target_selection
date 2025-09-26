@@ -4,6 +4,7 @@ Habitable zone and noise modeling stage - implements the original habitable zone
 import pandas as pd
 from ..base_simple import PipelineStage
 from core.exceptions import PipelineError
+from . import import_helpers  # This sets up the archive imports
 from data_processing import (
     calculate_and_insert_habitable_zone,
     calculate_and_insert_photon_noise,

@@ -4,6 +4,7 @@ Ralf comparison stage - implements the original Ralf comparison functionality.
 import pandas as pd
 from ..base_simple import PipelineStage
 from core.exceptions import PipelineError
+from . import import_helpers  # This sets up the archive imports
 from data_processing import merge_and_format_stellar_data
 from plotting import (
     plot_scatter_with_options,

@@ -4,6 +4,7 @@ Bright neighbors analysis stage - implements the original bright neighbors funct
 import pandas as pd
 from ..base_simple import PipelineStage
 from core.exceptions import PipelineError
+from . import import_helpers  # This sets up the archive imports
 from data_processing import analyze_bright_neighbors
 from utils import execute_gaia_query
 

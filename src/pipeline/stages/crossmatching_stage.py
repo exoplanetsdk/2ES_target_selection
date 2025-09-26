@@ -4,6 +4,7 @@ Crossmatching stage - implements the original crossmatching functionality.
 import pandas as pd
 from ..base_simple import PipelineStage
 from core.exceptions import PipelineError
+from . import import_helpers  # This sets up the archive imports
 from HWO_overlap import HWO_match
 from plato_lops2 import plato_lops2_match
 from gaia_tess_overlap import run_tess_overlap_batch

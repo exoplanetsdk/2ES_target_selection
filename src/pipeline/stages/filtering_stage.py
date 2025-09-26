@@ -4,6 +4,7 @@ Filtering stage - implements the original stellar filtering functionality.
 import pandas as pd
 from ..base_simple import PipelineStage
 from core.exceptions import PipelineError
+from . import import_helpers  # This sets up the archive imports
 from filtering import filter_stellar_data
 from plotting import plot_color_histogram, plot_color_magnitude_diagram
 

@@ -5,6 +5,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from ..base_simple import PipelineStage
 from core.exceptions import PipelineError
+from . import import_helpers  # This sets up the archive imports
 from plotting import (
     plot_scatter,
     plot_hr_diagram_with_detection_limit,

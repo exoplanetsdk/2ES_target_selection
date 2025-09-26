@@ -4,6 +4,7 @@ Catalog enrichment stage - implements the original catalog processing functional
 import pandas as pd
 from ..base_simple import PipelineStage
 from core.exceptions import PipelineError
+from . import import_helpers  # This sets up the archive imports
 from catalog_integration import CatalogProcessor, add_rhk_to_dataframe
 from plotting import plot_density_vs_logg
 from utils import save_and_adjust_column_widths
