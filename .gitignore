@@ -71,6 +71,9 @@ figures/
 !requirements.txt
 !README.md
 
+!fitures/histogram.png
+!figures/RV_tool.png
+
 # Development and temporary files
 /Development mode
 /TACS
@@ -81,3 +84,7 @@ notebooks/*.ipynb
 
 # Archive (keep in git for reference)
 # archive/ is intentionally not ignored
+
+
+results/stellar_type_cache.pkl
+results/simbad_cache.json

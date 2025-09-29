@@ -25,7 +25,7 @@ pip install -r requirements.txt
 ### Running the Pipeline
 ```bash
 cd src
-python main_2ES_pipeline.py
+python 2ES.py
 ```
 
 ## 📁 Project Structure
@@ -33,61 +33,60 @@ python main_2ES_pipeline.py
 ```
 2ES_target_selection/
 ├── src/                           # Main source code
-│   ├── core/                      # Core infrastructure
-│   │   ├── config.py             # Centralized configuration
-│   │   ├── exceptions.py         # Custom exception handling
-│   │   └── logging_config.py     # Professional logging
-│   ├── data/                      # Data processing modules
-│   │   ├── validation/           # Data validation
-│   │   └── processing/            # Data processing
-│   ├── pipeline/                  # Pipeline architecture
-│   │   ├── base_simple.py        # Base pipeline classes
-│   │   └── stages/                # Individual pipeline stages
-│   │       ├── gaia_acquisition_stage.py
-│   │       ├── data_cleaning_stage.py
-│   │       ├── data_consolidation_stage.py
-│   │       ├── catalog_enrichment_stage.py
-│   │       ├── filtering_stage.py
-│   │       ├── bright_neighbors_stage.py
-│   │       ├── habitable_zone_stage.py
-│   │       ├── visualization_stage.py
-│   │       ├── ralf_comparison_stage.py
-│   │       └── crossmatching_stage.py
-│   └── main_2ES_pipeline.py       # Main pipeline script
+│   ├── 2ES.py                     # Main pipeline script
+│   ├── config.py                  # Configuration settings
+│   ├── core/                      # Core processing modules
+│   │   ├── data_processing.py     # Main data processing (940 lines)
+│   │   ├── gaia_queries.py        # Gaia database queries
+│   │   └── utils.py               # Utility functions
+│   ├── analysis/                  # Analysis modules
+│   │   ├── catalog_integration.py # External catalog processing
+│   │   ├── filtering.py           # Stellar filtering
+│   │   ├── plotting.py            # All plotting functions (658 lines)
+│   │   ├── HWO_overlap.py         # HWO matching
+│   │   ├── plato_lops2.py         # PLATO matching
+│   │   └── gaia_tess_overlap.py   # TESS matching
+│   ├── calculations/              # Stellar calculations
+│   │   ├── rv_prec.py             # RV precision calculations
+│   │   ├── stellar_calculations.py # Stellar math
+│   │   └── stellar_properties.py   # Stellar properties
+│   ├── utilities/                 # Utility scripts
+│   │   ├── diff.py                # Data comparison
+│   │   └── G_stars_within_15_pc.py # G-star finder
+│   └── original_codes/             # Complete backup of original files
 ├── data/                          # Input data files
 ├── results/                       # Output files
 ├── figures/                       # Generated plots
-├── logs/                          # Pipeline logs
+├── notebooks/                     # Jupyter notebooks
 ├── archive/                       # Archived original files
 └── requirements.txt               # Python dependencies
 ```
 
-## 🔄 Pipeline Stages
+## 🔄 Pipeline Workflow
 
-The pipeline consists of 10 modular stages:
+The pipeline processes data through the following stages:
 
-1. **Gaia Acquisition** - Queries Gaia DR2/DR3 databases
-2. **Data Cleaning** - Removes duplicates and cleans data
-3. **Data Consolidation** - Merges DR2/DR3 data and adds identifiers
-4. **Catalog Enrichment** - Adds external catalog data (CELESTA, Vizier, R'HK)
-5. **Filtering** - Applies stellar parameter filters
-6. **Bright Neighbors** - Identifies and filters stars with bright neighbors
-7. **Habitable Zone** - Calculates habitable zones and noise models
+1. **Gaia Data Acquisition** - Queries Gaia DR2/DR3 databases and crossmatches
+2. **Data Processing** - Merges DR2/DR3 data, removes duplicates, and consolidates
+3. **Catalog Enrichment** - Adds external catalog data (CELESTA, Vizier, R'HK)
+4. **Stellar Filtering** - Applies stellar parameter filters and activity metrics
+5. **Bright Neighbors Analysis** - Identifies and filters stars with bright neighbors
+6. **Habitable Zone Calculations** - Calculates habitable zones and noise models
+7. **RV Precision & Detection Limits** - Computes RV precision and detection limits
 8. **Visualization** - Creates plots and diagrams
-9. **Ralf Comparison** - Compares with Ralf's target list
-10. **Crossmatching** - Crossmatches with HWO, PLATO, and TESS catalogs
+9. **Crossmatching** - Crossmatches with HWO, PLATO, and TESS catalogs
+10. **Final Analysis** - Generates comprehensive target selection results
 
 ## ⚙️ Configuration
 
-The pipeline uses a centralized configuration system in `src/core/config.py`:
+The pipeline uses a centralized configuration system in `src/config.py`:
 
 ```python
-from core.config import Config
+from config import *
 
-config = Config()
 # Access configuration parameters
-print(config.stellar_filters.temp_min)
-print(config.query_params.target_g_mag_limit)
+print(STELLAR_FILTERS['temp_min'])
+print(TARGET_G_MAG_LIMIT)
 ```
 
 ### Key Configuration Parameters
@@ -118,32 +117,37 @@ The pipeline creates various plots in the `figures/` directory:
 
 ## 🛠️ Development
 
-### Adding New Pipeline Stages
+### Code Organization
 
-1. Create a new stage class in `src/pipeline/stages/`
-2. Inherit from `PipelineStage`
-3. Implement the `process()` method
-4. Add to the main pipeline in `src/main_2ES_pipeline.py`
+The codebase is organized into logical modules:
 
-```python
-from pipeline.base_simple import PipelineStage
-
-class MyNewStage(PipelineStage):
-    def process(self, data):
-        # Your processing logic here
-        return processed_data
-```
+- **`core/`** - Core processing modules (data processing, Gaia queries, utilities)
+- **`analysis/`** - Analysis modules (plotting, filtering, catalog integration)
+- **`calculations/`** - Stellar calculations (RV precision, stellar properties)
+- **`utilities/`** - Utility scripts (data comparison, G-star finder)
 
 ### Modifying Configuration
 
-Edit `src/core/config.py` to change default parameters:
+Edit `src/config.py` to change default parameters:
 
 ```python
-@dataclass
-class StellarFilters:
-    temp_min: float = 3800      # Minimum temperature
-    temp_max: float = 6500      # Maximum temperature
+# Stellar filtering parameters
+STELLAR_FILTERS = {
+    'temp_min': 4000,       # Minimum temperature
+    'temp_max': 6500,       # Maximum temperature
     # ... other parameters
+}
+```
+
+### Adding New Modules
+
+1. Create your module in the appropriate directory (`core/`, `analysis/`, `calculations/`)
+2. Add a symlink in the root `src/` directory for backward compatibility
+3. Import and use in your main script
+
+```bash
+# Example: Adding a new analysis module
+ln -sf analysis/my_new_module.py src/my_new_module.py
 ```
 
 
@@ -179,9 +183,7 @@ returning an RV precision of 0.3886429800604213 m/s. The telescope parameters ar
 
 ## Recent Major Maintenance
 
-### **2025-09-25: Complete Repository Restructuring & Optimization**
-
-- **2025-09**: Complete repository restructuring & optimization, now a modular 10-stage pipeline (`core/`, `data/`, `pipeline/`), with centralized config, logging, and data validation. Implemented [TACS](https://github.com/MichaelCretignier/TACS) from Michael Cretignier to calculate stellar visibility throughout the year. 
+- **2025-09**: Complete code restructuring and cleanup. Organized code into logical modules (`core/`, `analysis/`, `calculations/`, `utilities/`). The main script `2ES.py` now runs with a clean, organized structure while maintaining full functionality. Implemented [TACS](https://github.com/MichaelCretignier/TACS) from Michael Cretignier to calculate stellar visibility throughout the year.
 
 
 - **2025-08-18**: Included p-mode and granulation RV noise for calculating the detection limit; integrated log R'HK activity metric for estimating stellar noise floor; introduced score for cross-matching HWO/TESS/PLATO targets; enabled interactive histograms.
