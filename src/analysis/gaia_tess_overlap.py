@@ -4,7 +4,7 @@ from tqdm import tqdm
 import warnings
 from config import *
 warnings.filterwarnings('ignore')
-from utils import *
+from core.utils import *
 
 # --------------------------------------------------------------------------------------------------
 def create_header_mapping_from_file(file_content):

@@ -154,7 +154,7 @@ The photon-limited RV precision calculations, available in the [Radial Velocity 
 To compute the photon-limited Radial Velocity (RV) precision for a star (e.g., Teff = 5000 K, Vmag = 8, 10-minute exposure by default), simply run:
 
 ```python
-from rv_prec import calculate_rv_precision
+from calculations.rv_prec import calculate_rv_precision
 result, custom_rv_precision = calculate_rv_precision(5000, 8)
 custom_rv_precision
 ```
@@ -163,7 +163,7 @@ returning an RV precision of 0.3886429800604213 m/s. The telescope parameters ar
 
 ## Recent Major Maintenance
 
-- **2025-09**: Complete code restructuring and cleanup. Organized code into logical modules (`core/`, `analysis/`, `calculations/`, `utilities/`). The main script `2ES.py` now runs with a clean, organized structure while maintaining full functionality. Implemented [TACS](https://github.com/MichaelCretignier/TACS) from Michael Cretignier to calculate stellar visibility throughout the year.
+- **2025-09-26**: Complete code restructuring and cleanup. Organized code into logical modules (`core/`, `analysis/`, `calculations/`, `utilities/`) with direct imports. Removed all symlinks for a clean directory structure. The main script `2ES.py` now runs with a clean, organized structure while maintaining full functionality. Implemented [TACS](https://github.com/MichaelCretignier/TACS) from Michael Cretignier to calculate stellar visibility throughout the year.
 
 
 - **2025-08-18**: Included p-mode and granulation RV noise for calculating the detection limit; integrated log R'HK activity metric for estimating stellar noise floor; introduced score for cross-matching HWO/TESS/PLATO targets; enabled interactive histograms.

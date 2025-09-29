@@ -7,10 +7,10 @@ from tqdm import tqdm
 from concurrent.futures import ThreadPoolExecutor
 
 from config import *
-from utils import *
-from rv_prec import calculate_rv_precision
-from stellar_properties import get_simbad_info_with_retry
-from stellar_calculations import *
+from .utils import *
+from calculations.rv_prec import calculate_rv_precision
+from calculations.stellar_properties import get_simbad_info_with_retry
+from calculations.stellar_calculations import *
 sys.path.append('../TACS')
 import THE_TCS_classes as tcsc
 

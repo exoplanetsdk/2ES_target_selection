@@ -3,7 +3,7 @@ import seaborn as sns
 from config import *
 import pandas as pd
 import numpy as np
-from utils import adjust_column_widths
+from core.utils import adjust_column_widths
 
 def plot_density_vs_logg(df, logg_col='logg_gaia', density_col='Density [Solar unit]', 
                         density_threshold=0.1, plot_ranges=None, output_path=None, show_plot=False):

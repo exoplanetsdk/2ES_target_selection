@@ -1,6 +1,6 @@
 import pandas as pd
 from config import RESULTS_DIRECTORY
-from utils import adjust_column_widths
+from core.utils import adjust_column_widths
 
 def filter_stellar_data(df, config):
     print("\nFiltering stars based on stellar parameters")

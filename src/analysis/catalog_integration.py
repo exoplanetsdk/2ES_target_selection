@@ -2,8 +2,8 @@ import pandas as pd
 import numpy as np
 from tqdm import tqdm
 from config import RESULTS_DIRECTORY
-from utils import save_and_adjust_column_widths
-from stellar_properties import get_star_properties_with_retries, get_empirical_stellar_parameters    
+from core.utils import save_and_adjust_column_widths
+from calculations.stellar_properties import get_star_properties_with_retries, get_empirical_stellar_parameters    
 from concurrent.futures import ThreadPoolExecutor
 import re
 import warnings

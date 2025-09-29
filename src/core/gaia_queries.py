@@ -1,6 +1,6 @@
 from astroquery.gaia import Gaia
 from config import *
-from utils import execute_gaia_query
+from .utils import execute_gaia_query
 
 def get_dr2_query():
     print("\nQuerying stars from Gaia DR2")

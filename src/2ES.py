@@ -1,16 +1,16 @@
 print('\nInitializing 2ES Target Selection Pipeline...')
 
 from config import *
-from gaia_queries import *
-from data_processing import *
-from plotting import *
-from stellar_calculations import *
-from utils import *
-from catalog_integration import CatalogProcessor, add_rhk_to_dataframe
-from filtering import filter_stellar_data
-from gaia_tess_overlap import run_tess_overlap_batch
-from HWO_overlap import HWO_match
-from plato_lops2 import plato_lops2_match
+from core.gaia_queries import *
+from core.data_processing import *
+from analysis.plotting import *
+from calculations.stellar_calculations import *
+from core.utils import *
+from analysis.catalog_integration import CatalogProcessor, add_rhk_to_dataframe
+from analysis.filtering import filter_stellar_data
+from analysis.gaia_tess_overlap import run_tess_overlap_batch
+from analysis.HWO_overlap import HWO_match
+from analysis.plato_lops2 import plato_lops2_match
 import matplotlib.pyplot as plt
 
 def main():

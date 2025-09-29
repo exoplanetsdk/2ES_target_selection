@@ -1,7 +1,7 @@
 import pandas as pd
 from datetime import datetime
 from config import DATA_DIRECTORY, RESULTS_DIRECTORY
-from utils import adjust_column_widths
+from core.utils import adjust_column_widths
 
 def HWO_match(df):
     """
