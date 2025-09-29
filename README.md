@@ -163,7 +163,7 @@ returning an RV precision of 0.3886429800604213 m/s. The telescope parameters ar
 
 ## Recent Major Maintenance
 
-- **2025-09-26**: Complete code restructuring and cleanup. Organized code into logical modules (`core/`, `analysis/`, `calculations/`, `utilities/`) with direct imports. Removed all symlinks for a clean directory structure. The main script `2ES.py` now runs with a clean, organized structure while maintaining full functionality. Implemented [TACS](https://github.com/MichaelCretignier/TACS) from Michael Cretignier to calculate stellar visibility throughout the year.
+- **2025-09-26**: Complete code restructuring and cleanup. Organized code into logical modules (`core/`, `analysis/`, `calculations/`, `utilities/`). The main script `2ES.py` now runs with a clean, organized structure while maintaining full functionality. Implemented [TACS](https://github.com/MichaelCretignier/TACS) from Michael Cretignier to calculate stellar visibility throughout the year.
 
 
 - **2025-08-18**: Included p-mode and granulation RV noise for calculating the detection limit; integrated log R'HK activity metric for estimating stellar noise floor; introduced score for cross-matching HWO/TESS/PLATO targets; enabled interactive histograms.
