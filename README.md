@@ -81,14 +81,6 @@ The pipeline processes data through the following stages:
 
 The pipeline uses a centralized configuration system in `src/config.py`:
 
-```python
-from config import *
-
-# Access configuration parameters
-print(STELLAR_FILTERS['temp_min'])
-print(TARGET_G_MAG_LIMIT)
-```
-
 ### Key Configuration Parameters
 
 - **Stellar Filters**: Temperature, luminosity, density, logg ranges
@@ -139,17 +131,6 @@ STELLAR_FILTERS = {
 }
 ```
 
-### Adding New Modules
-
-1. Create your module in the appropriate directory (`core/`, `analysis/`, `calculations/`)
-2. Add a symlink in the root `src/` directory for backward compatibility
-3. Import and use in your main script
-
-```bash
-# Example: Adding a new analysis module
-ln -sf analysis/my_new_module.py src/my_new_module.py
-```
-
 
 ---
 ## Interactive 2ES Target List Explorer
@@ -167,7 +148,6 @@ Alternatively, open the explorer in a standard Jupyter notebook interface [here]
 ## Radial Velocity precision calculator
 
 The photon-limited RV precision calculations, available in the [Radial Velocity precision calculator](http://www.astro.physik.uni-goettingen.de/research/rvprecision/) (Reiners & Zechmeister, 2020), have been automated in the `rv_prec.py` script. This automation eliminates the need for the online calculator, significantly speeding up the pipeline and allowing it to scale efficiently for a large number of stars.
-![Radial Velocity precision calculator](figures/RV_tool.png)
 
 **Example Usage**
 

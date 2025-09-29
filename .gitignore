@@ -71,8 +71,7 @@ figures/
 !requirements.txt
 !README.md
 
-!fitures/histogram.png
-!figures/RV_tool.png
+!figures/histogram.png
 
 # Development and temporary files
 /Development mode
