@@ -58,4 +58,4 @@ OUTPUT_CONFIRMED_UNIQUE_STARS   = OUTPUT_CONFIRMED_FILE.replace('.xlsx', '_uniqu
 OUTPUT_CANDIDATE_UNIQUE_PLANETS = OUTPUT_CANDIDATE_FILE.replace('.xlsx', '_unique_planets.xlsx')
 OUTPUT_CANDIDATE_UNIQUE_STARS   = OUTPUT_CANDIDATE_FILE.replace('.xlsx', '_unique_stars.xlsx')
 
-DETECTION_LIMITS = [None, 4, 2, 1.5] # M_Earth
+DETECTION_LIMITS = [None, 2, 1.5, 1] # M_Earth

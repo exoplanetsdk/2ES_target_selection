@@ -240,7 +240,7 @@ def plot_stellar_properties_vs_temperature(df, detection_limit, show_plot=False)
         axs[i].grid(True, linestyle='--', alpha=0.6)
 
     # Add a main title
-    fig.suptitle('Stellar Properties as a Function of Temperature\n(' + str(len(df)) + ' stars with HZ Detection Limit < ' + str(detection_limit) + ' M_Earth)', fontsize=14)
+    fig.suptitle('Stellar Properties as a Function of Temperature\n(' + str(len(df)) + ' stars with HZ Detection Limit < ' + str(detection_limit) + ' $M_\\oplus$)', fontsize=14)
 
     # Adjust the layout and display the plot
     plt.tight_layout(rect=[0, 0.03, 1, 0.95])
@@ -268,14 +268,14 @@ def plot_hr_diagram_with_detection_limit(df, use_filtered_data=True, detection_l
     if use_filtered_data:
         data_to_plot = df[df['HZ Detection Limit [M_Earth]'] <= detection_limit]
         color_data = data_to_plot['HZ Detection Limit [M_Earth]']
-        colorbar_label = f'HZ Detection Limit [M_Earth]'
+        colorbar_label = r'HZ Detection Limit [$M_\oplus$]'
         filename = f'{FIGURES_DIRECTORY}HR_diagram_HZ_detection_limit_filtered_{detection_limit}.png'
         print(f'Number of stars with HZ Detection Limit <= {detection_limit}: {len(data_to_plot)}')
         plot_stellar_properties_vs_temperature(data_to_plot, detection_limit, show_plot=show_plot)
     else:
         data_to_plot = df
         color_data = np.minimum(df['HZ Detection Limit [M_Earth]'], 4)
-        colorbar_label = 'HZ Detection Limit [M_Earth]'
+        colorbar_label = r'HZ Detection Limit [$M_\oplus$]'
         filename = f'{FIGURES_DIRECTORY}HR_diagram_HZ_detection_limit.png'
 
     # Create the plot
@@ -305,10 +305,10 @@ def plot_hr_diagram_with_detection_limit(df, use_filtered_data=True, detection_l
     plt.gca().invert_xaxis()
 
     # Add labels and title
-    plt.xlabel('Effective Temperature (K)')
-    plt.ylabel('Luminosity (L/L_sun)')
+    plt.xlabel('Effective Temperature [K]')
+    plt.ylabel('Luminosity [$L_\odot$]')
     if use_filtered_data:
-        plt.title('Hertzsprung-Russell Diagram (' + str(len(data_to_plot)) + ' < ' + str(detection_limit) + ' M_Earth)')
+        plt.title('Hertzsprung-Russell Diagram (' + str(len(data_to_plot)) + ' < ' + str(detection_limit) + ' $M_\\oplus$)')
     else:
         plt.title('Hertzsprung-Russell Diagram')
     
@@ -322,7 +322,7 @@ def plot_hr_diagram_with_detection_limit(df, use_filtered_data=True, detection_l
 
 #---------------------------------------------------------------------------------------------------
 
-def plot_hr_diagram_multi_detection_limits(df, detection_limits=[None, 4, 2, 1.5], dpi=150, show_plot=False):
+def plot_hr_diagram_multi_detection_limits(df, detection_limits=[None, 4, 2, 1.5], dpi=300, show_plot=False):
     """
     Create a Hertzsprung-Russell diagram with multiple subplots for different detection limits,
     all sharing the same colorbar.
@@ -339,7 +339,7 @@ def plot_hr_diagram_multi_detection_limits(df, detection_limits=[None, 4, 2, 1.5
     print('\nPlotting HR diagram with multiple detection limits')
     
     # Create figure with subplots
-    fig, axes = plt.subplots(2, 2, figsize=(16, 14), dpi=dpi, sharex=True, sharey=True)
+    fig, axes = plt.subplots(2, 2, figsize=(10, 8), dpi=dpi, sharex=True, sharey=True)
     axes = axes.flatten()
     
     # Get global min/max for temperature and luminosity for consistent axes
@@ -358,12 +358,12 @@ def plot_hr_diagram_multi_detection_limits(df, detection_limits=[None, 4, 2, 1.5
         # Determine which data to plot based on detection limit
         if detection_limit is not None:
             data_to_plot = df[df['HZ Detection Limit [M_Earth]'] <= detection_limit]
-            subtitle = f'({len(data_to_plot)} < {detection_limit} M_Earth)'
+            subtitle = f'{len(data_to_plot)} samples < {detection_limit} $M_\\oplus$'
         else:
             data_to_plot = df
-            subtitle = f'(All {len(data_to_plot)} stars)'
+            subtitle = f'All {len(data_to_plot)} stars'
         
-        # Use consistent color mapping across all plots (0-4 M_Earth)
+        # Use consistent color mapping across all plots (0-4 $M_\\oplus$)
         color_data = np.minimum(data_to_plot['HZ Detection Limit [M_Earth]'], 4)
         
         # Create scatter plot
@@ -395,17 +395,14 @@ def plot_hr_diagram_multi_detection_limits(df, detection_limits=[None, 4, 2, 1.5
         
         # Add labels for outer plots only
         if i >= 2:  # Bottom row
-            ax.set_xlabel('Effective Temperature (K)')
+            ax.set_xlabel('Effective Temperature (K)', fontsize=12)
         if i % 2 == 0:  # Left column
-            ax.set_ylabel('Luminosity (L/L_sun)')
+            ax.set_ylabel(r'Luminosity [$L_\odot$]', fontsize=12)
     
     # Add a common colorbar
     cbar_ax = fig.add_axes([0.92, 0.15, 0.02, 0.7])  # [left, bottom, width, height]
     cbar = fig.colorbar(scatter_plots[0], cax=cbar_ax)
-    cbar.set_label('HZ Detection Limit [M_Earth]')
-    
-    # Add main title
-    fig.suptitle('Hertzsprung-Russell Diagram', fontsize=20, y=0.98)
+    cbar.set_label(r'HZ Detection Limit [$M_\oplus$]', fontsize=12)
     
     # Adjust layout
     plt.tight_layout(rect=[0, 0, 0.9, 0.95])
@@ -513,7 +510,7 @@ def analyze_stellar_data(df, hz_limits=None, date_str=None, show_plot=False):
         else:
             # Filter data based on HZ Detection Limit
             filtered_df = df[df['HZ Detection Limit [M_Earth]'] < hz_limit].copy()
-            title = f'HZ Detection Limit [M_Earth] < {hz_limit}'
+            title = f'HZ Detection Limit [$M_\\oplus$] < {hz_limit}'
             suffix = f'_M_earth_{str(hz_limit).replace(".", "_")}'
 
         # Store filtered DataFrame
@@ -614,7 +611,7 @@ def plot_RV_precision_HZ_detection_limit_vs_temperature(merged_df, df_Ralf):
         y='HZ Detection Limit [M_Earth]',
         data=merged_df,
         xlabel='Stellar Temperature (K)',
-        ylabel='HZ Detection Limit (M_Earth)',
+        ylabel='HZ Detection Limit ($M_\\oplus$)',
         xlim=(min(merged_df['T_eff [K]']) - 200, 6000 + 500),
         ylim=(0, 10),
         filename=f'{FIGURES_DIRECTORY}HZ_detection_limit_vs_temperature_full.png',
@@ -630,7 +627,7 @@ def plot_RV_precision_HZ_detection_limit_vs_temperature(merged_df, df_Ralf):
         y='HZ Detection Limit [M_Earth]',
         data=merged_df,
         xlabel='Stellar Temperature (K)',
-        ylabel='HZ Detection Limit (M_Earth)',
+        ylabel='HZ Detection Limit ($M_\\oplus$)',
         xlim=(min(merged_df['T_eff [K]']) - 200, 6000 + 100),
         ylim=(0, 4),
         filename=f'{FIGURES_DIRECTORY}HZ_detection_limit_vs_temperature_zoomed_4.png',
@@ -646,7 +643,7 @@ def plot_RV_precision_HZ_detection_limit_vs_temperature(merged_df, df_Ralf):
         y='HZ Detection Limit [M_Earth]',
         data=merged_df,
         xlabel='Stellar Temperature (K)',
-        ylabel='HZ Detection Limit (M_Earth)',
+        ylabel='HZ Detection Limit ($M_\\oplus$)',
         xlim=(min(merged_df['T_eff [K]']) - 200, 6000 + 100),
         ylim=(0, 1.5),
         filename=f'{FIGURES_DIRECTORY}HZ_detection_limit_vs_temperature_zoomed_1_5.png',

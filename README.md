@@ -172,7 +172,7 @@ returning an RV precision of 0.3886429800604213 m/s. The telescope parameters ar
 
 ## Troubleshooting: SIMBAD Connection Issues
 
-Occasionally, the pipeline may be interrupted by an error similar to the following:
+Once in a while, the pipeline may be interrupted by an error similar to the following:
 
 ```
 pyvo.dal.exceptions.DALServiceError: Unable to access the capabilities endpoint at:

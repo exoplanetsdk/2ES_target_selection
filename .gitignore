@@ -85,5 +85,5 @@ notebooks/*.ipynb
 # archive/ is intentionally not ignored
 
 
-results/stellar_type_cache.pkl
-results/simbad_cache.json
+*.pkl
+*.json
