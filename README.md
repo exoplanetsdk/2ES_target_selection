@@ -157,6 +157,8 @@ returning an RV precision of 0.3886429800604213 m/s. The telescope parameters ar
 
 ## Recent Major Maintenance
 
+- **2025-12-12**: Significantly improved the loading speed of the 2ES Target List Explorer by migrating hosting to Huggingface, replacing the previous Binder and Voilà setup.
+
 - **2025-09-26**: Complete code restructuring and cleanup. Organized code into logical modules (`core/`, `analysis/`, `calculations/`, `utilities/`). The main script `2ES.py` now runs with a clean, organized structure while maintaining full functionality. Implemented [TACS](https://github.com/MichaelCretignier/TACS) from Michael Cretignier to calculate stellar visibility throughout the year.
 
 
