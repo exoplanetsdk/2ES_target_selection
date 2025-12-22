@@ -137,7 +137,7 @@ STELLAR_FILTERS = {
 
 Explore and analyze the Gaia target list interactively in your browser [hosted by huggingface](https://huggingface.co/spaces/jinglinzhao/Interactive_2ES_Targets_Explorer).
 
-<img src="figures/2ES Targets Explorer" alt="Interactive 2ES Targets Explorer"/>
+<img src="figures/2ES Targets Explorer.png" alt="Interactive 2ES Targets Explorer"/>
 
 ## Radial Velocity precision calculator
 
