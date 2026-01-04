@@ -3,6 +3,7 @@ import sys
 import time
 import json
 import pandas as pd
+import numpy as np
 from tqdm import tqdm
 from concurrent.futures import ThreadPoolExecutor
 
@@ -221,7 +222,6 @@ def consolidate_data(df):
 
     # Calculate Distance [pc] from Parallax and insert it right after Parallax
     if 'Parallax' in df_consolidated.columns:
-        import numpy as np
         parallax_index = df_consolidated.columns.get_loc('Parallax')
         # Calculate distance: Distance [pc] = 1000 / Parallax (mas)
         distance_pc = 1000.0 / df_consolidated['Parallax']
