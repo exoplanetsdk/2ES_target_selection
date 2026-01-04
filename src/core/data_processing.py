@@ -182,8 +182,13 @@ def consolidate_data(df):
     # Combine the new DataFrame with the original one
     df_consolidated = pd.concat([df_consolidated, df_new[['HD Number', 'GJ Number', 'HIP Number', 'Object Type']]], axis=1)
 
-    # Update the final columns list to include the new columns
-    final_columns.extend(['HD Number', 'GJ Number', 'HIP Number', 'Object Type'])
+    # Insert 'HD Number', 'GJ Number', and 'HIP Number' right after 'source_id_dr3'
+    source_id_dr3_index = final_columns.index('source_id_dr3')
+    final_columns.insert(source_id_dr3_index + 1, 'HD Number')
+    final_columns.insert(source_id_dr3_index + 2, 'GJ Number')
+    final_columns.insert(source_id_dr3_index + 3, 'HIP Number')
+    # Add 'Object Type' at the end
+    final_columns.append('Object Type')
 
     # Create the final dataframe with the updated column list
     df_consolidated = df_consolidated[final_columns]
@@ -829,7 +834,7 @@ def add_pmode_rms_to_dataframe(df, t_eff_col='T_eff [K]', mass_col='Mass [M_Sun]
                               luminosity_col='Luminosity [L_Sun]', 
                               alpha=0.63, beta=0.47, gamma=-0.45, delta=0.57):
     """
-    Add p-mode oscillation RMS column to a pandas DataFrame after 'σ_granulation [m/s]' column.
+    Add p-mode oscillation RMS column to a pandas DataFrame before 'σ_granulation [m/s]' column.
     
     Parameters:
     -----------
@@ -853,7 +858,7 @@ def add_pmode_rms_to_dataframe(df, t_eff_col='T_eff [K]', mass_col='Mass [M_Sun]
     Returns:
     --------
     pandas.DataFrame
-        DataFrame with added 'σ_p-mode [m/s]' column after 'σ_granulation [m/s]'
+        DataFrame with added 'σ_p-mode [m/s]' column before 'σ_granulation [m/s]'
     """
     df = df.copy()
     
@@ -891,8 +896,8 @@ def add_pmode_rms_to_dataframe(df, t_eff_col='T_eff [K]', mass_col='Mass [M_Sun]
     # Get the position of granulation column
     granulation_idx = df.columns.get_loc(granulation_col)
     
-    # Insert the p-mode RMS column right after granulation
-    insert_position = granulation_idx + 1
+    # Insert the p-mode RMS column before granulation (on the left)
+    insert_position = granulation_idx
     
     # Create new column order
     columns = df.columns.tolist()
@@ -912,7 +917,7 @@ def add_pmode_rms_to_dataframe(df, t_eff_col='T_eff [K]', mass_col='Mass [M_Sun]
 def calculate_and_insert_RV_noise(df):
     """
     Calculate the total RV noise as the quadrature sum of σ_photon [m/s], σ_granulation [m/s], and σ_p-mode [m/s],
-    and insert it as a new column 'σ_RV,total [m/s]' immediately after the 'σ_p-mode [m/s]' column.
+    and insert it as a new column 'σ_RV,total [m/s]' immediately after the 'σ_supergranulation [m/s]' column.
 
     Parameters
     ----------
@@ -940,11 +945,11 @@ def calculate_and_insert_RV_noise(df):
         (df[pmode_col] * RESIDUAL_P_MODE_FRACTION) **2
     ) ** 0.5
 
-    # Insert after σ_p-mode [m/s]
-    pmode_idx = df.columns.get_loc(pmode_col)
+    # Insert after σ_supergranulation [m/s]
+    supergran_idx = df.columns.get_loc(supergran_col)
     cols = df.columns.tolist()
     # Remove and re-insert at the right position
-    cols.insert(pmode_idx + 1, cols.pop(cols.index(total_col)))
+    cols.insert(supergran_idx + 1, cols.pop(cols.index(total_col)))
     df = df[cols]
 
     return df
