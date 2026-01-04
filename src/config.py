@@ -29,7 +29,7 @@ STELLAR_FILTERS = {
 INSTRUMENTAL_NOISE = 0.1 # m/s (instrumental noise， optimistic)
 RESIDUAL_P_MODE_FRACTION = 0.1 # p-mode noise RMS residual (tested; recommended by J. Zhao)
 RESIDUAL_GRANULATION_FRACTION = 1.0 # granulation noise RMS residual (unlikely to be corrected due to its 49 minute decaying timescale)
-RESIDUAL_SUPER_GRANULATION_FRACTION = 0.0 # supergranulation noise RMS residual (possible to be corrected due to its 1 day decaying timescale, depending on sampling!)
+RESIDUAL_SUPER_GRANULATION_FRACTION = 0.5 # supergranulation noise RMS residual (possible to be corrected due to its 1 day decaying timescale, depending on sampling!)
 
 
 RALF_FILE_PATH = f'{DATA_DIRECTORY}2ES_targetlist_astrid_export_2024Dec_comments.xlsx'

@@ -219,6 +219,17 @@ def consolidate_data(df):
     for column in columns_to_convert:
         df_consolidated[column] = pd.to_numeric(df_consolidated[column], errors='coerce')
 
+    # Calculate Distance [pc] from Parallax and insert it right after Parallax
+    if 'Parallax' in df_consolidated.columns:
+        import numpy as np
+        parallax_index = df_consolidated.columns.get_loc('Parallax')
+        # Calculate distance: Distance [pc] = 1000 / Parallax (mas)
+        distance_pc = 1000.0 / df_consolidated['Parallax']
+        # Set invalid values (negative, zero, or infinite parallax) to NaN
+        distance_pc[(df_consolidated['Parallax'] <= 0) | ~np.isfinite(df_consolidated['Parallax'])] = np.nan
+        # Insert the Distance [pc] column right after Parallax
+        df_consolidated.insert(parallax_index + 1, 'Distance [pc]', distance_pc)
+
     # Save the result to a new Excel file
     save_and_adjust_column_widths(df_consolidated, RESULTS_DIRECTORY + 'consolidated_results.xlsx')
 
