@@ -1,11 +1,16 @@
 import requests
-from astroquery.gaia import Gaia
-from openpyxl import load_workbook
-from openpyxl.styles import PatternFill, Font
-import time
 import logging
+import time
 import pandas as pd
 import numpy as np
+from openpyxl import load_workbook
+from openpyxl.styles import PatternFill, Font
+
+# Suppress astroquery info messages (including Gaia Archive workaround notice) before import
+logging.getLogger('astroquery').setLevel(logging.ERROR)
+logging.getLogger('astropy').setLevel(logging.ERROR)
+
+from astroquery.gaia import Gaia
 
 #-------------------------------------------------------------------------------------------------- 
 
@@ -31,9 +36,6 @@ def execute_gaia_query(query, str_columns=None, output_file=None, retries=3, del
     pandas.DataFrame or None
         Query results as a DataFrame, or None if the query fails.
     """
-    
-    # Suppress the specific info message from astroquery
-    logging.getLogger('astroquery').setLevel(logging.ERROR)
 
     attempt = 0
     while attempt < retries:

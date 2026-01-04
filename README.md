@@ -5,7 +5,7 @@ A professional, modular pipeline for selecting optimal targets for the 2ES (The 
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Python 3.8+
+- Python 3.8+ (tested up to Python 3.13)
 - Conda environment with required packages
 - Access to Gaia database
 

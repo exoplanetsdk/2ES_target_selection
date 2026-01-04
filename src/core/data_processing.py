@@ -747,7 +747,7 @@ def merge_and_format_stellar_data(df_main, ralf_file_path):
 def add_granulation_to_dataframe(df, t_eff_col='T_eff [K]', mass_col='Mass [M_Sun]', 
                                 luminosity_col='Luminosity [L_Sun]'):
     """
-    Add granulation noise column to a pandas DataFrame after 'σ_photon [m/s]' column.
+    Add granulation and supergranulation noise columns to a pandas DataFrame after 'σ_photon [m/s]' column.
     
     Parameters:
     -----------
@@ -763,7 +763,8 @@ def add_granulation_to_dataframe(df, t_eff_col='T_eff [K]', mass_col='Mass [M_Su
     Returns:
     --------
     pandas.DataFrame
-        DataFrame with added 'σ_granulation [m/s]' column after 'σ_photon [m/s]'
+        DataFrame with added 'σ_granulation [m/s]' and 'σ_supergranulation [m/s]' columns 
+        after 'σ_photon [m/s]', with supergranulation immediately after granulation
     """
     df = df.copy()
     
@@ -775,26 +776,31 @@ def add_granulation_to_dataframe(df, t_eff_col='T_eff [K]', mass_col='Mass [M_Su
         print(f"Warning: Missing columns: {missing_cols}")
         return df
     
-    # Calculate granulation noise for each star
+    # Calculate granulation and supergranulation noise for each star
     granulation_values = []
+    supergranulation_values = []
     for idx, row in df.iterrows():
         try:
             t_eff = float(row[t_eff_col])
             mass = float(row[mass_col]) 
             luminosity = float(row[luminosity_col])
             
-            gran_noise = calculate_granulation_noise(t_eff, mass, luminosity)
+            gran_noise, supergran_noise = calculate_granulation_noise(t_eff, mass, luminosity)
             granulation_values.append(gran_noise)
+            supergranulation_values.append(supergran_noise)
             
         except (ValueError, TypeError):
             granulation_values.append(np.nan)
+            supergranulation_values.append(np.nan)
     
     # Find the position of 'σ_photon [m/s]' column
     rv_precision_col = 'σ_photon [m/s]'
     gran_col_name = 'σ_granulation [m/s]'
+    supergran_col_name = 'σ_supergranulation [m/s]'
     if rv_precision_col not in df.columns:
-        print(f"Warning: '{rv_precision_col}' column not found. Adding granulation column at the end.")
+        print(f"Warning: '{rv_precision_col}' column not found. Adding granulation columns at the end.")
         df[gran_col_name] = granulation_values
+        df[supergran_col_name] = supergranulation_values
         return df
     
     # Get the position of RV precision column
@@ -806,9 +812,11 @@ def add_granulation_to_dataframe(df, t_eff_col='T_eff [K]', mass_col='Mass [M_Su
     # Create new column order
     columns = df.columns.tolist()
     columns.insert(insert_position, gran_col_name)
+    columns.insert(insert_position + 1, supergran_col_name)
     
-    # Add the granulation noise data
+    # Add the granulation and supergranulation noise data
     df[gran_col_name] = granulation_values
+    df[supergran_col_name] = supergranulation_values
     
     # Reorder columns
     df = df[columns]
@@ -919,6 +927,7 @@ def calculate_and_insert_RV_noise(df):
     df = df.copy()
     photon_col = 'σ_photon [m/s]'
     gran_col = 'σ_granulation [m/s]'
+    supergran_col = 'σ_supergranulation [m/s]'
     pmode_col = 'σ_p-mode [m/s]'
     total_col = 'σ_RV,total [m/s]'
 
@@ -927,6 +936,7 @@ def calculate_and_insert_RV_noise(df):
         INSTRUMENTAL_NOISE**2 +
         df[photon_col]**2 +
         (df[gran_col] * RESIDUAL_GRANULATION_FRACTION) **2 +
+        (df[supergran_col] * RESIDUAL_SUPER_GRANULATION_FRACTION) **2 +
         (df[pmode_col] * RESIDUAL_P_MODE_FRACTION) **2
     ) ** 0.5
 

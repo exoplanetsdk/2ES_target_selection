@@ -111,8 +111,8 @@ def calculate_hz_detection_limit_simplify(K, stellar_mass, orbital_radius):
 SOLAR_T_EFF = 5780.0  # K - Solar effective temperature
 SOLAR_MASS = 1.0      # Solar masses
 SOLAR_LUMINOSITY = 1.0  # Solar luminosities
-SOLAR_GRANULATION_RMS = 0.333  # m/s - Solar granulation RMS (excluding supergranulation)
-# SOLAR_GRANULATION_RMS = 0.8  # m/s - Solar granulation RMS (including supergranulation)
+SOLAR_GRANULATION_RMS = 0.333  # m/s - Solar granulation RMS
+SOLAR_SUPERGRANULATION_RMS = 0.802  # m/s - Solar supergranulation RMS 
 
 def calculate_granulation_noise(T_eff, mass, luminosity):
     """
@@ -143,8 +143,9 @@ def calculate_granulation_noise(T_eff, mass, luminosity):
     temperature_factor = (T_eff / SOLAR_T_EFF) ** (-0.5)
     
     granulation_noise = SOLAR_GRANULATION_RMS * luminosity_factor * mass_factor * temperature_factor
+    supergranulation_noise = SOLAR_SUPERGRANULATION_RMS * luminosity_factor * mass_factor * temperature_factor
     
-    return granulation_noise
+    return granulation_noise, supergranulation_noise
 
 
 #------------------------------------------------------------------------------------------------

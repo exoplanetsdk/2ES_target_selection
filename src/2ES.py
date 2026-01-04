@@ -1,5 +1,10 @@
 print('\nInitializing 2ES Target Selection Pipeline...')
 
+# Suppress astroquery info messages (including Gaia Archive workaround notice)
+import logging
+logging.getLogger('astroquery').setLevel(logging.ERROR)
+logging.getLogger('astropy').setLevel(logging.ERROR)
+
 from config import *
 from core.gaia_queries import *
 from core.data_processing import *
