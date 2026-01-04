@@ -1,9 +1,3 @@
-import logging
-
-# Suppress astroquery info messages (including Gaia Archive workaround notice) before import
-logging.getLogger('astroquery').setLevel(logging.ERROR)
-logging.getLogger('astropy').setLevel(logging.ERROR)
-
 from astroquery.gaia import Gaia
 from config import *
 from .utils import execute_gaia_query

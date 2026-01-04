@@ -5,11 +5,6 @@ import pandas as pd
 import numpy as np
 from openpyxl import load_workbook
 from openpyxl.styles import PatternFill, Font
-
-# Suppress astroquery info messages (including Gaia Archive workaround notice) before import
-logging.getLogger('astroquery').setLevel(logging.ERROR)
-logging.getLogger('astropy').setLevel(logging.ERROR)
-
 from astroquery.gaia import Gaia
 
 #-------------------------------------------------------------------------------------------------- 
