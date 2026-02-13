@@ -278,10 +278,8 @@ def plot_hr_diagram_with_detection_limit(df, use_filtered_data=True, detection_l
         colorbar_label = r'HZ Detection Limit [$M_\oplus$]'
         filename = f'{FIGURES_DIRECTORY}HR_diagram_HZ_detection_limit.png'
 
-    # Create the plot
-    plt.figure(figsize=(10, 8), dpi=dpi)
+    plt.figure(figsize=(5, 4), dpi=dpi)
 
-    # Scatter plot with color-coded circles
     sc = plt.scatter(
         data_to_plot['T_eff [K]'], 
         data_to_plot['Luminosity [L_Sun]'], 
@@ -290,32 +288,27 @@ def plot_hr_diagram_with_detection_limit(df, use_filtered_data=True, detection_l
         alpha=0.99, 
         edgecolors='grey',
         linewidths=0.05,
-        s=data_to_plot['Radius [R_Sun]'] * 20
+        s=data_to_plot['Radius [R_Sun]'] * 10
     )
 
-    # Add and configure colorbar
     cbar = plt.colorbar(sc, label=colorbar_label)
     sc.set_clim(0, 4)
 
-    # Configure axes
     plt.xscale('log')
     plt.yscale('log')
     plt.xlim(min(df['T_eff [K]'])-50, max(df['T_eff [K]'])+50)
     plt.ylim(min(df['Luminosity [L_Sun]']), max(df['Luminosity [L_Sun]'])+0.5)
     plt.gca().invert_xaxis()
 
-    # Add labels and title
-    plt.xlabel('Effective Temperature [K]')
-    plt.ylabel('Luminosity [$L_\odot$]')
+    plt.xlabel('Effective Temperature (K)')
+    plt.ylabel('Luminosity ($L_\odot$)')
     if use_filtered_data:
         plt.title('Hertzsprung-Russell Diagram (' + str(len(data_to_plot)) + ' < ' + str(detection_limit) + ' $M_\\oplus$)')
     else:
         plt.title('Hertzsprung-Russell Diagram')
     
-    # Add grid
     plt.grid(True, which="both", ls="--", linewidth=0.5)
 
-    # Save and display the plot
     plt.savefig(filename)
     print(f'Saved {filename}')
     plt.show() if show_plot else plt.close()
