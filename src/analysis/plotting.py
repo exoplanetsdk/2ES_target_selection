@@ -301,7 +301,7 @@ def plot_hr_diagram_with_detection_limit(df, use_filtered_data=True, detection_l
     plt.gca().invert_xaxis()
 
     plt.xlabel('Effective Temperature (K)')
-    plt.ylabel('Luminosity ($L_\odot$)')
+    plt.ylabel(r'Luminosity ($L_\odot$)')
     if use_filtered_data:
         plt.title('Hertzsprung-Russell Diagram (' + str(len(data_to_plot)) + ' < ' + str(detection_limit) + ' $M_\\oplus$)')
     else:
