@@ -62,11 +62,25 @@ class CatalogProcessor:
         
         return df_consolidated_HIP
 
+    def _hd_comparison_key(self, hd_str):
+        """Key for equality: same HD id with all spaces removed so 'HD 39 A' and 'HD 39A' match."""
+        if not hd_str or not isinstance(hd_str, str):
+            return ""
+        return hd_str.strip().replace(" ", "")
+
     def extract_mass(self, hd_number):
-        """Extract mass for a given HD number from stellar catalog"""
+        """Extract mass for a given HD number from stellar catalog.
+        hd_number may include suffix (e.g. '156274', '156274 A', '39 AB').
+        Catalog stores HD in cols 7:18 and component (A, B, AB, etc.) in cols 19:23.
+        Formats are kept as received; comparison uses space-removed form so 'HD 39 A' and 'HD 39A' match.
+        """
+        target = f"HD {hd_number}".strip()
+        target_key = self._hd_comparison_key(target)
         for line in self.STELLAR_CATALOG:
-            line_hd_number = line[7:18].strip()
-            if line_hd_number == f"HD {hd_number}":
+            line_hd = line[7:18].strip()
+            line_comp = line[19:23].strip()
+            line_full = f"{line_hd} {line_comp}".strip()  # keep format as in catalog
+            if self._hd_comparison_key(line_full) == target_key:
                 mass = line[130:134].strip()
                 return float(mass) if mass else None
         return None
