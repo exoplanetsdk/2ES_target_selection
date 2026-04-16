@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 import time
 import json
@@ -576,7 +577,7 @@ def calculate_and_insert_hz_detection_limit(
 
 #------------------------------------------------------------------------------------------------
 
-def analyze_bright_neighbors(merged_df, search_radius, execute_gaia_query_func, max_retries=3, delay=5):
+def analyze_bright_neighbors(merged_df, search_radius, execute_gaia_query_func, max_retries=3, delay=5, max_workers=8, save_results=True):
     print("\nAnalyzing stars to identify those with bright neighboring stars")
     """
     Analyze stars in the input DataFrame to identify those with bright neighboring stars.
@@ -587,6 +588,9 @@ def analyze_bright_neighbors(merged_df, search_radius, execute_gaia_query_func, 
         execute_gaia_query_func (callable): Function to execute Gaia queries
         max_retries (int, optional): Maximum number of retry attempts for failed queries. Defaults to 3
         delay (int, optional): Delay in seconds between retry attempts. Defaults to 5
+        max_workers (int, optional): Max concurrent Gaia TAP requests. Defaults to 8 (benchmark sweet spot).
+            If you see HTTP 500 errors, lower to 4–6; to go faster, try 10–12 via the benchmark script.
+        save_results (bool, optional): If True, save Excel outputs to RESULTS_DIRECTORY. Defaults to True.
         
     Returns:
         tuple: (DataFrame with bright neighbors, DataFrame without bright neighbors)
@@ -654,8 +658,8 @@ def analyze_bright_neighbors(merged_df, search_radius, execute_gaia_query_func, 
     rows_with_bright_neighbors = []
     rows_without_bright_neighbors = []
 
-    # Process rows in parallel with progress tracking
-    with ThreadPoolExecutor() as executor:
+    # Process rows in parallel with limited concurrency to avoid Gaia archive 500 errors
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
         results = list(tqdm(
             executor.map(process_row_with_retry, [row for idx, row in merged_df.iterrows()]),
             total=len(merged_df),
@@ -677,13 +681,25 @@ def analyze_bright_neighbors(merged_df, search_radius, execute_gaia_query_func, 
     print(f"Stars with bright neighbors: {len(df_with_bright_neighbors)}")
     print(f"Stars without bright neighbors: {len(df_without_bright_neighbors)}")
     
-    # Save the result to a new Excel file
-    save_and_adjust_column_widths(df_with_bright_neighbors, f"{RESULTS_DIRECTORY}stars_with_bright_neighbors.xlsx")
-    save_and_adjust_column_widths(df_without_bright_neighbors, f"{RESULTS_DIRECTORY}stars_without_bright_neighbors.xlsx")
+    if save_results:
+        save_and_adjust_column_widths(df_with_bright_neighbors, f"{RESULTS_DIRECTORY}stars_with_bright_neighbors.xlsx")
+        save_and_adjust_column_widths(df_without_bright_neighbors, f"{RESULTS_DIRECTORY}stars_without_bright_neighbors.xlsx")
 
     return df_with_bright_neighbors, df_without_bright_neighbors
 
 #------------------------------------------------------------------------------------------------   
+
+def _normalize_star_id_for_merge(s):
+    """Normalize star IDs so 'HD170493' and 'HD 170493' match. Returns canonical form 'HD 170493'."""
+    if pd.isna(s) or s == '':
+        return s
+    s = str(s).strip()
+    for prefix in ('HD', 'HIP', 'GJ'):
+        m = re.match(rf'(?i){re.escape(prefix)}\s*(\S+)', s)
+        if m:
+            return f"{prefix} {m.group(1).strip()}"
+    return s
+
 
 def merge_and_format_stellar_data(df_main, ralf_file_path):
     print("\nCrossmatching with Ralf's target list")
@@ -703,6 +719,10 @@ def merge_and_format_stellar_data(df_main, ralf_file_path):
     df_Ralf = pd.read_excel(ralf_file_path, engine='openpyxl', header=1)
     df_Ralf = df_Ralf[df_Ralf['prio'] != 3]
     
+    # Normalize Ralf's star_ID so 'HD170493' matches pipeline 'HD 170493'
+    df_Ralf = df_Ralf.copy()
+    df_Ralf['_id_norm'] = df_Ralf['star_ID  '].apply(_normalize_star_id_for_merge)
+    
     # Create a copy of the main DataFrame to avoid modifying the original
     merged_df = df_main.copy()
         
@@ -711,11 +731,19 @@ def merge_and_format_stellar_data(df_main, ralf_file_path):
         lambda x: f'HIP{x}' if pd.notna(x) and x != '' and not str(x).startswith('HIP') else x
     )
     
+    # Normalize merge keys so Ralf and pipeline formats match
     merge_keys = ['HD Number', 'HIP Number', 'GJ Number']
+    for key in merge_keys:
+        merged_df[f'{key}_norm'] = merged_df[key].apply(_normalize_star_id_for_merge)
+    
     merged_RJ = pd.concat([
-        df_Ralf.merge(merged_df, left_on='star_ID  ', right_on=key, how='left') 
+        df_Ralf.merge(merged_df, left_on='_id_norm', right_on=f'{key}_norm', how='left')
         for key in merge_keys
     ])
+    
+    # Drop temporary normalized key columns used for matching
+    norm_cols = [c for c in merged_RJ.columns if c.endswith('_norm') or c == '_id_norm']
+    merged_RJ = merged_RJ.drop(columns=norm_cols, errors='ignore')
     
     # Clean up merged DataFrame
     merged_RJ.sort_values(by='source_id', ascending=False, inplace=True)
@@ -756,7 +784,9 @@ def merge_and_format_stellar_data(df_main, ralf_file_path):
         
     adjust_column_widths(output_path)
     
-    return merged_RJ, df_Ralf
+    # Return df_Ralf without the temporary merge key column
+    df_Ralf_out = df_Ralf.drop(columns=['_id_norm'], errors='ignore')
+    return merged_RJ, df_Ralf_out
 
 #------------------------------------------------------------------------------------------------   
 

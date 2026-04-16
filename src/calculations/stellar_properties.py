@@ -120,39 +120,38 @@ def get_simbad_info_with_retry(gaia_identifier, max_retries=3, delay=1):
                 if not identifier or identifier == 'nan':
                     continue
                     
-                # Extract HD number (various formats)
+                # Extract HD number; record as-is from Simbad (e.g. "HD 156274", "HD 123")
                 hd_patterns = [
-                    r'HD\s*(\d+)',
-                    r'HD(\d+)',
-                    r'Henry\s*Draper\s*(\d+)'
+                    r'HD\s*\d+(?:\s*[A-Z]*)?',
+                    r'Henry\s*Draper\s*\d+(?:\s*[A-Z]*)?'
                 ]
                 for pattern in hd_patterns:
                     hd_match = re.search(pattern, identifier, re.IGNORECASE)
                     if hd_match and simbad_info['HD Number'] is None:
-                        simbad_info['HD Number'] = f"HD {hd_match.group(1)}"
+                        simbad_info['HD Number'] = hd_match.group(0).strip()
                         break
                 
-                # Extract GJ number (Gliese-Jahreiss catalog)
+                # Extract GJ number (Gliese-Jahreiss catalog); record as-is from Simbad (e.g. "GJ 666 A", "GJ 666")
                 gj_patterns = [
-                    r'GJ\s*(\d+(?:\.\d+)?[A-Z]*)',
-                    r'Gl\s*(\d+(?:\.\d+)?[A-Z]*)',
-                    r'Gliese\s*(\d+(?:\.\d+)?[A-Z]*)'
+                    r'GJ\s*\d+(?:\.\d+)?(?:\s*[A-Z]*)?',
+                    r'Gl\s*\d+(?:\.\d+)?(?:\s*[A-Z]*)?',
+                    r'Gliese\s*\d+(?:\.\d+)?(?:\s*[A-Z]*)?'
                 ]
                 for pattern in gj_patterns:
                     gj_match = re.search(pattern, identifier, re.IGNORECASE)
                     if gj_match and simbad_info['GJ Number'] is None:
-                        simbad_info['GJ Number'] = f"GJ {gj_match.group(1)}"
+                        simbad_info['GJ Number'] = gj_match.group(0).strip()
                         break
                 
-                # Extract HIP number (Hipparcos catalog)
+                # Extract HIP number; record as-is from Simbad (e.g. "HIP 12345", "HIP12345")
                 hip_patterns = [
-                    r'HIP\s*(\d+)',
-                    r'Hipparcos\s*(\d+)'
+                    r'HIP\s*\d+',
+                    r'Hipparcos\s*\d+'
                 ]
                 for pattern in hip_patterns:
                     hip_match = re.search(pattern, identifier, re.IGNORECASE)
                     if hip_match and simbad_info['HIP Number'] is None:
-                        simbad_info['HIP Number'] = f"HIP {hip_match.group(1)}"
+                        simbad_info['HIP Number'] = hip_match.group(0).strip()
                         break
             
             return simbad_info
