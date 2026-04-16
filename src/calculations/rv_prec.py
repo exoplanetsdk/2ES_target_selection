@@ -13,17 +13,28 @@ standVals = {
     "spRes": 80000
 }
 
-
 # # 2ES values
+# def get_manual_values(Temp: float = 4200.0, Vmag: float = 7.0) -> Dict[str, float]:
+#     return {
+#         "Temp": Temp,    # Temperature in K
+#         "Vmag": Vmag,    # V magnitude
+#         "MiDia": 2.2,    # Mirror Diameter in m
+#         "SpRes": 120000, # Spectral Resolution
+#         "TObs": 10.0,    # Observation Time in min
+#         "Lam_min": 390,  # Minimum wavelength in nm;
+#         "Lam_max": 870   # Maximum wavelength in nm; 
+#     }
+
+# HARPS-N values
 def get_manual_values(Temp: float = 4200.0, Vmag: float = 7.0) -> Dict[str, float]:
     return {
         "Temp": Temp,    # Temperature in K
         "Vmag": Vmag,    # V magnitude
-        "MiDia": 2.2,    # Mirror Diameter in m
-        "SpRes": 120000, # Spectral Resolution
+        "MiDia": 3.58,    # Mirror Diameter in m
+        "SpRes": 115000, # Spectral Resolution
         "TObs": 10.0,    # Observation Time in min
-        "Lam_min": 390,  # Minimum wavelength in nm;
-        "Lam_max": 870   # Maximum wavelength in nm; 
+        "Lam_min": 383,  # Minimum wavelength in nm;å
+        "Lam_max": 690   # Maximum wavelength in nm; 
     }
 
 # ESPRESSO values

@@ -8,16 +8,20 @@ DATA_DIRECTORY = '../data/'
 
 # Query parameters
 TARGET_G_MAG_LIMIT = 8     # Gaia G-band magnitude limit
-MIN_DEC = -80               # Minimum declination in degrees
-MAX_DEC = 20                # Maximum declination in degrees
+# MIN_DEC = -80               # Minimum declination in degrees
+# MAX_DEC = 20                # Maximum declination in degrees
+MIN_DEC = -20               # Minimum declination in degrees
+MAX_DEC = 80                # Maximum declination in degrees
 MIN_PARALLAX = 20           # Minimum parallax in mas; corresponds to 50 pc
 SEARCH_RADIUS = 2 / 3600.0  # Search radius in arcseconds for finding background contaminants (depends on the field of view of the telescope)
 THRESHOLD_ARCSEC = 2.5      # arcseconds for GAIA-TESS overlap (already tuned to exclude false positives)
 
 # Stellar filtering parameters
 STELLAR_FILTERS = {
-    'temp_min':     4000,       # Minimum effective temperature in K
-    'temp_max':     6500,       # Maximum effective temperature in K
+    # 'temp_min':     3800,       # Minimum effective temperature in K
+    # 'temp_max':     6500,       # Maximum effective temperature in K
+    'temp_min':     5300,       # Minimum effective temperature in K
+    'temp_max':     6000,       # Maximum effective temperature in K    
     'lum_min':      0.05,       # Minimum luminosity in solar units
     'lum_max':      5.2,        # Maximum luminosity in solar units (increased to include HD23754)
     'density_min':  0.1,        # Minimum density in solar units
@@ -26,10 +30,15 @@ STELLAR_FILTERS = {
     'log_rhk_max': -4.5,        # Maximum log R'HK value (for stellar activity corresponding to ~10 m/s RMS)
 }
 
-INSTRUMENTAL_NOISE = 0.1 # m/s (instrumental noise， optimistic)
+# INSTRUMENTAL_NOISE = 0.1 # m/s (instrumental noise， optimistic)
+# RESIDUAL_P_MODE_FRACTION = 0.1 # p-mode noise RMS residual (tested; recommended by J. Zhao)
+# RESIDUAL_GRANULATION_FRACTION = 0.3 # granulation noise RMS residual (unlikely to be corrected due to its 49 minute decaying timescale)
+# RESIDUAL_SUPER_GRANULATION_FRACTION = 0.3 # supergranulation noise RMS residual (possible to be corrected due to its 1 day decaying timescale, depending on sampling!)
+
+INSTRUMENTAL_NOISE = 0.3 # m/s (instrumental noise， optimistic for HARPS-N)
 RESIDUAL_P_MODE_FRACTION = 0.1 # p-mode noise RMS residual (tested; recommended by J. Zhao)
-RESIDUAL_GRANULATION_FRACTION = 1.0 # granulation noise RMS residual (unlikely to be corrected due to its 49 minute decaying timescale)
-RESIDUAL_SUPER_GRANULATION_FRACTION = 0.5 # supergranulation noise RMS residual (possible to be corrected due to its 1 day decaying timescale, depending on sampling!)
+RESIDUAL_GRANULATION_FRACTION = 0.2 # granulation noise RMS residual (unlikely to be corrected due to its 49 minute decaying timescale)
+RESIDUAL_SUPER_GRANULATION_FRACTION = 0.2 # supergranulation noise RMS residual (possible to be corrected due to its 1 day decaying timescale, depending on sampling!)
 
 
 RALF_FILE_PATH = f'{DATA_DIRECTORY}2ES_targetlist_astrid_export_2024Dec_comments.xlsx'
