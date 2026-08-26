@@ -1,5 +1,3 @@
-print('\nInitializing 2ES Target Selection Pipeline...')
-
 from config import *
 from core.gaia_queries import *
 
@@ -20,6 +18,8 @@ from analysis.plato_lops2 import plato_lops2_match
 import matplotlib.pyplot as plt
 
 def main():
+    print('\nInitializing 2ES Target Selection Pipeline...')
+
     # -----------------------------------------------------------
     # Gaia queries and merging
     # -----------------------------------------------------------
@@ -227,4 +227,14 @@ def main():
     save_and_adjust_column_widths(df, GAIA_FILE)
 
 if __name__ == "__main__":
-    main()
+    from datetime import datetime
+
+    from core.utils import start_run_log, stop_run_log
+
+    log_path = f"{RESULTS_DIRECTORY}2ES_run_{datetime.now().strftime('%Y.%m.%d_%H%M%S')}.log"
+    start_run_log(log_path)
+    print(f"Terminal output is being saved to {log_path}")
+    try:
+        main()
+    finally:
+        stop_run_log()

@@ -1,5 +1,7 @@
+import os
 import requests
 import logging
+import sys
 import time
 import pandas as pd
 import numpy as np
@@ -156,3 +158,60 @@ def format_gaia_id(gaia_id):
     if 'e' in gaia_id_str.lower():
         return f"{float(gaia_id_str):.0f}"
     return gaia_id_str
+
+#--------------------------------------------------------------------------------------------------
+
+class _Tee:
+    """Write to both a stream and a log file (for capturing pipeline terminal output)."""
+
+    def __init__(self, stream, log_file):
+        self.stream = stream
+        self.log_file = log_file
+
+    def write(self, data):
+        self.stream.write(data)
+        self.log_file.write(data)
+        self.log_file.flush()
+
+    def flush(self):
+        self.stream.flush()
+        self.log_file.flush()
+
+    def __getattr__(self, name):
+        return getattr(self.stream, name)
+
+
+_log_file_handle = None
+_original_stdout = None
+_original_stderr = None
+
+
+def start_run_log(log_path):
+    """Mirror stdout and stderr to log_path as well as the terminal."""
+    global _log_file_handle, _original_stdout, _original_stderr
+
+    log_dir = os.path.dirname(log_path)
+    if log_dir:
+        os.makedirs(log_dir, exist_ok=True)
+
+    _log_file_handle = open(log_path, 'w', encoding='utf-8')
+    _original_stdout = sys.stdout
+    _original_stderr = sys.stderr
+    sys.stdout = _Tee(sys.stdout, _log_file_handle)
+    sys.stderr = _Tee(sys.stderr, _log_file_handle)
+    return log_path
+
+
+def stop_run_log():
+    """Restore original stdout/stderr and close the log file."""
+    global _log_file_handle, _original_stdout, _original_stderr
+
+    if _original_stdout is not None:
+        sys.stdout = _original_stdout
+    if _original_stderr is not None:
+        sys.stderr = _original_stderr
+    if _log_file_handle is not None:
+        _log_file_handle.close()
+    _log_file_handle = None
+    _original_stdout = None
+    _original_stderr = None

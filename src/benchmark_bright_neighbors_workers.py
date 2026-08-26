@@ -68,11 +68,11 @@ def run_bright_neighbor_benchmark(merged_df, search_radius, max_workers, max_ret
                 if not pd.isna(row.get('source_id_dr3')):
                     query = create_neighbor_query(
                         row['source_id_dr3'], row['RA'], row['DEC'],
-                        row['Phot G Mean Mag'] + 6.5, search_radius, 'gaiadr3')
+                        row['Phot G Mean Mag'] + 10, search_radius, 'gaiadr3')
                 else:
                     query = create_neighbor_query(
                         row['source_id_dr2'], row['RA'], row['DEC'],
-                        row['Phot G Mean Mag'] + 6.5, search_radius, 'gaiadr2')
+                        row['Phot G Mean Mag'] + 10, search_radius, 'gaiadr2')
                 neighbors_df = execute_gaia_query(query)
                 return (row, neighbors_df is not None and not neighbors_df.empty)
             except Exception:

@@ -195,6 +195,8 @@ def consolidate_data(df):
     # Create the final dataframe with the updated column list
     df_consolidated = df_consolidated[final_columns]
 
+    save_and_adjust_column_widths(df_consolidated, RESULTS_DIRECTORY + 'consolidated_results_before_filtering.xlsx')
+
     # Keep only rows where Object Type is one of '*', '**', 'MS*', or 'SB*'
     allowed_types = ['*', '**', 'MS*', 'SB*', 'PM*']
     df_consolidated = df_consolidated[df_consolidated['Object Type'].isin(allowed_types)]
@@ -577,7 +579,7 @@ def calculate_and_insert_hz_detection_limit(
 
 #------------------------------------------------------------------------------------------------
 
-def analyze_bright_neighbors(merged_df, search_radius, execute_gaia_query_func, max_retries=3, delay=5, max_workers=8, save_results=True):
+def analyze_bright_neighbors(merged_df, search_radius, execute_gaia_query_func, neighbor_g_mag_delta=10, max_retries=3, delay=5, max_workers=8, save_results=True):
     print("\nAnalyzing stars to identify those with bright neighboring stars")
     """
     Analyze stars in the input DataFrame to identify those with bright neighboring stars.
@@ -586,6 +588,8 @@ def analyze_bright_neighbors(merged_df, search_radius, execute_gaia_query_func, 
         merged_df (pd.DataFrame): Input DataFrame containing stellar data
         search_radius (float): Search radius for finding neighbors
         execute_gaia_query_func (callable): Function to execute Gaia queries
+        neighbor_g_mag_delta (float, optional): Max G-band magnitude difference above the
+            target star for a neighbor to count as bright. Defaults to 10.
         max_retries (int, optional): Maximum number of retry attempts for failed queries. Defaults to 3
         delay (int, optional): Delay in seconds between retry attempts. Defaults to 5
         max_workers (int, optional): Max concurrent Gaia TAP requests. Defaults to 8 (benchmark sweet spot).
@@ -595,6 +599,37 @@ def analyze_bright_neighbors(merged_df, search_radius, execute_gaia_query_func, 
     Returns:
         tuple: (DataFrame with bright neighbors, DataFrame without bright neighbors)
     """
+    neighbor_suffix = f"_deltaG{neighbor_g_mag_delta:g}"
+    str_id_columns = ['source_id', 'source_id_dr2', 'source_id_dr3', 'HD Number', 'GJ Number', 'HIP Number']
+    id_dtype = {col: str for col in str_id_columns}
+
+    cached_with_ids = set()
+    cached_without_ids = set()
+    with_cache_path = f"{RESULTS_DIRECTORY}stars_with_bright_neighbors{neighbor_suffix}.xlsx"
+    without_cache_path = f"{RESULTS_DIRECTORY}stars_without_bright_neighbors{neighbor_suffix}.xlsx"
+
+    if os.path.exists(with_cache_path):
+        cached_with_ids = set(
+            pd.read_excel(with_cache_path, dtype=id_dtype)['source_id'].astype(str)
+        )
+    if os.path.exists(without_cache_path):
+        cached_without_ids = set(
+            pd.read_excel(without_cache_path, dtype=id_dtype)['source_id'].astype(str)
+        )
+
+    rows_to_query = []
+    for _, row in merged_df.iterrows():
+        source_id = str(row['source_id'])
+        if source_id not in cached_with_ids and source_id not in cached_without_ids:
+            rows_to_query.append(row)
+
+    n_cached = len(merged_df) - len(rows_to_query)
+    if n_cached:
+        print(
+            f"Skipping {n_cached} stars already present in "
+            f"stars_with/without_bright_neighbors{neighbor_suffix}.xlsx"
+        )
+
     def create_neighbor_query(source_id, ra, dec, neighbor_g_mag_limit, search_radius, data_release):
         """Create a Gaia query to find neighboring stars."""
         query = f"""
@@ -622,7 +657,7 @@ def analyze_bright_neighbors(merged_df, search_radius, execute_gaia_query_func, 
                         source_id=row['source_id_dr3'],
                         ra=row['RA'],
                         dec=row['DEC'],
-                        neighbor_g_mag_limit=row['Phot G Mean Mag']+6.5,
+                        neighbor_g_mag_limit=row['Phot G Mean Mag'] + neighbor_g_mag_delta,
                         search_radius=search_radius,
                         data_release='gaiadr3'
                     )
@@ -631,7 +666,7 @@ def analyze_bright_neighbors(merged_df, search_radius, execute_gaia_query_func, 
                         source_id=row['source_id_dr2'],
                         ra=row['RA'],
                         dec=row['DEC'],
-                        neighbor_g_mag_limit=row['Phot G Mean Mag']+6.5,
+                        neighbor_g_mag_limit=row['Phot G Mean Mag'] + neighbor_g_mag_delta,
                         search_radius=search_radius,
                         data_release='gaiadr2'
                     )
@@ -654,25 +689,29 @@ def analyze_bright_neighbors(merged_df, search_radius, execute_gaia_query_func, 
                     print("Max retries reached. Skipping this row.")
                     return (row, False)
 
-    # Initialize lists to store results
+    queried_results = {}
+    if rows_to_query:
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+            results = list(tqdm(
+                executor.map(process_row_with_retry, rows_to_query),
+                total=len(rows_to_query),
+                desc="Parallel processing for detecting bright neighbors",
+                ncols=100
+            ))
+
+            for row, has_bright_neighbors in results:
+                queried_results[str(row['source_id'])] = has_bright_neighbors
+    elif len(merged_df):
+        print("All stars already classified in cached bright-neighbor results.")
+
     rows_with_bright_neighbors = []
     rows_without_bright_neighbors = []
-
-    # Process rows in parallel with limited concurrency to avoid Gaia archive 500 errors
-    with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        results = list(tqdm(
-            executor.map(process_row_with_retry, [row for idx, row in merged_df.iterrows()]),
-            total=len(merged_df),
-            desc="Parallel processing for detecting bright neighbors",
-            ncols=100
-        ))
-        
-        # Sort results into appropriate lists
-        for row, has_bright_neighbors in results:
-            if has_bright_neighbors:
-                rows_with_bright_neighbors.append(row)
-            else:
-                rows_without_bright_neighbors.append(row)
+    for _, row in merged_df.iterrows():
+        source_id = str(row['source_id'])
+        if source_id in cached_with_ids or queried_results.get(source_id, False):
+            rows_with_bright_neighbors.append(row)
+        else:
+            rows_without_bright_neighbors.append(row)
 
     # Create DataFrames from results
     df_with_bright_neighbors = pd.DataFrame(rows_with_bright_neighbors)
@@ -682,8 +721,14 @@ def analyze_bright_neighbors(merged_df, search_radius, execute_gaia_query_func, 
     print(f"Stars without bright neighbors: {len(df_without_bright_neighbors)}")
     
     if save_results:
-        save_and_adjust_column_widths(df_with_bright_neighbors, f"{RESULTS_DIRECTORY}stars_with_bright_neighbors.xlsx")
-        save_and_adjust_column_widths(df_without_bright_neighbors, f"{RESULTS_DIRECTORY}stars_without_bright_neighbors.xlsx")
+        save_and_adjust_column_widths(
+            df_with_bright_neighbors,
+            with_cache_path,
+        )
+        save_and_adjust_column_widths(
+            df_without_bright_neighbors,
+            without_cache_path,
+        )
 
     return df_with_bright_neighbors, df_without_bright_neighbors
 
@@ -875,7 +920,8 @@ def add_pmode_rms_to_dataframe(df, t_eff_col='T_eff [K]', mass_col='Mass [M_Sun]
                               luminosity_col='Luminosity [L_Sun]', 
                               alpha=0.63, beta=0.47, gamma=-0.45, delta=0.57):
     """
-    Add p-mode oscillation RMS column to a pandas DataFrame before 'σ_granulation [m/s]' column.
+    Add residual p-mode oscillation RMS column (10 min exposure) to a pandas DataFrame
+    before 'σ_granulation [m/s]' column.
     
     Parameters:
     -----------
@@ -899,7 +945,7 @@ def add_pmode_rms_to_dataframe(df, t_eff_col='T_eff [K]', mass_col='Mass [M_Sun]
     Returns:
     --------
     pandas.DataFrame
-        DataFrame with added 'σ_p-mode [m/s]' column before 'σ_granulation [m/s]'
+        DataFrame with added 'σ_p-mode, 10 min [m/s]' column before 'σ_granulation [m/s]'
     """
     df = df.copy()
     
@@ -920,14 +966,14 @@ def add_pmode_rms_to_dataframe(df, t_eff_col='T_eff [K]', mass_col='Mass [M_Sun]
             luminosity = float(row[luminosity_col])
             
             pmode_rms = calculate_pmode_rms(t_eff, mass, luminosity, alpha, beta, gamma, delta)
-            pmode_values.append(pmode_rms)
+            pmode_values.append(pmode_rms * RESIDUAL_P_MODE_FRACTION)
             
         except (ValueError, TypeError):
             pmode_values.append(np.nan)
     
     # Find the position of 'σ_granulation [m/s]' column
     granulation_col = 'σ_granulation [m/s]'
-    pmode_col_name = 'σ_p-mode [m/s]'
+    pmode_col_name = 'σ_p-mode, 10 min [m/s]'
     
     if granulation_col not in df.columns:
         print(f"Warning: '{granulation_col}' column not found. Adding p-mode column at the end.")
@@ -957,7 +1003,7 @@ def add_pmode_rms_to_dataframe(df, t_eff_col='T_eff [K]', mass_col='Mass [M_Sun]
 
 def calculate_and_insert_RV_noise(df):
     """
-    Calculate the total RV noise as the quadrature sum of σ_photon [m/s], σ_granulation [m/s], and σ_p-mode [m/s],
+    Calculate the total RV noise as the quadrature sum of σ_photon [m/s], σ_granulation [m/s], and σ_p-mode, 10 min [m/s],
     and insert it as a new column 'σ_RV,total [m/s]' immediately after the 'σ_supergranulation [m/s]' column.
 
     Parameters
@@ -974,7 +1020,7 @@ def calculate_and_insert_RV_noise(df):
     photon_col = 'σ_photon [m/s]'
     gran_col = 'σ_granulation [m/s]'
     supergran_col = 'σ_supergranulation [m/s]'
-    pmode_col = 'σ_p-mode [m/s]'
+    pmode_col = 'σ_p-mode, 10 min [m/s]'
     total_col = 'σ_RV,total [m/s]'
 
     # Calculate the quadrature sum
@@ -983,7 +1029,7 @@ def calculate_and_insert_RV_noise(df):
         df[photon_col]**2 +
         (df[gran_col] * RESIDUAL_GRANULATION_FRACTION) **2 +
         (df[supergran_col] * RESIDUAL_SUPER_GRANULATION_FRACTION) **2 +
-        (df[pmode_col] * RESIDUAL_P_MODE_FRACTION) **2
+        df[pmode_col]**2
     ) ** 0.5
 
     # Insert after σ_supergranulation [m/s]
