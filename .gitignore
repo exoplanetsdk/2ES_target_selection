@@ -73,6 +73,10 @@ figures/
 
 !figures/histogram.png
 
+# Local-only directories (do not push to GitHub)
+paper/
+restored/
+
 # Development and temporary files
 /Development mode
 /TACS
