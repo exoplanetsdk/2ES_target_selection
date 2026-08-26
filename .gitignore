@@ -88,9 +88,5 @@ restored/
 notebooks/*.ipynb
 !notebooks/Interactive_2ES_Targets_Explorer.ipynb
 
-# Archive (keep in git for reference)
-# archive/ is intentionally not ignored
-
-
 *.pkl
 *.json
