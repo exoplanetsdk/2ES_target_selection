@@ -57,6 +57,9 @@ logfiles/
 # Data files (large files that shouldn't be in git)
 results/
 figures/
+
+archive/
+
 # Exclude xlsx/csv/dat/txt files globally
 *.xlsx
 *.csv
